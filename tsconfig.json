@@ -1,3 +1,10 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    // 필요한 compilerOptions를 여기에 추가합니다.
+    // 예를 들어:
+    "strict": true,
+    "noImplicitAny": true
+  },
+  "include": ["declarations.d.ts", "src/**/*"]
 }
