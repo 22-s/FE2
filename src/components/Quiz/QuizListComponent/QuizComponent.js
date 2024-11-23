@@ -1,16 +1,27 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import Correct from '../../assets/images/QuizList/Correct.svg';
-import Wrong from '../../assets/images/QuizList/Wrong.svg';
-import BookMarkButton from '../../assets/images/QuizList/Bookmark.svg';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Correct from '../../../assets/images/QuizList/Correct.svg';
+import Wrong from '../../../assets/images/QuizList/Wrong.svg';
+import BookMarkButton from '../../../assets/images/QuizList/Bookmark.svg';
+import BookmarkFilled from '../../../assets/images/QuizList/BookmarkFilled.svg';
 
 const QuizListComponent = ({content}) => {
+  const [bookmark, setBookmark] = useState(false);
+
   return (
     <View style={styles.container}>
       <Correct style={styles.answer} />
       <View style={styles.contentArea}>
         <Text style={styles.text}>{content}</Text>
-        <BookMarkButton style={styles.bookMarkButton} />
+        {bookmark ? (
+          <TouchableOpacity onPress={() => setBookmark(false)}>
+            <BookmarkFilled style={styles.bookMarkButton} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => {setBookmark(true); console.log('아이콘 클릭');}}>
+            <BookMarkButton style={styles.bookMarkButton} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal, View, StyleSheet, Text} from 'react-native';
 import NextQuizButton from './button/NextQuizButton';
 import AddReviewButton from './button/AddReviewButton';
-import XButton from '../../assets/images/QuizDetail/XButton.svg';
+import XButton from '../../../assets/images/QuizDetail/XButton.svg';
 
 const CorrectModal = ({content, modalVisible, setModalVisible, isCorrect}) => {
   return (
@@ -16,7 +16,7 @@ const CorrectModal = ({content, modalVisible, setModalVisible, isCorrect}) => {
       <View style={styles.centeredView}>
         <View style={styles.modalContainer}>
           <View style={styles.top}>
-            <XButton width={17} height={17} />
+           <XButton width={17} height={17} onPress={() => setModalVisible(false)} />
           </View>
           <View style={styles.modalTitle}>
             <Text

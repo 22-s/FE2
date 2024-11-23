@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import WhiteBox from '../../components/QuizDetailComponent/WhiteBox';
-import QuestionMan from '../../assets/images/QuizDetail/QuestionMan.svg';
+import WhiteBox from '../../../components/Quiz/QuizDetailComponent/WhiteBox';
+import QuestionMan from '../../../assets/images/QuizDetail/QuestionMan.svg';
 
 const Content = ({content}) => {
   return (

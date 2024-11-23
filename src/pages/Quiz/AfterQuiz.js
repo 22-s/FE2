@@ -1,21 +1,26 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import Title from '../../components/QuizDetailComponent/Title';
-import Content from '../../components/QuizDetailComponent/Content';
-import CorrectModal from '../../components/QuizDetailComponent/CorrectModal';
-import NavButtonNext from '../../components/AfterQuizComponent/NavButtonNext';
-import NavButtonPrev from '../../components/AfterQuizComponent/NavButtonPrev';
-import OpenModalButton from '../../components/AfterQuizComponent/OpenModalButton';
-import AddReviewButton from '../../components/AfterQuizComponent/AddReviewButton';
+import Title from '../../components/Quiz/QuizDetailComponent/Title';
+import Content from '../../components/Quiz/QuizDetailComponent/Content';
+import CorrectModal from '../../components/Quiz/QuizDetailComponent/CorrectModal';
+import NavButtonNext from '../../components/Quiz/AfterQuizComponent/NavButtonNext';
+import NavButtonPrev from '../../components/Quiz/AfterQuizComponent/NavButtonPrev';
+import OpenModalButton from '../../components/Quiz/AfterQuizComponent/OpenModalButton';
+import AddReviewButton from '../../components/Quiz/AfterQuizComponent/AddReviewButton';
 
 const AfterQuiz = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
+  const [isCorrect, setIsCorrect] = useState(true);
+  const [bookmark, setBookmark] = useState(false);
 
   return (
     <View style={styles.container}>
       <View marginBottom={12}>
-        <Title content="1. 신입사원은 정시에 맞추어 출근해야 하나요?" />
+        <Title
+          content="1. 신입사원은 정시에 맞추어 출근해야 하나요?"
+          bookmark={bookmark}
+          setBookmark={setBookmark}
+        />
       </View>
       <View marginBottom={17}>
         <Content content="당신은 이제 막 입사한 신입 사원입니다. 회사의 공식 출근 시간은 오전 9시로 정해져 있습니다. 그렇다면, 출근 시간을 정확히 맞춰 9시에 도착하는 것이 좋은 걸까요? 아니면, 다른 요인을 고려해야 할까요?" />

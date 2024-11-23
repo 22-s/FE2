@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import Title from '../../components/QuizDetailComponent/Title';
-import Content from '../../components/QuizDetailComponent/Content';
+import Title from '../../components/Quiz/QuizDetailComponent/Title';
+import Content from '../../components/Quiz/QuizDetailComponent/Content';
 import O from '../../assets/images/QuizDetail/O.svg';
 import X from '../../assets/images/QuizDetail/X.svg';
-import CorrectModal from '../../components/QuizDetailComponent/CorrectModal';
-import NavButtonNext from '../../components/AfterQuizComponent/NavButtonNext';
-import NavButtonPrev from '../../components/AfterQuizComponent/NavButtonPrev';
+import CorrectModal from '../../components/Quiz/QuizDetailComponent/CorrectModal';
+import NavButtonNext from '../../components/Quiz/AfterQuizComponent/NavButtonNext';
+import NavButtonPrev from '../../components/Quiz/AfterQuizComponent/NavButtonPrev';
 
 const QuizDetail = () => {
   const [modalVisible, setModalVisible] = useState(true);
