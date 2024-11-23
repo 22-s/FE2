@@ -14,6 +14,7 @@ import { name as appName } from "./app.json";
 // import Signup from "./src/pages/Signup/Signup";
 // import BuizContentsList from "./src/pages/BuizContents/BuizContentList";
 // import BuizContent from "./src/pages/BuizContents/BuizContent";
+import WordList from "./src/pages/Word/WordList";
 import MannerList from "./src/pages/Manner/MannerList";
 import MannerContent from "./src/pages/Manner/MannerContent";
 
@@ -21,12 +22,13 @@ const Stack = createStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="MannerList">
-        <Stack.Screen name="MannerList" component={MannerList} />
-        <Stack.Screen name="MannerContent" component={MannerContent} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <WordList />
+    // <NavigationContainer>
+    //   <Stack.Navigator initialRouteName="MannerList">
+    //     <Stack.Screen name="MannerList" component={MannerList} />
+    //     <Stack.Screen name="MannerContent" component={MannerContent} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
   );
 }
 
