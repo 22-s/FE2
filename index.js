@@ -10,8 +10,6 @@ import TabNavigator from "./src/navigators/TabNavigator";
 import AuthStack from "./src/navigators/AuthStack";
 import { name as appName } from "./app.json";
 
-=======
->>>>>>> be95de9bad0af90234a23b5ad53fdfc3fd134a0b
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(true);
 
@@ -25,5 +23,4 @@ function App() {
 }
 
 AppRegistry.registerComponent(appName, () => App);
-export default App;
 export default App;
