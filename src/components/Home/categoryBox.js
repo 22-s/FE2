@@ -1,13 +1,14 @@
 import React from "react";
 import { View, StyleSheet, Text, Dimensions } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const windowWidth = Dimensions.get("window").width;
 
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-export default function CategoryBox({ title, subtitle, icon }) {
+export default function CategoryBox({ title, subtitle, icon, onPress }) {
   return (
-    <View style={styles.categoryBox}>
+    <TouchableOpacity style={styles.categoryBox} onPress={onPress}>
       <View>
         <Text style={styles.text1}>{title}</Text>
         <Text style={styles.text2}>{subtitle}</Text>
@@ -15,7 +16,7 @@ export default function CategoryBox({ title, subtitle, icon }) {
       <View style={styles.imageBox}>
         <View style={styles.image}>{icon}</View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

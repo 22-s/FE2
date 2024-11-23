@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
-import Next from '../../assets/images/AfterQuiz/Next.svg';
+import Next from '../../../assets/images/AfterQuiz/Next.svg';
 
 const NavButton = () => {
   return (

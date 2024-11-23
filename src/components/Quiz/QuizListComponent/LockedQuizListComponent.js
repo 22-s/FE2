@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import LockImg from '../../assets/images/QuizList/Lock.svg';
+import LockImg from '../../../assets/images/QuizList/Lock.svg';
 
 const LockedQuizListComponent = ({content}) => {
   return (

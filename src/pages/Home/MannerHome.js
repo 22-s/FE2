@@ -13,12 +13,12 @@ import Meeting from "../../assets/images/Home/meeting.svg";
 
 const windowWidth = Dimensions.get("window").width;
 
-export default function QuizHome() {
+export default function MannerHome() {
   const navigation = useNavigation(); // Access navigation object
 
   const handlePress = (category) => {
     console.log(`Category clicked: ${category}`); // Console log on click
-    navigation.navigate("QuizList");
+    navigation.navigate("MannerList");
   };
 
   return (

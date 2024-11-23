@@ -10,6 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@react-navigation/bottom-tabs": "^6.6.1",
+>>>>>>> be95de9bad0af90234a23b5ad53fdfc3fd134a0b
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
     "@react-navigation/stack": "^6.3.21",
@@ -18,6 +22,10 @@
     "react-native-date-picker": "^5.0.7",
     "react-native-gesture-handler": "^2.15.0",
     "react-native-image-picker": "^7.1.0",
+<<<<<<< HEAD
+=======
+    "react-native-reanimated": "^3.16.2",
+>>>>>>> be95de9bad0af90234a23b5ad53fdfc3fd134a0b
     "react-native-safe-area-context": "^4.9.0",
     "react-native-screens": "^3.29.0",
     "react-native-svg": "^14.1.0",
@@ -36,6 +44,7 @@
     "babel-jest": "^29.6.3",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
+    "metro-react-native-babel-preset": "^0.76.9",
     "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
     "typescript": "5.0.4"
