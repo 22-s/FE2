@@ -12,7 +12,7 @@ import Negotiate from "../../assets/images/Home/negotiate.svg";
 
 const windowWidth = Dimensions.get("window").width;
 
-export default function QuizHome() {
+export default function WordHome() {
   return (
     <View style={styles.container}>
       <ScrollView>

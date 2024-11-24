@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import Back from "./src/assets/images/Header/Back.svg";
-import Logo from "./src/assets/images/Header/Logo.svg";
+import Logo from "./src/assets/images/Header/Logo.png";
 
 const CustomHeader = ({ title, navigation, routeName }) => {
   const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   useEffect(() => {
-    // QuizHome일 때만 Logo를 표시하고, 나머지 화면에서는 Back 버튼 표시
-    if (routeName === "QuizHome") {
+    if (
+      routeName === "QuizHome" ||
+      routeName === "WordHome" ||
+      routeName === "BuizContentList" ||
+      routeName === "MannerHome"
+    ) {
       setIsLogoVisible(true);
     } else {
       setIsLogoVisible(false);
     }
   }, [routeName]);
+  
 
   return (
     <View
@@ -38,9 +43,22 @@ const CustomHeader = ({ title, navigation, routeName }) => {
           onPress={() => {
             if (!isLogoVisible) navigation.goBack();
           }}
-          style={{ width: 30, height: 30 }}
+          style={{ 
+            width: 30, 
+            height: 30,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          {isLogoVisible ? <Logo /> : <Back />}
+          {isLogoVisible ? (
+            <Image
+              source={Logo} 
+              style={{ width: 35, height: 35 }}
+              resizeMode="contain"
+            />
+          ) : (
+            <Back />
+          )}
         </TouchableOpacity>
         <Text
           style={{

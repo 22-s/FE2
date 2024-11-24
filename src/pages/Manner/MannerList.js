@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
+import SearchBar from "../../components/Home/searchBar";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -37,6 +38,9 @@ export default function MannerList() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
+        <View style={{paddingHorizontal: 20, paddingTop: 10}}>
+          <SearchBar />
+        </View>
         {data.map((item, index) => (
           <TouchableOpacity key={index}>
             <MannerListBox

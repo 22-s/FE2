@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Import Stack Navigators
 import QuizStack from "./QuizStack";
 import MannerStack from "./MannerStack";
+import WordStack from  "./WordStack";
 import BuizContentStack from "./BuizContentStack";
 
 // Import Tab Icons
@@ -32,7 +33,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="퀴즈" component={QuizStack} options={{ tabBarLabel: "퀴즈", headerShown: false }} />
       <Tab.Screen name="매너설명서" component={MannerStack} options={{ tabBarLabel: "매너설명서", headerShown: false }} />
-      <Tab.Screen name="업무용어" component={MannerStack} options={{ tabBarLabel: "업무용어", headerShown: false }} />
+      <Tab.Screen name="업무용어" component={WordStack} options={{ tabBarLabel: "업무용어", headerShown: false }} />
       <Tab.Screen name="트렌드" component={BuizContentStack} options={{ tabBarLabel: "트렌드", headerShown: false }} />
     </Tab.Navigator>
   );

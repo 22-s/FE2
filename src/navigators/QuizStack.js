@@ -16,28 +16,28 @@ const QuizStack = () => (
       name="QuizHome"
       component={QuizHome}
       options={{
-        header: ({ navigation }) => <CustomHeader title="퀴즈" navigation={navigation} />,
+        header: ({ navigation }) => <CustomHeader title="퀴즈" navigation={navigation} routeName={"QuizHome"}/>,
       }}
     />
     <Stack.Screen
       name="QuizList"
       component={QuizList}
       options={{
-        header: ({ navigation }) => <CustomHeader title="퀴즈 목록" navigation={navigation} />,
+        header: ({ navigation }) => <CustomHeader title="퀴즈 목록" navigation={navigation} routeName={"QuizList"}/>,
       }}
     />
     <Stack.Screen
       name="QuizDetail"
       component={QuizDetail}
       options={{
-        header: ({ navigation }) => <CustomHeader title="퀴즈 상세" navigation={navigation} />,
+        header: ({ navigation }) => <CustomHeader title="퀴즈 상세" navigation={navigation} routeName={"QuizDetail"}/>,
       }}
     />
     <Stack.Screen
       name="AfterQuiz"
       component={AfterQuiz}
       options={{
-        header: ({ navigation }) => <CustomHeader title="퀴즈 결과" navigation={navigation} />,
+        header: ({ navigation }) => <CustomHeader title="퀴즈 결과" navigation={navigation} routeName={"AfterQuiz"}/>,
       }}
     />
   </Stack.Navigator>

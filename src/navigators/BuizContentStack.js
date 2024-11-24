@@ -14,14 +14,14 @@ const BuizContentStack = () => (
       name="BuizContentList"
       component={BuizContentList}
       options={{
-        header: ({ navigation }) => <CustomHeader title="비즈니스 트렌드 콘텐츠 목록" navigation={navigation} />,
+        header: ({ navigation }) => <CustomHeader title="비즈니스 트렌드 콘텐츠 목록" navigation={navigation} routeName={"BuizContentList"}/>,
       }}
     />
     <Stack.Screen
       name="BuizContent"
       component={BuizContent}
       options={{
-        header: ({ navigation }) => <CustomHeader title="비즈니스 트렌드 콘텐츠 상세" navigation={navigation} />,
+        header: ({ navigation }) => <CustomHeader title="비즈니스 트렌드 콘텐츠 상세" navigation={navigation} routeName={"BuizContent"}/>,
       }}
     />
   </Stack.Navigator>
