@@ -1,16 +1,22 @@
-import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import Title from '../../components/Quiz/QuizDetailComponent/Title';
-import Content from '../../components/Quiz/QuizDetailComponent/Content';
-import O from '../../assets/images/QuizDetail/O.svg';
-import X from '../../assets/images/QuizDetail/X.svg';
-import CorrectModal from '../../components/Quiz/QuizDetailComponent/CorrectModal';
-import NavButtonNext from '../../components/Quiz/AfterQuizComponent/NavButtonNext';
-import NavButtonPrev from '../../components/Quiz/AfterQuizComponent/NavButtonPrev';
+import React, { useState } from "react";
+import { View, StyleSheet, Touchable } from "react-native";
+import Title from "../../components/Quiz/QuizDetailComponent/Title";
+import Content from "../../components/Quiz/QuizDetailComponent/Content";
+import O from "../../assets/images/QuizDetail/O.svg";
+import X from "../../assets/images/QuizDetail/X.svg";
+import CorrectModal from "../../components/Quiz/QuizDetailComponent/CorrectModal";
+import NavButtonNext from "../../components/Quiz/AfterQuizComponent/NavButtonNext";
+import NavButtonPrev from "../../components/Quiz/AfterQuizComponent/NavButtonPrev";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const QuizDetail = () => {
-  const [modalVisible, setModalVisible] = useState(true);
+const QuizDetail = ({ route }) => {
+  const { quizId } = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -25,8 +31,12 @@ const QuizDetail = () => {
         <NavButtonNext />
       </View>
       <View style={styles.answer}>
-        <O width={165} height={75} />
-        <X width={165} height={75} />
+        <TouchableOpacity onPress={openModal}>
+          <O width={165} height={75} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={openModal}>
+          <X width={165} height={75} />
+        </TouchableOpacity>
       </View>
       <CorrectModal
         content="출근 시각 10분 일찍 출근해서 업무 시작 준비를 해야합니다! 여유를 가지고 하루 일과 및 계획을 점검하며, 간단한 청소 정리정돈으로 하루를 시작합니다."
@@ -41,21 +51,21 @@ const QuizDetail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F3F3F3',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F3F3F3",
   },
   answer: {
     width: 360,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '95%',
-    position: 'absolute',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "95%",
+    position: "absolute",
     zIndex: 10,
   },
 });

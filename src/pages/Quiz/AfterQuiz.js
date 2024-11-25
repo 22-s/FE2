@@ -1,17 +1,19 @@
-import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import Title from '../../components/Quiz/QuizDetailComponent/Title';
-import Content from '../../components/Quiz/QuizDetailComponent/Content';
-import CorrectModal from '../../components/Quiz/QuizDetailComponent/CorrectModal';
-import NavButtonNext from '../../components/Quiz/AfterQuizComponent/NavButtonNext';
-import NavButtonPrev from '../../components/Quiz/AfterQuizComponent/NavButtonPrev';
-import OpenModalButton from '../../components/Quiz/AfterQuizComponent/OpenModalButton';
-import AddReviewButton from '../../components/Quiz/AfterQuizComponent/AddReviewButton';
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import Title from "../../components/Quiz/QuizDetailComponent/Title";
+import Content from "../../components/Quiz/QuizDetailComponent/Content";
+import CorrectModal from "../../components/Quiz/QuizDetailComponent/CorrectModal";
+import NavButtonNext from "../../components/Quiz/AfterQuizComponent/NavButtonNext";
+import NavButtonPrev from "../../components/Quiz/AfterQuizComponent/NavButtonPrev";
+import OpenModalButton from "../../components/Quiz/AfterQuizComponent/OpenModalButton";
+import AddReviewButton from "../../components/Quiz/AfterQuizComponent/AddReviewButton";
 
 const AfterQuiz = () => {
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(true);
   const [bookmark, setBookmark] = useState(false);
+
+  const openModal = () => setModalVisible(true);
 
   return (
     <View style={styles.container}>
@@ -37,7 +39,7 @@ const AfterQuiz = () => {
         <NavButtonNext />
       </View>
       <View style={styles.bottomContainer}>
-        <OpenModalButton />
+        <OpenModalButton onPress={openModal} />
         <AddReviewButton />
       </View>
     </View>
@@ -47,32 +49,32 @@ const AfterQuiz = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F3F3F3',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F3F3F3",
   },
   quizHeader: {
     marginBottom: 20,
   },
   answer: {
     width: 360,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '95%',
-    position: 'absolute',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "95%",
+    position: "absolute",
     zIndex: 10,
   },
   bottomContainer: {
     width: 330,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 
