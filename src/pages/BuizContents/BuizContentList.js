@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import BuizContentsListBox from "../../components/BuizContents/BuizContentsListBox";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -16,6 +17,8 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function BuizContentsList() {
+  const navigation = useNavigation();
+
   // 반복되는 데이터를 배열로 저장
   const data = [
     {
@@ -72,7 +75,7 @@ export default function BuizContentsList() {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
         {data.map((item, index) => (
-          <TouchableOpacity key={index}>
+          <TouchableOpacity key={index} onPress={() => navigation.navigate("BuizContent")}>
             <BuizContentsListBox
               category={item.category}
               title={item.title}

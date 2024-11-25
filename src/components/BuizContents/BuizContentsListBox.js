@@ -24,7 +24,7 @@ export default function BuizContentsListBox({
   date,
 }) {
   return (
-    <TouchableOpacity onPress={() => {}}>
+    <View >
       <View style={styles.block}>
         <View style={styles.highBox}>
           <Text style={styles.highText}>{category}</Text>
@@ -49,7 +49,7 @@ export default function BuizContentsListBox({
       </View>
 
       <View style={styles.line}></View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   contentBox: {
     width: "100%",
-    height: widthPercentage(18),
+    height: widthPercentage(17),
     // backgroundColor: "lightgreen",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: "Pretendard",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "500",
     color: "#acacac",
   },

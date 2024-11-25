@@ -8,8 +8,14 @@ import {
 } from "react-native";
 import LogoMan from "../../assets/images/Logo/logoMan.svg";
 import LogoText from "../../assets/images/Logo/logoWelcome.svg";
+import { useNavigation } from "@react-navigation/native"; 
 
 const Welcome = () => {
+  const navigation = useNavigation(); 
+  const handleGetStarted = () => {
+    navigation.replace("TabNavigator"); 
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* 남자 이미지 */}
@@ -22,11 +28,11 @@ const Welcome = () => {
       <Text style={styles.subtitle}>비즈니스 매너와 업무 스킬을 한 번에!</Text>
 
       {/* 버튼들 */}
-      <TouchableOpacity style={styles.primaryButton}>
+      <TouchableOpacity style={styles.primaryButton} onPress={handleGetStarted}>
         <Text style={styles.primaryButtonText}>신입사UP 시작하기</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.secondaryButton}>
+      <TouchableOpacity style={styles.secondaryButton} onPress={()=> navigation.navigate("Login")}>
         <Text style={styles.secondaryButtonText}>로그인</Text>
       </TouchableOpacity>
     </SafeAreaView>

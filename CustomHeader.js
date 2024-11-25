@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import Back from "./src/assets/images/Header/Back.svg";
 import Logo from "./src/assets/images/Header/Logo.png";
+import { useAuth } from "./src/contexts/AuthContext";
 
 const CustomHeader = ({ title, navigation, routeName }) => {
   const [isLogoVisible, setIsLogoVisible] = useState(false);
+  const { isLoggedIn, login, logout } = useAuth();
 
   useEffect(() => {
     if (
@@ -18,7 +20,29 @@ const CustomHeader = ({ title, navigation, routeName }) => {
       setIsLogoVisible(false);
     }
   }, [routeName]);
-  
+
+  const handleAuthAction = () => {
+    if (isLoggedIn) {
+      // 로그아웃 확인 알림 표시
+      Alert.alert(
+        "로그아웃", 
+        "로그아웃을 하시겠습니까?", 
+        [
+          { text: "취소", style: "cancel" },
+          { 
+            text: "확인", 
+            onPress: () => {
+              logout(); // 로그아웃 처리
+              Alert.alert("알림", "로그아웃되었습니다.");
+            }
+          }
+        ]
+      );
+    } else {
+      // 로그인 화면으로 이동
+      navigation.navigate("Login");
+    }
+  };
 
   return (
     <View
@@ -69,8 +93,10 @@ const CustomHeader = ({ title, navigation, routeName }) => {
         >
           {title}
         </Text>
-        <TouchableOpacity>
-          <Text style={{ color: "blue" }}>로그인</Text>
+        <TouchableOpacity onPress={handleAuthAction}>
+          <Text style={{ color: "blue" }}>
+            {isLoggedIn ? "로그아웃" : "로그인"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

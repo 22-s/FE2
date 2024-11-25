@@ -19,8 +19,10 @@ import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import DateIcon from "../../assets/images/Logo/date.svg";
 import Box1 from "../../assets/images/Logo/box1.svg";
 import Box2 from "../../assets/images/Logo/box2.svg";
+import { useNavigation } from "@react-navigation/native"; 
 
 const Signup = () => {
+  const navigation = useNavigation(); 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +36,10 @@ const Signup = () => {
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [openDatePicker, setOpenDatePicker] = useState(false);
+
+  const [emailStatusMessage, setEmailStatusMessage] = useState(""); // 이메일 상태 메시지
+  const [emailStatusColor, setEmailStatusColor] = useState("#5A5A5A"); // 메시지 색상
+
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -73,16 +79,26 @@ const Signup = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 형식 검증 정규식
     if (!emailRegex.test(email)) {
       setEmailAvailable(false);
+      setEmailStatusMessage("올바른 이메일 형식을 입력해주세요.");
+      setEmailStatusColor("red");
       showToast("올바른 이메일 형식을 입력해주세요.");
       return;
     }
-    // example data, 나중에는 백에서 유효한지 Boolean으로 받아오면 됨!
+    // Example 데이터, 실제 백엔드와 연동 시 교체
     const isAvailable = email !== "haeun9394@gmail.com";
     setEmailAvailable(isAvailable);
-    showToast(
-      isAvailable ? "사용 가능한 이메일입니다." : "이미 가입된 이메일입니다."
-    );
+  
+    if (isAvailable) {
+      setEmailStatusMessage("사용 가능한 이메일입니다.");
+      setEmailStatusColor("#268AFF"); // 성공 메시지 색상
+      showToast("사용 가능한 이메일입니다.");
+    } else {
+      setEmailStatusMessage("중복된 이메일입니다.");
+      setEmailStatusColor("red"); // 실패 메시지 색상
+      showToast("이미 가입된 이메일입니다.");
+    }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,12 +117,20 @@ const Signup = () => {
       </View>
 
       {/* 이메일 입력 필드 */}
-      <View style={styles.emailContainer}>
+      <View
+        style={[
+          styles.emailContainer,
+          emailAvailable === false && styles.inputError, // 이메일이 유효하지 않을 때
+        ]}
+      >
         <TextInput
           placeholder="이메일"
           value={email}
-          onChangeText={setEmail}
-          style={styles.emailInput}
+          onChangeText={(text) => {
+            setEmail(text);
+            setEmailStatusMessage(""); // 이메일 입력 시 상태 초기화
+          }}
+          style={[styles.emailInput, !emailAvailable && styles.inputError]}
           placeholderTextColor="#4D678C"
         />
         <TouchableOpacity style={styles.checkButton} onPress={handleEmailCheck}>
@@ -122,13 +146,21 @@ const Signup = () => {
           </View>
         </TouchableOpacity>
       </View>
+      {/* 상태 메시지 표시 */}
+      {emailStatusMessage &&
+        <Text style={[styles.emailStatusMessage, { color: emailStatusColor }]}>
+          {emailStatusMessage}
+        </Text>
+      }
+      
+
 
       {/* Toast Notification */}
-      {toastVisible && (
+      {/* {toastVisible && (
         <Animated.View style={[styles.toast, { opacity: fadeAnim }]}>
           <Text style={styles.toastText}>{toastMessage}</Text>
         </Animated.View>
-      )}
+      )} */}
 
       {/* 비밀번호 입력 필드 */}
       <View style={styles.inputContainer}>
@@ -221,12 +253,12 @@ const Signup = () => {
       </TouchableOpacity>
 
       {/* 로그인 링크 */}
-      <Text style={styles.loginText}>
+      <Text style={styles.loginText} onPress={()=> navigation.navigate("Login")}>
         계정이 있으신가요? <Text style={styles.loginLink}>로그인</Text>
       </Text>
 
       {/* 하단 네비게이션 메뉴 */}
-      <View style={styles.navBar}>
+      {/* <View style={styles.navBar}>
         <TouchableOpacity style={styles.navItem}>
           <QuizIcon width={24} height={24} />
           <Text style={styles.navText}>퀴즈</Text>
@@ -243,7 +275,7 @@ const Signup = () => {
           <TrendIcon width={24} height={24} />
           <Text style={styles.navText}>트랜드</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
@@ -258,24 +290,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     marginBottom: -10,
-  },
-  emailContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "#268AFF",
-    borderWidth: 1,
-    borderRadius: 15,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-    width: "90%",
-  },
-  emailInput: {
-    flex: 1,
-    paddingVertical: 10,
-    paddingLeft: 12,
-    fontSize: 16,
-    color: "#5A5A5A",
-    fontWeight: "bold",
   },
   checkButtonContent: {
     flexDirection: "row",
@@ -464,6 +478,14 @@ const styles = StyleSheet.create({
     color: "#FF000F",
     fontSize: 14,
   },
+  emailStatusMessage: {
+    fontSize: 12,
+    marginTop: -10,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+    marginLeft: 35,
+  },
+  
 });
 
 export default Signup;

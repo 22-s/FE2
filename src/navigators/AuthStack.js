@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import CustomHeader from "../../CustomHeader.js"
+import CustomHeader from "../../CustomHeader.js";
 
 // Pages
 import Welcome from "../pages/Welcome/Welcome";
