@@ -14,8 +14,10 @@ import WordIcon from "../../assets/images/Logo/word.svg";
 import TrendIcon from "../../assets/images/Logo/trend.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
+import { useNavigation } from "@react-navigation/native"; 
 
 const LoginPage = () => {
+  const navigation = useNavigation(); 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
@@ -57,12 +59,12 @@ const LoginPage = () => {
       </TouchableOpacity>
 
       {/* 회원가입 링크 */}
-      <Text style={styles.signUpText}>
+      <Text style={styles.signUpText} onPress={()=> navigation.navigate("Signup")}>
         계정이 없으신가요? <Text style={styles.signUpLink}>회원가입</Text>
       </Text>
 
       {/* 하단 네비게이션 메뉴 */}
-      <View style={styles.navBar}>
+      {/* <View style={styles.navBar}>
         <TouchableOpacity style={styles.navItem}>
           <QuizIcon width={24} height={24} />
           <Text style={styles.navText}>퀴즈</Text>
@@ -79,7 +81,7 @@ const LoginPage = () => {
           <TrendIcon width={24} height={24} />
           <Text style={styles.navText}>트랜드</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
