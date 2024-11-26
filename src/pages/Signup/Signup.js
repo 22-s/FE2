@@ -19,6 +19,7 @@ import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import DateIcon from "../../assets/images/Logo/date.svg";
 import Box1 from "../../assets/images/Logo/box1.svg";
 import Box2 from "../../assets/images/Logo/box2.svg";
+import axiosInstance from "../../api/axiosInstance";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -82,6 +83,40 @@ const Signup = () => {
     showToast(
       isAvailable ? "사용 가능한 이메일입니다." : "이미 가입된 이메일입니다."
     );
+  };
+
+  const handleSignUpButton = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      showToast("모든 입력란을 입력하세요.");
+      return;
+    }
+
+    if (!isPasswordMatch) {
+      showToast("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    try {
+      const requestBody = {
+        nickname: name,
+        email,
+        password,
+        join_date: date.toISOString().split("T")[0],
+      };
+
+      const response = await axiosInstance.post("/users/signup", requestBody);
+
+      if (response.status === 201) {
+        showToast("회원가입이 완료되었습니다!");
+      } else {
+        showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (e) {
+      console.error("Signup Error: ", e);
+      showToast(
+        e.response?.data?.message || "회원가입 요청 중 문제가 발생했습니다."
+      );
+    }
   };
 
   return (
@@ -216,7 +251,10 @@ const Signup = () => {
       />
 
       {/* 회원가입 버튼 */}
-      <TouchableOpacity style={styles.signUpButton}>
+      <TouchableOpacity
+        style={styles.signUpButton}
+        onPress={handleSignUpButton}
+      >
         <Text style={styles.signUpButtonText}>회원가입</Text>
       </TouchableOpacity>
 
