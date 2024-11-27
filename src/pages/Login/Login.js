@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   SafeAreaView,
   Text,
@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import LogoText from "../../assets/images/Logo/logo2.svg";
 import QuizIcon from "../../assets/images/Logo/quiz.svg";
@@ -14,11 +15,60 @@ import WordIcon from "../../assets/images/Logo/word.svg";
 import TrendIcon from "../../assets/images/Logo/trend.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
-import { useNavigation } from "@react-navigation/native"; 
+import { useNavigation } from "@react-navigation/native";
+import { post } from "../../api/request";
 
 const LoginPage = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    setToastVisible(true);
+
+    fadeAnim.setValue(0);
+
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setTimeout(() => {
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start(() => setToastVisible(false));
+      }, 3000);
+    });
+  };
+
+  const handleLoginButton = async () => {
+    if (!email || !password) {
+      showToast("모든 입력란을 입력하세요.");
+      return;
+    }
+
+    try {
+      const requestBody = {
+        email,
+        password,
+      };
+
+      const response = await post("/user/signin", requestBody);
+      console.log("Response Data:", response?.message);
+
+      navigation.navigate("QuizHome");
+    } catch (e) {
+      console.error("Login Error: ", e);
+      console.error(e.response?.data.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,6 +78,8 @@ const LoginPage = () => {
       {/* 이메일 입력 필드 */}
       <View style={styles.inputContainer}>
         <TextInput
+          value={email}
+          onChangeText={setEmail}
           placeholder="이메일"
           style={styles.input}
           placeholderTextColor="#4D678C"
@@ -37,6 +89,8 @@ const LoginPage = () => {
       {/* 비밀번호 입력 필드 */}
       <View style={styles.inputContainer}>
         <TextInput
+          value={password}
+          onChangeText={setPassword}
           placeholder="비밀번호"
           secureTextEntry={!isPasswordVisible}
           style={styles.input}
@@ -54,12 +108,15 @@ const LoginPage = () => {
       </View>
 
       {/* 로그인 버튼 */}
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLoginButton}>
         <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity>
 
       {/* 회원가입 링크 */}
-      <Text style={styles.signUpText} onPress={()=> navigation.navigate("Signup")}>
+      <Text
+        style={styles.signUpText}
+        onPress={() => navigation.navigate("Signup")}
+      >
         계정이 없으신가요? <Text style={styles.signUpLink}>회원가입</Text>
       </Text>
 

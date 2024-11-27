@@ -122,18 +122,12 @@ const Signup = () => {
       console.log("Response Data:", response?.message);
 
       navigation.navigate("Login");
-
-      if (response) {
-        showToast("회원가입이 완료되었습니다!");
-      } else {
-        showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
-      }
     } catch (e) {
       console.error("Signup Error: ", e);
       console.error(e.response?.data.message);
-      showToast(
-        e.response?.data?.message || "회원가입 요청 중 문제가 발생했습니다."
-      );
+      // showToast(
+      //   e.response?.data?.message || "회원가입 요청 중 문제가 발생했습니다."
+      // );
     }
   };
 

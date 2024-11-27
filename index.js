@@ -10,7 +10,6 @@ import { AuthProvider } from "./src/contexts/AuthContext";
 import TabNavigator from "./src/navigators/TabNavigator";
 import AuthStack from "./src/navigators/AuthStack";
 import { name as appName } from "./app.json";
-import Signup from "./src/pages/Signup/Signup";
 
 const Stack = createStackNavigator();
 
@@ -20,7 +19,22 @@ function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Signup />
+        <Stack.Navigator
+          initialRouteName={isLoggedIn ? "TabNavigator" : "AuthStack"}
+        >
+          {/* AuthStack */}
+          <Stack.Screen
+            name="AuthStack"
+            component={AuthStack}
+            options={{ headerShown: false }}
+          />
+          {/* TabNavigator */}
+          <Stack.Screen
+            name="TabNavigator"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
   );
