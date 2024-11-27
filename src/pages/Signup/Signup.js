@@ -19,10 +19,11 @@ import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import DateIcon from "../../assets/images/Logo/date.svg";
 import Box1 from "../../assets/images/Logo/box1.svg";
 import Box2 from "../../assets/images/Logo/box2.svg";
-import { useNavigation } from "@react-navigation/native"; 
+import { useNavigation } from "@react-navigation/native";
+import { post } from "../../api/request";
 
 const Signup = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +40,6 @@ const Signup = () => {
 
   const [emailStatusMessage, setEmailStatusMessage] = useState(""); // 이메일 상태 메시지
   const [emailStatusColor, setEmailStatusColor] = useState("#5A5A5A"); // 메시지 색상
-
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -87,7 +87,7 @@ const Signup = () => {
     // Example 데이터, 실제 백엔드와 연동 시 교체
     const isAvailable = email !== "haeun9394@gmail.com";
     setEmailAvailable(isAvailable);
-  
+
     if (isAvailable) {
       setEmailStatusMessage("사용 가능한 이메일입니다.");
       setEmailStatusColor("#268AFF"); // 성공 메시지 색상
@@ -98,7 +98,44 @@ const Signup = () => {
       showToast("이미 가입된 이메일입니다.");
     }
   };
-  
+
+  const handleSignUpButton = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      showToast("모든 입력란을 입력하세요.");
+      return;
+    }
+
+    if (!isPasswordMatch) {
+      showToast("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    try {
+      const requestBody = {
+        nickname: name,
+        email,
+        password,
+        join_date: date.toISOString().split("T")[0],
+      };
+
+      const response = await post("/user/signup", requestBody);
+      console.log("Response Data:", response?.message);
+
+      navigation.navigate("Login");
+
+      if (response) {
+        showToast("회원가입이 완료되었습니다!");
+      } else {
+        showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (e) {
+      console.error("Signup Error: ", e);
+      console.error(e.response?.data.message);
+      showToast(
+        e.response?.data?.message || "회원가입 요청 중 문제가 발생했습니다."
+      );
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -147,13 +184,11 @@ const Signup = () => {
         </TouchableOpacity>
       </View>
       {/* 상태 메시지 표시 */}
-      {emailStatusMessage &&
+      {emailStatusMessage && (
         <Text style={[styles.emailStatusMessage, { color: emailStatusColor }]}>
           {emailStatusMessage}
         </Text>
-      }
-      
-
+      )}
 
       {/* Toast Notification */}
       {/* {toastVisible && (
@@ -248,12 +283,18 @@ const Signup = () => {
       />
 
       {/* 회원가입 버튼 */}
-      <TouchableOpacity style={styles.signUpButton}>
+      <TouchableOpacity
+        style={styles.signUpButton}
+        onPress={handleSignUpButton}
+      >
         <Text style={styles.signUpButtonText}>회원가입</Text>
       </TouchableOpacity>
 
       {/* 로그인 링크 */}
-      <Text style={styles.loginText} onPress={()=> navigation.navigate("Login")}>
+      <Text
+        style={styles.loginText}
+        onPress={() => navigation.navigate("Login")}
+      >
         계정이 있으신가요? <Text style={styles.loginLink}>로그인</Text>
       </Text>
 
@@ -485,7 +526,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginLeft: 35,
   },
-  
 });
 
 export default Signup;
