@@ -3,7 +3,7 @@ import EncryptedStorage from "react-native-encrypted-storage";
 
 const axiosInstance = axios.create({
   baseURL: "https://22s.store/api",
-  withCredentials: true,
+  withCredentials: false,
   timeout: 10000,
 });
 
