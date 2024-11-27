@@ -19,8 +19,8 @@ import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import DateIcon from "../../assets/images/Logo/date.svg";
 import Box1 from "../../assets/images/Logo/box1.svg";
 import Box2 from "../../assets/images/Logo/box2.svg";
-import axiosInstance from "../../api/axiosInstance";
 import { useNavigation } from "@react-navigation/native";
+import { post } from "../../api/request";
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -118,15 +118,19 @@ const Signup = () => {
         join_date: date.toISOString().split("T")[0],
       };
 
-      const response = await axiosInstance.post("/users/signup", requestBody);
+      const response = await post("/user/signup", requestBody);
+      console.log("Response Data:", response?.message);
 
-      if (response.status === 201) {
+      navigation.navigate("Login");
+
+      if (response) {
         showToast("회원가입이 완료되었습니다!");
       } else {
         showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (e) {
       console.error("Signup Error: ", e);
+      console.error(e.response?.data.message);
       showToast(
         e.response?.data?.message || "회원가입 요청 중 문제가 발생했습니다."
       );
