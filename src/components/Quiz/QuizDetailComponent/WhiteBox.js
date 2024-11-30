@@ -1,15 +1,16 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
-const whiteBox = ({height, children}) => {
-  return <View style={[styles.container, {height}]}>{children}</View>;
+const whiteBox = ({minHeight, children}) => {
+  return <View style={[styles.container, {minHeight}]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: 359,
+    width: '50%',
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    paddingTop: 22,
   },
 });
 

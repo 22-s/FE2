@@ -5,7 +5,7 @@ import QuestionMan from '../../../assets/images/QuizDetail/QuestionMan.svg';
 
 const Content = ({content}) => {
   return (
-    <WhiteBox height={416}>
+    <WhiteBox minHeight={416}>
       <View style={styles.container}>
         <Text style={styles.text}>{content}</Text>
         <QuestionMan width={258} height={258} />
@@ -16,22 +16,22 @@ const Content = ({content}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   text: {
-    width: 296,
-    height: 142,
+    width: 359,
     flexDirection: 'column',
     justifyContent: 'center',
-    flexShrink: 0,
     color: '#72777A',
     fontFamily: 'Pretendard',
     fontSize: 16,
     fontStyle: 'normal',
     fontWeight: '400',
     lineHeight: 20,
+    paddingHorizontal: 20,
+    // backgroundColor: 'yellow'
   },
 });
 

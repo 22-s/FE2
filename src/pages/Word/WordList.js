@@ -5,7 +5,8 @@ import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const WordList = () => {
+const WordList = ({route}) => {
+  const { category } = route.params;
   const [terms, setTerms] = useState([]); // API 데이터 저장
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +40,7 @@ const WordList = () => {
   };
 
   useEffect(() => {
-    fetchQuizzes("협상의사결정");
+    fetchQuizzes(category);
   }, []);
 
   if (loading) {

@@ -1,9 +1,9 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
-const NextQuizButton = () => {
+const NextQuizButton = ({onPress}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.text}>다음 문제</Text>
     </TouchableOpacity>
   );

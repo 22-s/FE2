@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import Next from '../../../assets/images/AfterQuiz/Next.svg';
 
-const NavButton = () => {
+const NavButton = ({onPress}) => {
   return (
-    <TouchableOpacity style={styles.navButton}>
+    <TouchableOpacity style={styles.navButton} onPress={onPress}>
       <Next width={27} height={20} />
       <Text style={styles.buttonText}>다음</Text>
     </TouchableOpacity>

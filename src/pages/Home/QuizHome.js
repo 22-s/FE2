@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Navigation hook
 import SearchBar from "../../components/Home/searchBar";
-import ReviewBar from "../../components/Home/reviewBar";
+import ReviewBar from "../../components/Home/reviewBarQuiz";
 import CategoryBox from "../../components/Home/categoryBox";
 import Bag from "../../assets/images/Home/bag.svg";
 import Card from "../../assets/images/Home/card.svg";
@@ -18,14 +18,14 @@ export default function QuizHome() {
 
   const handlePress = (category) => {
     console.log(`Category clicked: ${category}`); // Console log on click
-    navigation.navigate("QuizList");
+    navigation.navigate("QuizList", {category});
   };
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <SearchBar />
-        <ReviewBar />
+        <ReviewBar onPress={() => handlePress("???")}/>
         <View style={styles.categoryArea}>
           <CategoryBox
             title="업무의 첫걸음"
@@ -38,7 +38,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Bag />}
-            onPress={() => handlePress("업무의 첫걸음")}
+            onPress={() => handlePress("기본 매너")}
           />
           <CategoryBox
             title="첫인상을 좌우하는"
@@ -49,7 +49,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Card />}
-            onPress={() => handlePress("첫인상을 좌우하는")}
+            onPress={() => handlePress("명함 공유 매너")}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -64,7 +64,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Email />}
-            onPress={() => handlePress("이렇게 보내면 OK!")}
+            onPress={() => handlePress("팀장님께 메일 보내기")}
           />
           <CategoryBox
             title="명확하고 간결하게,"
@@ -75,7 +75,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Pen />}
-            onPress={() => handlePress("명확하고 간결하게")}
+            onPress={() => handlePress("직장인 글쓰기 Tip")}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -89,7 +89,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Outfit />}
-            onPress={() => handlePress("상황별 스타일링 가이드")}
+            onPress={() => handlePress("??")}
           />
           <CategoryBox
             title="원활한 의견 전달"
@@ -100,7 +100,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Meeting />}
-            onPress={() => handlePress("원활한 의견 전달")}
+            onPress={() => handlePress("커뮤니케이션 매너")}
           />
         </View>
       </ScrollView>
