@@ -25,7 +25,7 @@ export default function WordHome() {
     <View style={styles.container}>
       <ScrollView>
         <SearchBar />
-        <BookmarkBar />
+        <BookmarkBar onPress={() => navigation.navigate("WordLikeList")}/>
         <View style={styles.categoryArea}>
           <CategoryBox
             title="정확한 회계 처리"

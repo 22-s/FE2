@@ -5,6 +5,7 @@ import CustomHeader from "../../CustomHeader.js"
 // Pages
 import WordHome from "../pages/Home/WordHome.js";
 import WordList from "../pages/Word/WordList.js";
+import WordLikeList from "../pages/Word/WordLikeList.js";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,13 @@ const WordStack = () => (
       component={WordList}
       options={{
         header: ({ navigation }) => <CustomHeader title="회사 업무 용어 단어장" navigation={navigation} routeName={WordList}/>,
+      }}
+    />
+    <Stack.Screen
+      name="WordLikeList"
+      component={WordLikeList}
+      options={{
+        header: ({ navigation }) => <CustomHeader title="회사 업무 용어 단어장" navigation={navigation} routeName={WordLikeList}/>,
       }}
     />
   </Stack.Navigator>

@@ -54,7 +54,7 @@ const LoginPage = () => {
       return;
     }
 
-    //await CookieManager.clearAll();
+    await CookieManager.clearAll();
     await AsyncStorage.removeItem("accessToken");
 
     try {

@@ -5,11 +5,11 @@ import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const WordList = () => {
+const WordLikeList = () => {
   const [terms, setTerms] = useState([]); // API 데이터 저장
   const [loading, setLoading] = useState(true);
 
-  const fetchQuizzes = async (category) => {
+  const fetchQuizzes = async () => {
     const token = await AsyncStorage.getItem("accessToken");
     const headers = {
       "Content-Type": "application/json",
@@ -20,7 +20,7 @@ const WordList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://22s.store/api/voca?category=${category}`,
+        `https://22s.store/api/voca/likes`,
         { headers }
       );
 
@@ -39,7 +39,7 @@ const WordList = () => {
   };
 
   useEffect(() => {
-    fetchQuizzes("협상의사결정");
+    fetchQuizzes();
   }, []);
 
   if (loading) {
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WordList;
+export default WordLikeList;
