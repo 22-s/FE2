@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import Prev from '../../../assets/images/AfterQuiz/Prev.svg';
 
-const NavButton = () => {
+const NavButton = ({onPress}) => {
   return (
-    <TouchableOpacity style={styles.navButton}>
+    <TouchableOpacity style={styles.navButton} onPress={onPress}>
       <Prev width={27} height={20} />
       <Text style={styles.buttonText}>이전</Text>
     </TouchableOpacity>

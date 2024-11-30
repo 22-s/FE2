@@ -96,6 +96,7 @@ const QuizLikeList = ({route}) => {
               content={quiz.question}
               correct={quiz.correct}
               review={quiz.inReviewList}
+              solved={quiz.solved}
               onPress={() => handleQuizPress(quiz.quizId, quiz.review)}
             />
           );

@@ -35,9 +35,9 @@ export default function WordHome() {
           />
           <CategoryBox
             title="IT 프로젝트 관리"
-            subtitle="기술 IT"
+            subtitle="기술/IT"
             icon={<IT />}
-            onPress={() => handlePress("기술 IT")}
+            onPress={() => handlePress("기술IT")}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -56,10 +56,10 @@ export default function WordHome() {
         </View>
         <View style={styles.categoryArea}>
           <CategoryBox
-            title="원활한 의견 전달"
-            subtitle="회의 시 소통 전략"
+            title="리더의 소통 방법"
+            subtitle="리더십/팀워크"
             icon={<Captain />}
-            onPress={() => handlePress("회의 시 소통 전략")}
+            onPress={() => handlePress("리더십팀워크")}
           />
           <CategoryBox
             title="효과적인 협상 전략"

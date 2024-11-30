@@ -6,7 +6,7 @@ import BookmarkFilled from "../../../assets/images/QuizList/BookmarkFilled.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const Title = ({ content, review, quizId }) => {
+const Title = ({ content, review, quizId, solved }) => {
   const [bookmark, setBookmark] = useState(review);
   const [containerHeight, setContainerHeight] = useState(50); // 기본 높이를 50으로 설정
 
@@ -20,20 +20,24 @@ const Title = ({ content, review, quizId }) => {
     };
 
     try {
-      if (bookmark) {
-        // 복습하기 해제 API 호출
-        await axios.delete(`https://22s.store/api/quiz/${quizId}/review`, {
-          headers,
-        });
-        Alert.alert("알림", "복습하기 리스트에서 삭제하였습니다.");
+      if(!solved) {
+        Alert.alert('답을 제출해야 복습 리스트에 추가할 수 있습니다.');
       } else {
-        // 복습하기 추가 API 호출
-        await axios.post(`https://22s.store/api/quiz/${quizId}/review`, {}, {
-          headers,
-        });
-        Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+        if (bookmark) {
+          // 복습하기 해제 API 호출
+          await axios.delete(`https://22s.store/api/quiz/${quizId}/review`, {
+            headers,
+          });
+          Alert.alert("알림", "복습하기 리스트에서 삭제하였습니다.");
+        } else {
+          // 복습하기 추가 API 호출
+          await axios.post(`https://22s.store/api/quiz/${quizId}/review`, {}, {
+            headers,
+          });
+          Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+        }
+        setBookmark((prev) => !prev); // 상태 변경
       }
-      setBookmark((prev) => !prev); // 상태 변경
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
@@ -62,11 +66,16 @@ const Title = ({ content, review, quizId }) => {
           {content}
         </Text>
         <TouchableOpacity onPress={handleReview}>
-          {bookmark ? (
+          {solved ?
+          (bookmark ? (
             <BookmarkFilled style={styles.bookMarkButton} />
           ) : (
             <BookMarkButton style={styles.bookMarkButton} />
-          )}
+          ))
+          : (
+            <BookMarkButton style={styles.bookMarkButton} />
+          )
+          }
         </TouchableOpacity>
       </View>
     </View>

@@ -7,7 +7,7 @@ import BookmarkFilled from "../../../assets/images/QuizList/BookmarkFilled.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const QuizListComponent = ({ quizId, content, correct, review, onPress }) => {
+const QuizListComponent = ({ quizId, content, correct, review, onPress, solved }) => {
   const [bookmark, setBookmark] = useState(review);
 
   const handleReview = async () => {
@@ -50,20 +50,28 @@ const QuizListComponent = ({ quizId, content, correct, review, onPress }) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      {/* Correct or Wrong 이미지 */}
-      {correct ? (
-        <Correct style={styles.answer} />
+      {solved ? (
+        correct ? (
+          <Correct style={styles.answer} />
+        ) : (
+          <Wrong style={styles.answer} />
+        )
       ) : (
-        <Wrong style={styles.answer} />
-      )}
+        <View style={styles.answer}></View>
+      )}      
       <View style={styles.contentArea}>
         <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">{content}</Text>
         <TouchableOpacity onPress={handleReview}>
-          {bookmark ? (
+          {solved ? (
+            bookmark ? (
               <BookmarkFilled style={styles.bookMarkButton} />
           ) : (
               <BookMarkButton style={styles.bookMarkButton} />
+          )
+          ) : (
+            <View style={styles.bookMarkButton} />
           )}
+          
         </TouchableOpacity>
         
       </View>

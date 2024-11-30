@@ -6,6 +6,7 @@ import CustomHeader from "../../CustomHeader.js"
 import QuizHome from "../pages/Home/QuizHome";
 import QuizList from "../pages/Quiz/QuizList";
 import QuizDetail from "../pages/Quiz/QuizDetail";
+import QuizDetail2 from "../pages/Quiz/QuizDetail2.js";
 import AfterQuiz from "../pages/Quiz/AfterQuiz";
 import QuizLikeList from "../pages/Quiz/QuizLikeList.js";
 
@@ -32,6 +33,13 @@ const QuizStack = () => (
       component={QuizDetail}
       options={{
         header: ({ navigation }) => <CustomHeader title="퀴즈 상세" navigation={navigation} routeName={"QuizDetail"}/>,
+      }}
+    />
+    <Stack.Screen
+      name="QuizDetail2"
+      component={QuizDetail2}
+      options={{
+        header: ({ navigation }) => <CustomHeader title="퀴즈 상세" navigation={navigation} routeName={"QuizDetail2"}/>,
       }}
     />
     <Stack.Screen

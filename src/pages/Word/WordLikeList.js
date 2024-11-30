@@ -26,6 +26,7 @@ const WordLikeList = () => {
 
       if (response.data.isSuccess) {
         setTerms(response.data.result); // 데이터 저장
+        console.log(response.data.result);
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
         Alert.alert("오류", response.data.message);

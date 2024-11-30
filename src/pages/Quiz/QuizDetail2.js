@@ -15,17 +15,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
-const QuizDetail = ({ route }) => {
+const QuizDetail2 = ({ route }) => {
   const navigation = useNavigation();
   const { quizId, review, firstQuizId, lastQuizId } = route.params;
-  //const [ currentQuizId, setIsQuizId ] = useState(quizId);
+  const [ currentQuizId, setIsQuizId ] = useState(quizId);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [quiz, setQuiz] = useState("");
   const [answer, setAnswer] = useState("");
   const [ isSubmit, setIsSubmit] = useState(false);
   const [bookmark, setBookmark] = useState(review);
-  const [isSolved, setIsSolved] = useState(false);
 
   const openModal = () => {
     setModalVisible(true);
@@ -52,7 +51,7 @@ const QuizDetail = ({ route }) => {
 
       if (response.data.isSuccess) {
         setQuiz(response.data.result);
-        setIsSolved(quiz.solved);
+
         setIsSubmit(false);
         setModalVisible(false);
       } else {
@@ -89,7 +88,6 @@ const QuizDetail = ({ route }) => {
         setIsCorrect(response.data.result.correct); // 정답 여부 설정
         setModalVisible(true); // 모달 열기
         setIsSubmit(true);
-        setIsSolved(true);
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
         Alert.alert("오류", response.data.message);
@@ -106,7 +104,7 @@ const QuizDetail = ({ route }) => {
 
   const updateQuizId = async (quizId) => {
     console.log("업데이트 퀴즈 아이디: " + quizId);
-    navigation.replace("QuizDetail2", { quizId, review, firstQuizId, lastQuizId } )
+    navigation.replace("QuizDetail", { quizId, review, firstQuizId, lastQuizId } )
   };
 
   const nextQuiz = (quizId) => {
@@ -174,14 +172,14 @@ const QuizDetail = ({ route }) => {
   return (
     <View style={styles.container}>
       <View marginBottom={12}>
-        <Title content={quiz.question} review={quiz.inReviewList} quizId={quizId} solved={quiz.solved}/>
+        <Title content={quiz.question} review={review} quizId={quizId} />
       </View>
       <View marginBottom={17}>
         <Content content={quiz.questionDetail} />
       </View>
       <View style={styles.buttonContainer}>
-        <NavButtonPrev onPress={() => prevQuiz(quizId)}/>
-        <NavButtonNext onPress={() => nextQuiz(quizId)}/>
+        <NavButtonPrev onPress={() => prevQuiz(currentQuizId)}/>
+        <NavButtonNext onPress={() => nextQuiz(currentQuizId)}/>
       </View>
       { isSubmit ?
       <View style={styles.bottomContainer}>
@@ -190,10 +188,10 @@ const QuizDetail = ({ route }) => {
       </View>
       :
       <View style={styles.answer}>
-        <TouchableOpacity onPress={() => submitAnswer(quizId, "O")}>
+        <TouchableOpacity onPress={() => submitAnswer(currentQuizId, "O")}>
           <O width={165} height={75} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => submitAnswer(quizId, "X")}>
+        <TouchableOpacity onPress={() => submitAnswer(currentQuizId, "X")}>
           <X width={165} height={75} />
         </TouchableOpacity>
       </View>
@@ -244,4 +242,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizDetail;
+export default QuizDetail2;

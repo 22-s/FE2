@@ -89,7 +89,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Outfit />}
-            onPress={() => handlePress("??")}
+            onPress={() => handlePress("TPO에 맞는 복장")}
           />
           <CategoryBox
             title="원활한 의견 전달"

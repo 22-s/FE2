@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Modal, View, StyleSheet, Text } from "react-native";
+import { Modal, View, StyleSheet, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import NextQuizButton from "./button/NextQuizButton";
 import AddReviewButton from "./button/AddReviewButton";
@@ -59,7 +59,7 @@ const CorrectModal = ({
 
   const nextQuizPress = () => {
     console.log('함수 실행');
-    updateQuizId(quizId);
+    updateQuizId(quizId+1);
   };  
 
   return (

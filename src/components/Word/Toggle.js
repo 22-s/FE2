@@ -8,9 +8,9 @@ import StarFull from "../../assets/images/Word/채운별.svg";
 import Star from "../../assets/images/Word/빈별.svg";
 import ToggleContent from "./ToggleContent";
 
-const Toggle = ({ vocaId, term, description, example }) => {
+const Toggle = ({ vocaId, term, description, example, favorited }) => {
   const [isToggled, setIsToggled] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false); // 즐겨찾기 상태
+  const [isFavorite, setIsFavorite] = useState(favorited); // 즐겨찾기 상태
 
   const handleToggle = () => {
     setIsToggled((prev) => !prev);
