@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { post } from "../../api/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CookieManager from "@react-native-cookies/cookies";
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from "../../contexts/AuthContext";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -54,14 +54,14 @@ const LoginPage = () => {
       return;
     }
 
-    //await CookieManager.clearAll();
+    await CookieManager.clearAll();
     await AsyncStorage.removeItem("accessToken");
 
     try {
       const requestBody = { email, password };
       const response = await post("/user/signin", requestBody);
       console.log("Response 전체:", response);
-  
+
       if (response.isSuccess) {
         console.log("로그인 성공");
         login();
