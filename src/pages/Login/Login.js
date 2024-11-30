@@ -9,17 +9,17 @@ import {
   Animated,
 } from "react-native";
 import LogoText from "../../assets/images/Logo/logo2.svg";
-import QuizIcon from "../../assets/images/Logo/quiz.svg";
-import MannerIcon from "../../assets/images/Logo/manner.svg";
-import WordIcon from "../../assets/images/Logo/word.svg";
-import TrendIcon from "../../assets/images/Logo/trend.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import { useNavigation } from "@react-navigation/native";
 import { post } from "../../api/request";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CookieManager from "@react-native-cookies/cookies";
+import { useAuth } from '../../contexts/AuthContext';
 
 const LoginPage = () => {
   const navigation = useNavigation();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -54,28 +54,42 @@ const LoginPage = () => {
       return;
     }
 
+    //await CookieManager.clearAll();
+    await AsyncStorage.removeItem("accessToken");
+
     try {
-      const requestBody = {
-        email,
-        password,
-      };
-
+      const requestBody = { email, password };
       const response = await post("/user/signin", requestBody);
-      console.log("Response Data:", response?.message);
-
-      navigation.navigate("QuizHome");
+      console.log("Response 전체:", response);
+  
+      if (response.isSuccess) {
+        console.log("로그인 성공");
+        login();
+        navigation.replace("TabNavigator");
+      } else {
+        showToast("로그인에 실패했습니다. 다시 시도해주세요.");
+      }
     } catch (e) {
-      console.error("Login Error: ", e);
-      console.error(e.response?.data.message);
+      console.error("Login Error:", e);
+      showToast("로그인에 실패했습니다. 다시 시도해주세요.");
     }
+  };
+
+  // 토큰 추출 함수
+  const extractAccessToken = (setCookieHeader) => {
+    const cookieParts = setCookieHeader[0].split(";");
+    for (const part of cookieParts) {
+      if (part.trim().startsWith("accessToken=")) {
+        return part.split("=")[1];
+      }
+    }
+    return null;
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 로고 */}
       <LogoText width={400} height={120} style={styles.logo} />
 
-      {/* 이메일 입력 필드 */}
       <View style={styles.inputContainer}>
         <TextInput
           value={email}
@@ -86,7 +100,6 @@ const LoginPage = () => {
         />
       </View>
 
-      {/* 비밀번호 입력 필드 */}
       <View style={styles.inputContainer}>
         <TextInput
           value={password}
@@ -107,38 +120,16 @@ const LoginPage = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 로그인 버튼 */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLoginButton}>
         <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity>
 
-      {/* 회원가입 링크 */}
       <Text
         style={styles.signUpText}
         onPress={() => navigation.navigate("Signup")}
       >
         계정이 없으신가요? <Text style={styles.signUpLink}>회원가입</Text>
       </Text>
-
-      {/* 하단 네비게이션 메뉴 */}
-      {/* <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navItem}>
-          <QuizIcon width={24} height={24} />
-          <Text style={styles.navText}>퀴즈</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <MannerIcon width={24} height={24} />
-          <Text style={styles.navText}>매너설명서</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <WordIcon width={24} height={24} />
-          <Text style={styles.navText}>업무용어</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <TrendIcon width={24} height={24} />
-          <Text style={styles.navText}>트랜드</Text>
-        </TouchableOpacity>
-      </View> */}
     </SafeAreaView>
   );
 };
@@ -201,27 +192,6 @@ const styles = StyleSheet.create({
     color: "#5A5A5A",
     fontWeight: "bold",
     textDecorationLine: "underline",
-  },
-  navBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    position: "absolute",
-    bottom: 20,
-    paddingHorizontal: 30,
-  },
-  navItem: {
-    alignItems: "center",
-  },
-  navText: {
-    color: "#B0B0B0",
-    fontSize: 12,
-    marginTop: 5,
-  },
-  navTextInactive: {
-    color: "#B0B0B0",
-    fontSize: 12,
-    marginTop: 5,
   },
 });
 

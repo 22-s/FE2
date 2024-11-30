@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
 import SearchBar from "../../components/Home/searchBar";
+import axiosInstance from "../../api/axiosInstance";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -18,27 +20,41 @@ const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function MannerList() {
   const navigation = useNavigation(); // navigation 훅 사용
+  const [data, setData] = useState([]); // API 데이터를 저장
+  const [loading, setLoading] = useState(true); // 로딩 상태 관리
 
-  const data = [
-    {
-      title: "OpenAI DevDay, 최고급 청바지를 선보이다.",
-      content:
-        '"골드러시 시대에는 금맥을 찾는 대신 청바지나 곡괭이를 팔아라"라는 비즈니스 격언, 한 번쯤 들어보셨을 겁니다. 과거 캘...',
-      images: {},
-    },
-    {
-      title: "에이닷, 이렇게 좋은데 외않써?",
-      content:
-        "최근 흥미로운 기사를 하나 읽었습니다. 한국생성형AI연구원에서 발표한 생성형AI 활용 조사 결과에 대한 내용이었는데요...",
-      images: {},
-    },
-    // 추가 데이터...
-  ];
+  const fetchVocaData = async (category) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(`/voca?category=${encodeURIComponent(category)}`);
+      if (response.data.isSuccess) {
+        setData(response.data.result); // API 응답 데이터 저장
+      } else {
+        console.error("데이터를 가져오지 못했습니다:", response.data.message);
+      }
+    } catch (error) {
+      console.error("데이터를 가져오는 중 오류 발생:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchVocaData("기본 매너"); // 원하는 카테고리로 요청
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#268AFF" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
-        <View style={{paddingHorizontal: 20, paddingTop: 10}}>
+        <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
           <SearchBar />
         </View>
         {data.map((item, index) => (
@@ -65,5 +81,10 @@ const styles = StyleSheet.create({
   listArea: {
     paddingLeft: 7,
     paddingRight: 7,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

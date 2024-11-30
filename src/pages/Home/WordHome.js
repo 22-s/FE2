@@ -9,10 +9,18 @@ import Marketing from "../../assets/images/Home/marketing.svg";
 import HR from "../../assets/images/Home/hr.svg";
 import Captain from "../../assets/images/Home/captain.svg";
 import Negotiate from "../../assets/images/Home/negotiate.svg";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 
 export default function WordHome() {
+  const navigation = useNavigation(); // Access navigation object
+
+  const handlePress = (category) => {
+    console.log(`Category clicked: ${category}`); // Console log on click
+    navigation.navigate("WordList");
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -23,6 +31,7 @@ export default function WordHome() {
             title="정확한 회계 처리"
             subtitle="회계/재무"
             icon={<Accounting />}
+            onPress={() => handlePress("협상의사결정")}
           />
           <CategoryBox
             title="IT 프로젝트 관리"
