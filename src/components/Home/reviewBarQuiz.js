@@ -7,10 +7,10 @@ import {
   Dimensions,
   Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import Star from "../../assets/images/Home/star.svg";
-import Arrow from "../../assets/images/Home/arrow_yellow.svg";
+import Check from "../../assets/images/Home/check.svg";
+import Arrow from "../../assets/images/Home/arrow.svg";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -18,12 +18,12 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function BookmarkBar({onPress}) {
+export default function ReviewBar({onPress}) {
   return (
     <TouchableOpacity style={styles.reviewBox} onPress={onPress}>
       <View style={{ flexDirection: "row" }}>
-        <Star style={{ marginRight: 4 }} />
-        <Text style={styles.reviewBoxTitle}>즐겨찾기</Text>
+        <Check style={{ marginRight: 4 }} />
+        <Text style={styles.reviewBoxTitle}>복습하러 가기</Text>
       </View>
 
       <Arrow />
@@ -34,7 +34,7 @@ export default function BookmarkBar({onPress}) {
 const styles = StyleSheet.create({
   reviewBox: {
     flex: 1,
-    backgroundColor: "#FFF1B9",
+    backgroundColor: "rgba(255, 163, 157, 0.38)",
     borderRadius: 15,
     padding: widthPercentage(2.5),
     paddingLeft: widthPercentage(3),
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
     fontFamily: "Pretendard",
     fontSize: 15,
     fontWeight: "700",
-    color: "#FBAA38",
+    color: "#FF5526",
   },
 });

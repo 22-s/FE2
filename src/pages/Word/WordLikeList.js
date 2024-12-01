@@ -5,12 +5,11 @@ import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const WordList = ({route}) => {
-  const { category } = route.params;
+const WordLikeList = () => {
   const [terms, setTerms] = useState([]); // API 데이터 저장
   const [loading, setLoading] = useState(true);
 
-  const fetchQuizzes = async (category) => {
+  const fetchQuizzes = async () => {
     const token = await AsyncStorage.getItem("accessToken");
     const headers = {
       "Content-Type": "application/json",
@@ -21,7 +20,7 @@ const WordList = ({route}) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://22s.store/api/voca?category=${category}`,
+        `https://22s.store/api/voca/likes`,
         { headers }
       );
 
@@ -41,7 +40,7 @@ const WordList = ({route}) => {
   };
 
   useEffect(() => {
-    fetchQuizzes(category);
+    fetchQuizzes();
   }, []);
 
   if (loading) {
@@ -68,7 +67,6 @@ const WordList = ({route}) => {
             term={term.term}
             description={term.description}
             example={term.example}
-            favorited={term.favorited}
           />
         ))}
       </ScrollView>
@@ -116,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WordList;
+export default WordLikeList;

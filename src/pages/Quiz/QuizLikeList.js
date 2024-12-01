@@ -16,7 +16,7 @@ import axios from "axios";
 
 //const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
 
-const QuizList = ({route}) => {
+const QuizLikeList = ({route}) => {
   const { category } = route.params;
   const [quizzes, setQuizzes] = useState([]); // 퀴즈 데이터 저장
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -24,8 +24,7 @@ const QuizList = ({route}) => {
   const [lastQuizId, setLastQuizId] = useState(null); // 마지막 퀴즈 ID
   const navigation = useNavigation();
 
-  const fetchQuizzes = async (category) => {
-    console.log("Fetching quizzes for category:", category);
+  const fetchQuizzes = async () => {
     const token = await AsyncStorage.getItem("accessToken");
     console.log("토큰이당: "+token);
     
@@ -37,7 +36,7 @@ const QuizList = ({route}) => {
     
     try {
       setLoading(true);
-      const response = await axios.get(`https://22s.store/api/quiz?category=${category}`, { headers });
+      const response = await axios.get(`https://22s.store/api/quiz/review`, { headers });
       console.log(response.data);
   
       if (response.data.isSuccess) {
@@ -125,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizList;
+export default QuizLikeList;

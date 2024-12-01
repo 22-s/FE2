@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 
-const AddReviewButton = () => {
+const AddReviewButton = ({onPress}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.text}>복습 추가</Text>
     </TouchableOpacity>
   );

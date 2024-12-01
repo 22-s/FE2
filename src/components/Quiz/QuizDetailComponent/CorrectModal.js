@@ -1,22 +1,66 @@
-import React from "react";
-import { Modal, View, StyleSheet, Text } from "react-native";
+import React, {useState} from "react";
+import { Modal, View, StyleSheet, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import NextQuizButton from "./button/NextQuizButton";
 import AddReviewButton from "./button/AddReviewButton";
 import XButton from "../../../assets/images/QuizDetail/XButton.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const CorrectModal = ({
   content,
   modalVisible,
   setModalVisible,
   isCorrect,
+  review,
+  quizId,
+  updateQuizId,
 }) => {
   const navigation = useNavigation();
+  const [bookmark, setBookmark] = useState(review);
 
   const handleClose = () => {
     setModalVisible(false);
-    navigation.navigate("AfterQuiz");
   };
+
+  const addReview = async () => {
+    const token = await AsyncStorage.getItem("accessToken");
+    console.log("토큰이당: "+token);
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+
+    // console.log(quizId);
+    // console.log("요청 URL: ", `https://22s.store/api/quiz/${quizId}/review`);
+    // console.log("Authorization 헤더: ", headers.Authorization);
+    try {
+      if (bookmark) {
+        Alert.alert("이미 복습리스트에 추가되어 있습니다.");
+      } else {
+        // 복습하기 추가 API 호출
+        await axios.post(`https://22s.store/api/quiz/${quizId}/review`, {
+          headers,
+        });
+        Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+      }
+      setBookmark((prev) => !prev); // 상태 변경
+    } catch (error) {
+      console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
+      Alert.alert(
+        "오류",
+        bookmark
+          ? "복습하기 해제 중 문제가 발생했습니다."
+          : "복습하기 추가 중 문제가 발생했습니다."
+      );
+    }
+  };
+
+  const nextQuizPress = () => {
+    console.log('함수 실행');
+    updateQuizId(quizId+1);
+  };  
 
   return (
     <Modal
@@ -46,8 +90,8 @@ const CorrectModal = ({
             <Text style={styles.text}>{content}</Text>
           </View>
           <View style={styles.bottom}>
-            <NextQuizButton />
-            <AddReviewButton />
+            <NextQuizButton onPress={nextQuizPress} />
+            <AddReviewButton onPress={addReview}/>
           </View>
         </View>
       </View>
