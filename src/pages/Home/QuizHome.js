@@ -16,8 +16,11 @@ const windowWidth = Dimensions.get("window").width;
 export default function QuizHome() {
   const navigation = useNavigation(); // Access navigation object
 
+  const goLikeList = () => {
+    navigation.navigate("QuizLikeList");
+  };
+
   const handlePress = (category) => {
-    console.log(`Category clicked: ${category}`); // Console log on click
     navigation.navigate("QuizList", {category});
   };
 
@@ -25,7 +28,7 @@ export default function QuizHome() {
     <View style={styles.container}>
       <ScrollView>
         <SearchBar />
-        <ReviewBar onPress={() => handlePress("???")}/>
+        <ReviewBar onPress={goLikeList}/>
         <View style={styles.categoryArea}>
           <CategoryBox
             title="업무의 첫걸음"

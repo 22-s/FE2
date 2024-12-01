@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Modal, View, StyleSheet, Text, Alert } from "react-native";
+import { Modal, View, StyleSheet, Text, Alert, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import NextQuizButton from "./button/NextQuizButton";
 import AddReviewButton from "./button/AddReviewButton";
@@ -15,9 +15,10 @@ const CorrectModal = ({
   review,
   quizId,
   updateQuizId,
+  isSubmit
 }) => {
   const navigation = useNavigation();
-  const [bookmark, setBookmark] = useState(review);
+  //const [bookmark, setBookmark] = useState(review);
 
   const handleClose = () => {
     setModalVisible(false);
@@ -36,7 +37,7 @@ const CorrectModal = ({
     // console.log("요청 URL: ", `https://22s.store/api/quiz/${quizId}/review`);
     // console.log("Authorization 헤더: ", headers.Authorization);
     try {
-      if (bookmark) {
+      if (review) {
         Alert.alert("이미 복습리스트에 추가되어 있습니다.");
       } else {
         // 복습하기 추가 API 호출
@@ -44,13 +45,19 @@ const CorrectModal = ({
           headers,
         });
         Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+        // navigation.replace("QuizDetail", {
+        //   quizId,
+        //   review: !review, // review 상태 반대로 전달
+        //   isSubmit, // 유지하고 싶은 값 전달
+        // });
       }
-      setBookmark((prev) => !prev); // 상태 변경
+      //setBookmark((prev) => !prev); // 상태 변경
+      
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
         "오류",
-        bookmark
+        review
           ? "복습하기 해제 중 문제가 발생했습니다."
           : "복습하기 추가 중 문제가 발생했습니다."
       );
@@ -86,9 +93,12 @@ const CorrectModal = ({
               {isCorrect ? "정답입니다!" : "틀렸습니다"}
             </Text>
           </View>
-          <View style={styles.modalContent}>
+          <ScrollView
+            style={styles.modalContent}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 30 }}
+          >
             <Text style={styles.text}>{content}</Text>
-          </View>
+          </ScrollView>
           <View style={styles.bottom}>
             <NextQuizButton onPress={nextQuizPress} />
             <AddReviewButton onPress={addReview}/>
@@ -107,11 +117,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContainer: {
+    flex: 0.55,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     width: 288,
-    height: 445,
     borderRadius: 15,
     backgroundColor: "#FFFFFF",
     padding: 21,
@@ -134,9 +144,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   modalContent: {
-    alignItems: "center",
+    // alignItems: "center",
     width: 243,
-    height: 249,
+    // height: 249,
     borderColor: "#BAC4CE",
     borderWidth: 1,
     borderRadius: 15,
