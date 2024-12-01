@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -81,6 +82,12 @@ export default function MannerList({ route }) {
     //초기 카테고리 데이터 로드
     fetchMannerListData();
   }, [category, searchText]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchMannerListData(); 
+    }, [])
+  );
 
   if (loading) {
     return (

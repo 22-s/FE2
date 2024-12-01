@@ -107,10 +107,10 @@ const QuizDetail = ({ route }) => {
     fetchQuizzes(quizId);
   }, []);
 
-  const updateQuizId = async (quizId) => {
-    console.log("업데이트 퀴즈 아이디: " + quizId);
-    navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
-  };
+  // const updateQuizId = async (quizId) => {
+  //   console.log("업데이트 퀴즈 아이디: " + quizId);
+  //   navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
+  // };
 
   const nextQuiz = (quizId) => {
     if(quiz.solved) {
@@ -212,8 +212,10 @@ const QuizDetail = ({ route }) => {
         isCorrect={isCorrect}
         review={bookmark}
         quizId={quizId}
-        updateQuizId={updateQuizId}
+        updateQuizId={nextQuiz}
         isSubmit={quiz.isSubmit}
+        firstQuizId={firstQuizId}
+        lastQuizId={lastQuizId}
       />
     </View>
   );

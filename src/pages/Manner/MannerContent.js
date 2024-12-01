@@ -11,6 +11,7 @@ import {
 import BuizContentsListBox from "../../components/BuizContents/BuizContentsListBox";
 import StarFull from "../../assets/images/Manner/bigStar_full.svg";
 import StarEmpty from "../../assets/images/Manner/bigStar_empty.svg";
+import { Image } from "react-native";
 import { get, post, deleteRequest } from "../../api/request";
 
 const windowWidth = Dimensions.get("window").width;
@@ -23,22 +24,22 @@ export default function MannerContent({ route }) {
   const [isStarFull, setIsStarFull] = useState(false); // 초기 상태를 false로 설정
   const [mannerInfo, setMannerInfo] = useState({});
   const item = route.params.item;
-  console.log(route);
+
+  //매너 설명서 상세 정보 조회
+  const fetchMannerInfo = async () => {
+    try {
+      const response = await get(`/manners/${item.mannerId}`);
+
+      if (response.isSuccess) {
+        setMannerInfo(response.result);
+        setIsStarFull(response.result.favorited);
+      }
+    } catch (e) {
+      console.log("매너설명서 상세 조회 실패: ", e);
+    }
+  };
 
   useEffect(() => {
-    //매너 설명서 상세 정보 조회
-    const fetchMannerInfo = async () => {
-      try {
-        const response = await get(`/manners/${item.mannerId}`);
-
-        if (response.isSuccess) {
-          setMannerInfo(response.result);
-        }
-      } catch (e) {
-        console.log("매너설명서 상세 조회 실패: ", e);
-      }
-    };
-
     fetchMannerInfo();
   }, []);
 
@@ -92,7 +93,12 @@ export default function MannerContent({ route }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
-        <View style={styles.imageContainer} />
+        <Image
+          source={{
+            uri: "https://www.w3schools.com/w3images/lights.jpg",
+          }}
+          style={styles.imageContainer} 
+        />
         <View style={styles.categoryBox}>
           <Text style={styles.categoryText}>{item.category}</Text>
         </View>

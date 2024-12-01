@@ -15,7 +15,9 @@ const CorrectModal = ({
   review,
   quizId,
   updateQuizId,
-  isSubmit
+  isSubmit,
+  firstQuizId,
+  lastQuizId
 }) => {
   const navigation = useNavigation();
   //const [bookmark, setBookmark] = useState(review);
@@ -66,7 +68,7 @@ const CorrectModal = ({
 
   const nextQuizPress = () => {
     console.log('함수 실행');
-    updateQuizId(quizId+1);
+    updateQuizId(quizId);
   };  
 
   return (
