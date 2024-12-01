@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import Star from "../../assets/images/Manner/star_full.svg";
-import { Image } from "react-native-svg";
+import { Image } from "react-native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -44,14 +44,12 @@ export default function MannerListBox({ item }) {
             </Text>
           </View>
           <View>
-            {item.imageUrl ? (
-              <Image
-                source={{ uri: item.imageUrl }}
-                style={styles.imageContainer}
-              />
-            ) : (
-              <View style={styles.imageContainer} />
-            )}
+            <Image
+              source={{
+                uri: "https://www.w3schools.com/w3images/lights.jpg",
+              }}
+              style={styles.imageContainer}
+            />
           </View>
         </View>
       </View>
@@ -64,7 +62,7 @@ export default function MannerListBox({ item }) {
 const styles = StyleSheet.create({
   block: {
     width: "100%",
-    height: widthPercentage(31),
+    height: widthPercentage(28),
     backgroundColor: "white",
     padding: 14,
     alignItems: "center",

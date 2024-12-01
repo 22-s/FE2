@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
+import SearchBar from "../../components/Home/searchBarQuiz";
 import MannerSearchBar from "../../components/Home/MannerSearchBar";
 import { get } from "../../api/request";
 
@@ -80,6 +82,12 @@ export default function MannerList({ route }) {
     //초기 카테고리 데이터 로드
     fetchMannerListData();
   }, [category, searchText]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchMannerListData(); 
+    }, [])
+  );
 
   if (loading) {
     return (

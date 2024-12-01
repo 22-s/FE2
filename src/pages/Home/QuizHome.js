@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Navigation hook
-import SearchBar from "../../components/Home/searchBar";
+import SearchBar from "../../components/Home/searchBarQuiz";
 import ReviewBar from "../../components/Home/reviewBarQuiz";
 import CategoryBox from "../../components/Home/categoryBox";
 import Bag from "../../assets/images/Home/bag.svg";
