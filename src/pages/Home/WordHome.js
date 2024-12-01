@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import SearchBar from "../../components/Home/searchBar";
+import SearchBar from "../../components/Home/searchBarQuiz";
 import BookmarkBar from "../../components/Home/bookmarkBar";
 import CategoryBox from "../../components/Home/categoryBox";
 import Accounting from "../../assets/images/Home/accounting.svg";

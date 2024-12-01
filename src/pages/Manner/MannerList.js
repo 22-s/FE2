@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
-import SearchBar from "../../components/Home/searchBar";
+import SearchBar from "../../components/Home/searchBarQuiz";
 import { get } from "../../api/request";
 
 const windowWidth = Dimensions.get("window").width;
