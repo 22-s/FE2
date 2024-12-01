@@ -9,6 +9,7 @@ import QuizDetail from "../pages/Quiz/QuizDetail";
 import QuizDetail2 from "../pages/Quiz/QuizDetail2.js";
 import AfterQuiz from "../pages/Quiz/AfterQuiz";
 import QuizLikeList from "../pages/Quiz/QuizLikeList.js";
+import SearchQuizList from "../pages/Quiz/SearchQuizList.js";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,13 @@ const QuizStack = () => (
       component={QuizLikeList}
       options={{
         header: ({ navigation }) => <CustomHeader title="퀴즈 복습 리스트" navigation={navigation} routeName={"QuizLikeList"}/>,
+      }}
+    />
+    <Stack.Screen
+      name="SearchQuizList"
+      component={SearchQuizList}
+      options={{
+        header: ({ navigation }) => <CustomHeader title="퀴즈 검색 리스트" navigation={navigation} routeName={"SearchQuizList"}/>,
       }}
     />
   </Stack.Navigator>

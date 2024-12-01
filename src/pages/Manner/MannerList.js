@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
+import SearchBar from "../../components/Home/searchBarQuiz";
 import MannerSearchBar from "../../components/Home/MannerSearchBar";
 import { get } from "../../api/request";
 
