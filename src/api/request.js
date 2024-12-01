@@ -12,7 +12,7 @@ const request = async (path, method, data = {}, params = {}) => {
 
     return response.data;
   } catch (e) {
-    console.error("Request error: ", e.message || e.response?.data || e);
+    console.log("Request error: ", e.message || e.response?.data || e);
     throw e;
   }
 };
