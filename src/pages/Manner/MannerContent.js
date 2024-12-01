@@ -11,7 +11,7 @@ import {
 import BuizContentsListBox from "../../components/BuizContents/BuizContentsListBox";
 import StarFull from "../../assets/images/Manner/bigStar_full.svg";
 import StarEmpty from "../../assets/images/Manner/bigStar_empty.svg";
-import { get, post } from "../../api/request";
+import { get, post, deleteRequest } from "../../api/request";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -47,10 +47,10 @@ export default function MannerContent({ route }) {
     try {
       const response = await post(`/manners/likes/${item.mannerId}`);
       if (response.isSuccess) {
-        Alert("즐겨찾기에 추가되었습니다.");
+        Alert.alert("즐겨찾기에 추가되었습니다.");
         return true;
       } else {
-        Alert("문제가 발생했습니다.");
+        Alert.alert("문제가 발생했습니다.");
         return false;
       }
     } catch (e) {
@@ -62,12 +62,12 @@ export default function MannerContent({ route }) {
   const removeMannerLikes = async () => {
     //즐겨찾기 삭제
     try {
-      const response = await delete `/manners/likes/${item.mannerId}`;
+      const response = await deleteRequest(`/manners/likes/${item.mannerId}`);
       if (response.isSuccess) {
-        Alert("즐겨찾기에서 삭제되었습니다.");
+        Alert.alert("즐겨찾기에서 삭제되었습니다.");
         return true;
       } else {
-        Alert("문제가 발생했습니다.");
+        Alert.alert("문제가 발생했습니다.");
         return false;
       }
     } catch (e) {
