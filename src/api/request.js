@@ -28,3 +28,7 @@ export const get = async (path, params = {}) => {
 export const patch = async (path, data) => {
   return await request(path, "patch", data);
 };
+
+export const deleteRequest = async (path, params = {}) => {
+  return await request(path, "delete", {}, params);
+};
