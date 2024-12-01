@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Navigation hook
-import SearchBar from "../../components/Home/searchBar";
+import MannerSearchBar from "../../components/Home/MannerSearchBar";
 import MannerReviewBar from "../../components/Home/MannerReviewBar";
 import CategoryBox from "../../components/Home/categoryBox";
 import Bag from "../../assets/images/Home/bag.svg";
@@ -17,14 +17,19 @@ export default function MannerHome() {
   const navigation = useNavigation();
 
   const handlePress = (category) => {
+    //카테고리 클릭 시
     console.log(`Category clicked: ${category}`);
     navigation.navigate("MannerList", { category });
+  };
+
+  const handleSearch = (searchText) => {
+    navigation.navigate("MannerList", { searchText });
   };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <SearchBar />
+        <MannerSearchBar onSearch={handleSearch} />
         <MannerReviewBar />
         <View style={styles.categoryArea}>
           <CategoryBox

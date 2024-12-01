@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -6,10 +6,11 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
-import SearchBar from "../../components/Home/searchBar";
+import MannerSearchBar from "../../components/Home/MannerSearchBar";
 import { get } from "../../api/request";
 
 const windowWidth = Dimensions.get("window").width;
@@ -22,30 +23,63 @@ export default function MannerList({ route }) {
   const navigation = useNavigation(); // navigation 훅 사용
   const [data, setData] = useState([]); // API 데이터를 저장
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
-  const category = route.params.category;
+  const { category, searchText: routeSearchText } = route.params || {};
+  const [searchText, setSearchText] = useState(routeSearchText || "");
 
-  const fetchVocaData = async (param) => {
+  useEffect(() => {}, [routeSearchText, searchText]);
+
+  const fetchMannerListData = async () => {
+    //데이터 로드 함수
     try {
-      console.log(param);
       setLoading(true);
-      const response = await get(`/manners?category=${param}`);
+      let response;
+      setData([]);
+
+      // 1. 카테고리 내 검색 결과 조회
+      if (category && searchText) {
+        response = await get(
+          `/manners/search/category?category=${category}&keyword=${searchText}`
+        );
+      }
+      // 2. 카테고리별 매너 설명서 리스트 조회
+      else if (category) {
+        response = await get(`/manners?category=${category}`);
+      }
+      // 3. 전체 검색 결과 조회
+      else if (searchText) {
+        response = await get(`/manners/search?keyword=${searchText}`);
+      }
+      // 4. 둘 다 없을 때
+      else {
+        console.log("카테고리와 검색어가 모두 제공되지 않았습니다.");
+        return;
+      }
+
       if (response.isSuccess) {
-        //api 응답 데이터 저장
+        if (response.result.length === 0) {
+          Alert.alert("검색 결과가 없습니다. 다시 시도해주세요.");
+        }
         setData(response.result);
+      } else {
+        console.error("API 호출 실패:", response?.message);
       }
     } catch (error) {
-      console.error(
-        "매너설명서 카테고리 리스트를 가져오는 중 오류 발생:",
-        error
-      );
+      console.error("데이터 로드 중 오류 발생:", error);
+      setData([]);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleSearch = (newSearchText) => {
+    //검색 결과 처리
+    setSearchText(newSearchText);
+  };
+
   useEffect(() => {
-    fetchVocaData(category); // 원하는 카테고리로 요청
-  }, []);
+    //초기 카테고리 데이터 로드
+    fetchMannerListData();
+  }, [category, searchText]);
 
   if (loading) {
     return (
@@ -59,7 +93,7 @@ export default function MannerList({ route }) {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
         <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
-          <SearchBar />
+          <MannerSearchBar category={category} onSearch={handleSearch} />
         </View>
         {data.map((item, index) => (
           <TouchableOpacity key={index}>
