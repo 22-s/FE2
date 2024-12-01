@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 const Welcome = () => {
   const navigation = useNavigation(); 
   const handleGetStarted = () => {
-    navigation.replace("TabNavigator"); 
+    navigation.navigate("Signup"); 
   };
 
   return (
@@ -29,7 +29,7 @@ const Welcome = () => {
 
       {/* 버튼들 */}
       <TouchableOpacity style={styles.primaryButton} onPress={handleGetStarted}>
-        <Text style={styles.primaryButtonText}>신입사UP 시작하기</Text>
+        <Text style={styles.primaryButtonText}>회원가입</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.secondaryButton} onPress={()=> navigation.navigate("Login")}>
