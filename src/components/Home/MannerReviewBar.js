@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import Check from "../../assets/images/Home/check.svg";
 import Arrow from "../../assets/images/Home/arrow.svg";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -18,15 +20,21 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function MannerReviewBar() {
+  const navigation = useNavigation();
+
+  const handleClickReviewBox = () => {
+    navigation.navigate("ReviewMannerList");
+  };
+
   return (
-    <View style={styles.reviewBox}>
+    <TouchableOpacity style={styles.reviewBox} onPress={handleClickReviewBox}>
       <View style={{ flexDirection: "row" }}>
         <Check style={{ marginRight: 4 }} />
         <Text style={styles.reviewBoxTitle}>복습하러 가기</Text>
       </View>
 
       <Arrow />
-    </View>
+    </TouchableOpacity>
   );
 }
 
