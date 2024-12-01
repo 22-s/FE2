@@ -23,6 +23,9 @@ const QuizListComponent = ({ quizId, content, correct, review, onPress, solved }
     // console.log("요청 URL: ", `https://22s.store/api/quiz/${quizId}/review`);
     // console.log("Authorization 헤더: ", headers.Authorization);
     try {
+      if(!solved) {
+        Alert.alert('답을 제출해야 복습 리스트에 추가할 수 있습니다.');
+      } else {
       if (bookmark) {
         // 복습하기 해제 API 호출
         await axios.delete(`https://22s.store/api/quiz/${quizId}/review`, {
@@ -37,6 +40,7 @@ const QuizListComponent = ({ quizId, content, correct, review, onPress, solved }
         Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
       }
       setBookmark((prev) => !prev); // 상태 변경
+    }
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
@@ -69,7 +73,7 @@ const QuizListComponent = ({ quizId, content, correct, review, onPress, solved }
               <BookMarkButton style={styles.bookMarkButton} />
           )
           ) : (
-            <View style={styles.bookMarkButton} />
+            <BookMarkButton style={styles.bookMarkButton} />
           )}
           
         </TouchableOpacity>
@@ -86,31 +90,33 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     marginTop: 11,
+    // alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 20
   },
   text: {
-    marginLeft: 20,
+    width: '85%',
     fontSize: 13,
     fontStyle: "normal",
     fontWeight: "600",
   },
   contentArea: {
-    width: "90%",
+
+    width: "100%",
     flexDirection: "row",
-    justifyContent: "left",
+    justifyContent: 'space-between',
     alignItems: "center",
     // backgroundColor: 'yellow'
   },
   answer: {
-    position: "relative",
-    width: 32,
-    height: 12,
-    marginLeft: 9,
-    marginTop: 8.3,
+    position: "absolute",
+    left: 10,
+    top: 7,
   },
   bookMarkButton: {
     width: 30,
     height: 30,
-    marginRight: 15,
+    marginRight: 10
   },
 });
 

@@ -17,14 +17,14 @@ import { useNavigation } from "@react-navigation/native";
 
 const QuizDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { quizId, review, firstQuizId, lastQuizId } = route.params;
+  const { quizId, firstQuizId, lastQuizId, isSubmit: initialIsSubmit } = route.params;
   //const [ currentQuizId, setIsQuizId ] = useState(quizId);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [quiz, setQuiz] = useState("");
   const [answer, setAnswer] = useState("");
-  const [ isSubmit, setIsSubmit] = useState(false);
-  const [bookmark, setBookmark] = useState(review);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
 
   const openModal = () => {
@@ -49,12 +49,13 @@ const QuizDetail = ({ route }) => {
         { headers }
       );
       console.log(response.data);
-
+      console.log("solved: "+response.data.result.solved);
       if (response.data.isSuccess) {
         setQuiz(response.data.result);
-        setIsSolved(quiz.solved);
+        setIsSolved(response.data.result.solved);
         setIsSubmit(false);
         setModalVisible(false);
+        setBookmark(response.data.result.inReviewList);
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
         Alert.alert("오류", response.data.message);
@@ -87,9 +88,11 @@ const QuizDetail = ({ route }) => {
       if (response.data.isSuccess) {
         setAnswer(response.data.result);
         setIsCorrect(response.data.result.correct); // 정답 여부 설정
+        //fetchQuizzes(quizId);
         setModalVisible(true); // 모달 열기
         setIsSubmit(true);
         setIsSolved(true);
+        
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
         Alert.alert("오류", response.data.message);
@@ -106,7 +109,7 @@ const QuizDetail = ({ route }) => {
 
   const updateQuizId = async (quizId) => {
     console.log("업데이트 퀴즈 아이디: " + quizId);
-    navigation.replace("QuizDetail2", { quizId, review, firstQuizId, lastQuizId } )
+    navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
   };
 
   const nextQuiz = (quizId) => {
@@ -116,7 +119,7 @@ const QuizDetail = ({ route }) => {
       }
       else {
         quizId += 1;
-        navigation.replace("QuizDetail2", { quizId, review, firstQuizId, lastQuizId } )
+        navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
       }
     } else {
       Alert.alert("현재 퀴즈를 풀어야 넘어갈 수 있습니다.");
@@ -130,7 +133,7 @@ const QuizDetail = ({ route }) => {
       }
       else {
         quizId -= 1;
-        navigation.replace("QuizDetail2", { quizId, review, firstQuizId, lastQuizId } )
+        navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
       }
     } else {
       Alert.alert("현재 퀴즈를 풀어야 넘어갈 수 있습니다.");
@@ -158,8 +161,11 @@ const QuizDetail = ({ route }) => {
           headers,
         });
         Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+        // setBookmark((prev) => !prev); // 상태 변경
+        // fetchQuizzes(quizId);
+        // setIsSubmit(true);
       }
-      setBookmark((prev) => !prev); // 상태 변경
+      
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
@@ -174,7 +180,7 @@ const QuizDetail = ({ route }) => {
   return (
     <View style={styles.container}>
       <View marginBottom={12}>
-        <Title content={quiz.question} review={quiz.inReviewList} quizId={quizId} solved={quiz.solved}/>
+        <Title content={quiz.question} review={quiz.inReviewList} quizId={quizId} solved={quiz.solved} isSubmit={quiz.isSubmit}/>
       </View>
       <View marginBottom={17}>
         <Content content={quiz.questionDetail} />
@@ -200,17 +206,14 @@ const QuizDetail = ({ route }) => {
       }
 
       <CorrectModal
-        content={
-          isCorrect
-            ? "정답입니다! 출근 시각 10분 일찍 출근해서 업무 시작 준비를 해야합니다!"
-            : "틀렸습니다. 출근 시각 10분 일찍 출근해서 업무 시작 준비를 해야합니다!"
-        }
+        content={quiz.description}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         isCorrect={isCorrect}
-        review={review}
+        review={bookmark}
         quizId={quizId}
         updateQuizId={updateQuizId}
+        isSubmit={quiz.isSubmit}
       />
     </View>
   );

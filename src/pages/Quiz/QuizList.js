@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   ScrollView,
@@ -46,7 +47,7 @@ const QuizList = ({route}) => {
         if (quizData.length > 0) {
           setFirstQuizId(quizData[0].quizId); // 첫 번째 퀴즈 ID 저장
           setLastQuizId(quizData[quizData.length - 1].quizId); // 마지막 퀴즈 ID 저장
-          console.log(firstQuizId + " " + lastQuizId);
+          //console.log(firstQuizId + " " + lastQuizId);
         }
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
@@ -60,13 +61,19 @@ const QuizList = ({route}) => {
     }
   };
 
-  const handleQuizPress = (quizId, review) => {
-    navigation.navigate("QuizDetail", { quizId, review, firstQuizId, lastQuizId });
+  const handleQuizPress = (quizId) => {
+    navigation.navigate("QuizDetail", { quizId, firstQuizId, lastQuizId });
   };
 
   useEffect(() => {
     fetchQuizzes(category);
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchQuizzes(category); // 화면에 포커스될 때 실행
+    }, [category])
+  );
 
   if (loading) {
     return (
@@ -98,7 +105,7 @@ const QuizList = ({route}) => {
               correct={quiz.correct}
               review={quiz.inReviewList}
               solved={quiz.solved}
-              onPress={() => handleQuizPress(quiz.quizId, quiz.review)}
+              onPress={() => handleQuizPress(quiz.quizId)}
             />
           );
         })}
