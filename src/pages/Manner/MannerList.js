@@ -18,15 +18,17 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerList() {
+export default function MannerList({ route }) {
   const navigation = useNavigation(); // navigation 훅 사용
   const [data, setData] = useState([]); // API 데이터를 저장
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
+  const category = route.params.category;
 
-  const fetchVocaData = async (category) => {
+  const fetchVocaData = async (param) => {
     try {
+      console.log(param);
       setLoading(true);
-      const response = await get(`/manners?category=${category}`);
+      const response = await get(`/manners?category=${param}`);
       if (response.isSuccess) {
         //api 응답 데이터 저장
         setData(response.result);
@@ -42,7 +44,7 @@ export default function MannerList() {
   };
 
   useEffect(() => {
-    fetchVocaData("기본 매너"); // 원하는 카테고리로 요청
+    fetchVocaData(category); // 원하는 카테고리로 요청
   }, []);
 
   if (loading) {

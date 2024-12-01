@@ -17,7 +17,7 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function ReviewBar() {
+export default function MannerReviewBar() {
   return (
     <View style={styles.reviewBox}>
       <View style={{ flexDirection: "row" }}>
