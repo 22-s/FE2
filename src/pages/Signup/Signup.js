@@ -21,6 +21,8 @@ import Box1 from "../../assets/images/Logo/box1.svg";
 import Box2 from "../../assets/images/Logo/box2.svg";
 import { useNavigation } from "@react-navigation/native";
 import { post } from "../../api/request";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CookieManager from "@react-native-cookies/cookies";
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -111,6 +113,8 @@ const Signup = () => {
     }
 
     try {
+      await CookieManager.clearAll();
+
       const requestBody = {
         nickname: name,
         email,

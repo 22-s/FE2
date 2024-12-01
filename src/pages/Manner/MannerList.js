@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
 import SearchBar from "../../components/Home/searchBar";
-import axiosInstance from "../../api/axiosInstance";
+import { get } from "../../api/request";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -26,14 +26,16 @@ export default function MannerList() {
   const fetchVocaData = async (category) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/voca?category=${encodeURIComponent(category)}`);
-      if (response.data.isSuccess) {
-        setData(response.data.result); // API 응답 데이터 저장
-      } else {
-        console.error("데이터를 가져오지 못했습니다:", response.data.message);
+      const response = await get(`/manners?category=${category}`);
+      if (response.isSuccess) {
+        //api 응답 데이터 저장
+        setData(response.result);
       }
     } catch (error) {
-      console.error("데이터를 가져오는 중 오류 발생:", error);
+      console.error(
+        "매너설명서 카테고리 리스트를 가져오는 중 오류 발생:",
+        error
+      );
     } finally {
       setLoading(false);
     }
@@ -62,9 +64,8 @@ export default function MannerList() {
             <MannerListBox
               category={item.category}
               title={item.title}
-              content={item.content}
-              date={item.date}
-              images={item.images}
+              contentPreview={item.contentPreview}
+              imageUrl={item.imageUrl}
             />
           </TouchableOpacity>
         ))}

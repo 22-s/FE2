@@ -5,10 +5,12 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import Star from "../../assets/images/Manner/star_full.svg";
+import { Image } from "react-native-svg";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -16,7 +18,7 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerListBox({ title, content, images }) {
+export default function MannerListBox({ title, contentPreview, imageUrl }) {
   const navigation = useNavigation();
 
   return (
@@ -32,11 +34,16 @@ export default function MannerListBox({ title, content, images }) {
             </View>
             <View style={styles.textAreaGap} />
             <Text style={styles.content} numberOfLines={2} ellipsizeMode="tail">
-              {content}
+              {contentPreview}
             </Text>
           </View>
-
-          <View style={styles.imageContainer} />
+          <View>
+            {imageUrl ? (
+              <Image source={{ uri: imageUrl }} style={styles.imageContainer} />
+            ) : (
+              <View style={styles.imageContainer} />
+            )}
+          </View>
         </View>
       </View>
 
