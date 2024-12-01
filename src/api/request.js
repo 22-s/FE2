@@ -2,6 +2,7 @@ import axiosInstance from "./axiosInstance";
 
 const request = async (path, method, data = {}, params = {}) => {
   try {
+    console.log(`Request URL: ${axiosInstance.defaults.baseURL}${path}`);
     const response = await axiosInstance({
       url: path,
       method: method,

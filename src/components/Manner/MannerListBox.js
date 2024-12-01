@@ -18,28 +18,37 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerListBox({ title, contentPreview, imageUrl }) {
+export default function MannerListBox({ item }) {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("MannerContent")}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("MannerContent", {
+          item: item,
+        })
+      }
+    >
       <View style={styles.block}>
         <View style={styles.contentBox}>
           <View style={styles.textArea}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-                {title}
+                {item.title}
               </Text>
               <Star />
             </View>
             <View style={styles.textAreaGap} />
             <Text style={styles.content} numberOfLines={2} ellipsizeMode="tail">
-              {contentPreview}
+              {item.contentPreview}
             </Text>
           </View>
           <View>
-            {imageUrl ? (
-              <Image source={{ uri: imageUrl }} style={styles.imageContainer} />
+            {item.imageUrl ? (
+              <Image
+                source={{ uri: item.imageUrl }}
+                style={styles.imageContainer}
+              />
             ) : (
               <View style={styles.imageContainer} />
             )}

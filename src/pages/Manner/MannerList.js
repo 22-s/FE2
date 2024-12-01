@@ -61,12 +61,7 @@ export default function MannerList() {
         </View>
         {data.map((item, index) => (
           <TouchableOpacity key={index}>
-            <MannerListBox
-              category={item.category}
-              title={item.title}
-              contentPreview={item.contentPreview}
-              imageUrl={item.imageUrl}
-            />
+            <MannerListBox item={item} />
           </TouchableOpacity>
         ))}
       </ScrollView>
