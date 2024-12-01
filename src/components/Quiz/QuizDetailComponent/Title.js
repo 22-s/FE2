@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import WhiteBox from "../../../components/Quiz/QuizDetailComponent/WhiteBox";
 import BookMarkButton from "../../../assets/images/QuizList/Bookmark.svg";
 import BookmarkFilled from "../../../assets/images/QuizList/BookmarkFilled.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
-const Title = ({ content, review, quizId, solved }) => {
-  const [bookmark, setBookmark] = useState(review);
+const Title = ({ content, review, quizId, solved, isSubmit }) => {
+  const navigation = useNavigation();
+  //const [bookmark, setBookmark] = useState(review);
   const [containerHeight, setContainerHeight] = useState(50); // 기본 높이를 50으로 설정
 
   const handleReview = async () => {
@@ -23,7 +25,7 @@ const Title = ({ content, review, quizId, solved }) => {
       if(!solved) {
         Alert.alert('답을 제출해야 복습 리스트에 추가할 수 있습니다.');
       } else {
-        if (bookmark) {
+        if (review) {
           // 복습하기 해제 API 호출
           await axios.delete(`https://22s.store/api/quiz/${quizId}/review`, {
             headers,
@@ -36,13 +38,19 @@ const Title = ({ content, review, quizId, solved }) => {
           });
           Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
         }
-        setBookmark((prev) => !prev); // 상태 변경
+        //setBookmark((prev) => !prev); // 상태 변경
+
+        navigation.replace("QuizDetail", {
+          quizId,
+          review: !review, // review 상태 반대로 전달
+          isSubmit, // 유지하고 싶은 값 전달
+        });
       }
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
         "오류",
-        bookmark
+        review
           ? "복습하기 해제 중 문제가 발생했습니다."
           : "복습하기 추가 중 문제가 발생했습니다."
       );
@@ -65,9 +73,9 @@ const Title = ({ content, review, quizId, solved }) => {
         <Text style={styles.text} onLayout={handleTextLayout}>
           {content}
         </Text>
-        <TouchableOpacity onPress={handleReview}>
+        {/* <TouchableOpacity onPress={handleReview}>
           {solved ?
-          (bookmark ? (
+          (review ? (
             <BookmarkFilled style={styles.bookMarkButton} />
           ) : (
             <BookMarkButton style={styles.bookMarkButton} />
@@ -76,7 +84,7 @@ const Title = ({ content, review, quizId, solved }) => {
             <BookMarkButton style={styles.bookMarkButton} />
           )
           }
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -94,10 +102,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     height: "100%",
-    width: "90%",
+    paddingHorizontal: 20,
+    // backgroundColor: "yellow"
   },
   text: {
-    marginLeft: 20,
     fontSize: 13,
     fontStyle: "normal",
     fontWeight: "600",

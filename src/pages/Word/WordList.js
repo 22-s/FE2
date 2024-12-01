@@ -1,14 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
-import Pic from "../../assets/images/Word/회계재무.svg";
+
+import Accounting from '../../assets/images/Home/accounting.svg';
+import IT from '../../assets/images/Home/it.svg';
+import Marketing from '../../assets/images/Home/marketing.svg';
+import HR from '../../assets/images/Home/hr.svg';
+import Captin from '../../assets/images/Home/captain.svg';
+import Nego from '../../assets/images/Home/negotiate.svg';
+
 import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const WordList = ({route}) => {
-  const { category } = route.params;
+const WordList = ({ route }) => {
+  const { category, title, subtitle } = route.params;
   const [terms, setTerms] = useState([]); // API 데이터 저장
   const [loading, setLoading] = useState(true);
+
+  // category와 SVG 컴포넌트 매핑
+  const svgMapping = {
+    "회계재무": Accounting,
+    "기술IT": IT,
+    "마케팅세일즈": Marketing,
+    "HR조직": HR,
+    "리더십팀워크": Captin,
+    "협상의사결정": Nego,
+  };
+
+  const SelectedSVG = svgMapping[category]; // 매핑에서 선택된 SVG 컴포넌트
 
   const fetchQuizzes = async (category) => {
     const token = await AsyncStorage.getItem("accessToken");
@@ -57,13 +76,15 @@ const WordList = ({route}) => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.title}>
           <View style={styles.left}>
-            <Text style={styles.top}>정확한 회계 재무</Text>
-            <Text style={styles.down}>회계/재무</Text>
+            <Text style={styles.top}>{title}</Text>
+            <Text style={styles.down}>{subtitle}</Text>
           </View>
-          <Pic width={85} height={85} />
+          {/* 선택된 SVG 컴포넌트를 렌더링 */}
+          {SelectedSVG && <SelectedSVG width={80} height={80} />}
         </View>
         {terms.map((term) => (
           <Toggle
+            key={term.vocaId}
             vocaId={term.vocaId}
             term={term.term}
             description={term.description}

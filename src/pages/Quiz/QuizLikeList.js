@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   ScrollView,
@@ -16,8 +17,7 @@ import axios from "axios";
 
 //const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
 
-const QuizLikeList = ({route}) => {
-  const { category } = route.params;
+const QuizLikeList = () => {
   const [quizzes, setQuizzes] = useState([]); // 퀴즈 데이터 저장
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [firstQuizId, setFirstQuizId] = useState(null); // 첫 번째 퀴즈 ID
@@ -26,22 +26,30 @@ const QuizLikeList = ({route}) => {
 
   const fetchQuizzes = async () => {
     const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: "+token);
-    
+    console.log("토큰이당: " + token);
+  
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
       ...(token && { Authorization: `Bearer ${token}` }),
     };
-    
+  
     try {
       setLoading(true);
-      const response = await axios.get(`https://22s.store/api/quiz/review`, { headers });
+      const response = await axios.get(`https://22s.store/api/quiz/review`, {
+        headers,
+      });
       console.log(response.data);
   
       if (response.data.isSuccess) {
-        const quizData = response.data.result;
+        let quizData = response.data.result;
+        // 각 quizId를 1부터 순차적으로 재할당
+        quizData = quizData.map((quiz, index) => ({
+          ...quiz,
+          quizId: index + 1,
+        }));
         setQuizzes(quizData); // 퀴즈 데이터 저장
+  
         if (quizData.length > 0) {
           setFirstQuizId(quizData[0].quizId); // 첫 번째 퀴즈 ID 저장
           setLastQuizId(quizData[quizData.length - 1].quizId); // 마지막 퀴즈 ID 저장
@@ -57,15 +65,21 @@ const QuizLikeList = ({route}) => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const handleQuizPress = (quizId, review) => {
     navigation.navigate("QuizDetail", { quizId, review, firstQuizId, lastQuizId });
   };
 
   useEffect(() => {
-    fetchQuizzes(category);
+    fetchQuizzes();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchQuizzes(); 
+    }, [])
+  );
 
   if (loading) {
     return (

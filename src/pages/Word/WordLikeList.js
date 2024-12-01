@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import Pic from "../../assets/images/Word/회계재무.svg";
+import Star from '../../assets/images/Word/별.svg';
 import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -16,17 +17,21 @@ const WordLikeList = () => {
       Accept: "application/json",
       ...(token && { Authorization: `Bearer ${token}` }),
     };
-
+  
     try {
       setLoading(true);
       const response = await axios.get(
         `https://22s.store/api/voca/likes`,
         { headers }
       );
-
+  
       if (response.data.isSuccess) {
-        setTerms(response.data.result); // 데이터 저장
-        console.log(response.data.result);
+        const processedTerms = response.data.result.map((term) => ({
+          ...term,
+          favorited: true, // favorited 필드 추가
+        }));
+        setTerms(processedTerms); // 데이터 저장
+        console.log(processedTerms);
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
         Alert.alert("오류", response.data.message);
@@ -38,6 +43,7 @@ const WordLikeList = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchQuizzes();
@@ -56,10 +62,10 @@ const WordLikeList = () => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.title}>
           <View style={styles.left}>
-            <Text style={styles.top}>정확한 회계 재무</Text>
-            <Text style={styles.down}>회계/재무</Text>
+            <Text style={styles.top}>저장하고 바로 보는</Text>
+            <Text style={styles.down}>즐겨찾기</Text>
           </View>
-          <Pic width={85} height={85} />
+          <Star width={75} height={75} />
         </View>
         {terms.map((term) => (
           <Toggle
@@ -67,6 +73,7 @@ const WordLikeList = () => {
             term={term.term}
             description={term.description}
             example={term.example}
+            favorited={term.favorited}
           />
         ))}
       </ScrollView>
