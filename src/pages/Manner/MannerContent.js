@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -6,10 +6,12 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import BuizContentsListBox from "../../components/BuizContents/BuizContentsListBox";
 import StarFull from "../../assets/images/Manner/bigStar_full.svg";
 import StarEmpty from "../../assets/images/Manner/bigStar_empty.svg";
+import { get, post } from "../../api/request";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -17,11 +19,74 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerContent() {
+export default function MannerContent({ route }) {
   const [isStarFull, setIsStarFull] = useState(false); // 초기 상태를 false로 설정
+  const [mannerInfo, setMannerInfo] = useState({});
+  const item = route.params.item;
+  console.log(route);
 
-  const toggleStar = () => {
-    setIsStarFull(!isStarFull); // 클릭할 때마다 상태를 반대로 설정
+  useEffect(() => {
+    //매너 설명서 상세 정보 조회
+    const fetchMannerInfo = async () => {
+      try {
+        const response = await get(`/manners/${item.mannerId}`);
+
+        if (response.isSuccess) {
+          setMannerInfo(response.result);
+        }
+      } catch (e) {
+        console.log("매너설명서 상세 조회 실패: ", e);
+      }
+    };
+
+    fetchMannerInfo();
+  }, []);
+
+  const addMannerLikes = async () => {
+    //즐겨찾기 추가
+    try {
+      const response = await post(`/manners/likes/${item.mannerId}`);
+      if (response.isSuccess) {
+        Alert("즐겨찾기에 추가되었습니다.");
+        return true;
+      } else {
+        Alert("문제가 발생했습니다.");
+        return false;
+      }
+    } catch (e) {
+      console.log("즐겨찾기 추가 문제 발생 : ", e);
+      return false;
+    }
+  };
+
+  const removeMannerLikes = async () => {
+    //즐겨찾기 삭제
+    try {
+      const response = await delete `/manners/likes/${item.mannerId}`;
+      if (response.isSuccess) {
+        Alert("즐겨찾기에서 삭제되었습니다.");
+        return true;
+      } else {
+        Alert("문제가 발생했습니다.");
+        return false;
+      }
+    } catch (e) {
+      console.log("즐겨찾기 추가 문제 발생 : ", e);
+      return false;
+    }
+  };
+
+  const toggleStar = async () => {
+    //즐겨찾기 Handler
+    if (isStarFull) {
+      //즐겨찾기 삭제
+      const isSuccess = await removeMannerLikes();
+      if (isSuccess) setIsStarFull(false);
+    } else {
+      //즐겨찾기 추가
+      const isSuccess = await addMannerLikes();
+      if (isSuccess) setIsStarFull(true);
+    }
   };
 
   return (
@@ -29,10 +94,10 @@ export default function MannerContent() {
       <ScrollView contentContainerStyle={styles.listArea}>
         <View style={styles.imageContainer} />
         <View style={styles.categoryBox}>
-          <Text style={styles.categoryText}>테크</Text>
+          <Text style={styles.categoryText}>{item.category}</Text>
         </View>
         <View style={styles.titleArea}>
-          <Text style={styles.titleText}>에이닷, 이렇게 좋은데 외않써?</Text>
+          <Text style={styles.titleText}>{mannerInfo.title}</Text>
           <TouchableOpacity onPress={toggleStar}>
             {isStarFull ? <StarFull /> : <StarEmpty />}
           </TouchableOpacity>
@@ -40,26 +105,7 @@ export default function MannerContent() {
 
         <View style={styles.line} />
         <View style={styles.contentBox}>
-          <Text style={styles.categoryText}>
-            최근 흥미로운 기사를 하나 읽었습니다. 한국생성형AI연구원에서
-            발표한 생성형AI 활용 조사 결과에 대한 내용이었는데요. 구체적으로는
-            '활용 효과'와 '활용 수준'에 대한 결과가 인상적이었습니다.
-            <Text>{"\n\n"}</Text>
-            먼저 활용 효과에 대한 조사 결과를 살펴보면, 응답자의 56.7%는 효과가
-            있다고 답했고, 27.6%는 효과가 매우 크다고 응답했습니다. 즉, 85%
-            이상의 응답자가 생성형 AI의 긍정적인 효과를 체감하고 있다는
-            의미로 해석할 수 있습니다.
-            <Text>{"\n\n"}</Text>
-            반면, 자신의 생성형 AI 활용 수준에 대해서는 '보통'이라고 답한 사람이
-            40.9%, '조금 안다'라고 답한 사람이 20.5%, '잘 모른다'라고 답변한
-            사람이 9.4%였습니다. 이는 많은 사람들이 생성형 AI를 충분히 활용하지
-            못하고 있다고 느끼고 있음을 보여줍니다.
-            <Text>{"\n\n"}</Text>이 두 가지 결과를 종합해 보면, 생성형 AI가
-            효과적이지만 그 능력만큼 잘 활용되지 못하고 있다는 결론에 이르게
-            되는데요. 이러한 현상의 배경에는 생성형 AI 기술 트렌드 변화가
-            있습니다. 2022년 11월 ChatGPT가 출시 이후, 2023년까지 생성형 AI의
-            기술 경쟁이 치열하게 전개되었고...
-          </Text>
+          <Text style={styles.categoryText}>{mannerInfo.content}</Text>
         </View>
       </ScrollView>
     </View>

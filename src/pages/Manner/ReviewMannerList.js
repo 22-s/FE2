@@ -18,36 +18,35 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerList({ route }) {
-  const navigation = useNavigation(); // navigation 훅 사용
-  const [data, setData] = useState([]); // API 데이터를 저장
+export default function ReviewMannerList() {
+  const navigation = useNavigation();
+  const [reviewMannerList, setReviewMannerList] = useState([]); // API 데이터를 저장
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
-  const category = route.params.category;
 
-  const fetchVocaData = async (param) => {
+  const fetchReviewMannerData = async (param) => {
+    //매너설명서 리스트 조회
+
     try {
       console.log(param);
       setLoading(true);
-      const response = await get(`/manners?category=${param}`);
+      const response = await get(`/manners/likes`);
       if (response.isSuccess) {
         //api 응답 데이터 저장
-        setData(response.result);
+        setReviewMannerList(response.result);
       }
     } catch (error) {
-      console.error(
-        "매너설명서 카테고리 리스트를 가져오는 중 오류 발생:",
-        error
-      );
+      console.error("매너설명서 복습 리스트를 가져오는 중 오류 발생:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchVocaData(category); // 원하는 카테고리로 요청
+    fetchReviewMannerData(); // 원하는 카테고리로 요청
   }, []);
 
   if (loading) {
+    //로딩 Logic
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#268AFF" />
@@ -61,7 +60,7 @@ export default function MannerList({ route }) {
         <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
           <SearchBar />
         </View>
-        {data.map((item, index) => (
+        {reviewMannerList.map((item, index) => (
           <TouchableOpacity key={index}>
             <MannerListBox item={item} />
           </TouchableOpacity>
