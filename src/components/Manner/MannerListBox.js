@@ -36,7 +36,7 @@ export default function MannerListBox({ item }) {
               <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
                 {item.title}
               </Text>
-              <Star />
+              {item.favorited && <Star />}
             </View>
             <View style={styles.textAreaGap} />
             <Text style={styles.content} numberOfLines={2} ellipsizeMode="tail">
