@@ -42,18 +42,12 @@ const QuizLikeList = () => {
       console.log(response.data);
   
       if (response.data.isSuccess) {
-        let quizData = response.data.result;
-        // 각 quizId를 1부터 순차적으로 재할당
-        quizData = quizData.map((quiz, index) => ({
-          ...quiz,
-          quizId: index + 1,
-        }));
+        const quizData = response.data.result;
         setQuizzes(quizData); // 퀴즈 데이터 저장
   
         if (quizData.length > 0) {
           setFirstQuizId(quizData[0].quizId); // 첫 번째 퀴즈 ID 저장
           setLastQuizId(quizData[quizData.length - 1].quizId); // 마지막 퀴즈 ID 저장
-          console.log(firstQuizId + " " + lastQuizId);
         }
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
@@ -65,10 +59,16 @@ const QuizLikeList = () => {
     } finally {
       setLoading(false);
     }
-  };  
+  };
+  
 
-  const handleQuizPress = (quizId, review) => {
-    navigation.navigate("QuizDetail", { quizId, review, firstQuizId, lastQuizId });
+  const handleQuizPress = (quizId) => {
+    navigation.navigate("QuizDetail", {
+      quizId,
+      quizzes, 
+      firstQuizId,
+      lastQuizId,
+    });
   };
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const QuizLikeList = () => {
               correct={quiz.correct}
               review={quiz.inReviewList}
               solved={quiz.solved}
-              onPress={() => handleQuizPress(quiz.quizId, quiz.review)}
+              onPress={() => handleQuizPress(quiz.quizId)}
             />
           );
         })}

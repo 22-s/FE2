@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const QuizDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { quizId, firstQuizId, lastQuizId, isSubmit: initialIsSubmit } = route.params;
+  const { quizId, quizzes, firstQuizId, lastQuizId, isSubmit: initialIsSubmit } = route.params;
   //const [ currentQuizId, setIsQuizId ] = useState(quizId);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -26,6 +26,8 @@ const QuizDetail = ({ route }) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [bookmark, setBookmark] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
+
+  const currentIndex = quizzes.findIndex((q) => q.quizId === quizId);
 
   const openModal = () => {
     setModalVisible(true);
@@ -112,33 +114,41 @@ const QuizDetail = ({ route }) => {
   //   navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
   // };
 
-  const nextQuiz = (quizId) => {
-    if(isSolved) {
-      if(quizId == lastQuizId) { 
-        Alert.alert("마지막 퀴즈입니다."); 
-      }
-      else {
-        quizId += 1;
-        navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
+  const nextQuiz = () => {
+    if (isSolved) {
+      if (currentIndex < quizzes.length - 1) {
+        const nextQuizId = quizzes[currentIndex + 1].quizId;
+        navigation.replace("QuizDetail", {
+          quizId: nextQuizId,
+          quizzes,
+          firstQuizId,
+          lastQuizId,
+        });
+      } else {
+        Alert.alert("마지막 퀴즈입니다.");
       }
     } else {
       Alert.alert("현재 퀴즈를 풀어야 넘어갈 수 있습니다.");
     }
-  }
+  };
 
-  const prevQuiz = (quizId) => {
-    if(quiz.solved) {
-      if(quizId == 0 || quizId == firstQuizId) {
+  const prevQuiz = () => {
+    if (isSolved) {
+      if (currentIndex > 0) {
+        const prevQuizId = quizzes[currentIndex - 1].quizId;
+        navigation.replace("QuizDetail", {
+          quizId: prevQuizId,
+          quizzes,
+          firstQuizId,
+          lastQuizId,
+        });
+      } else {
         Alert.alert("이전 퀴즈가 없습니다.");
       }
-      else {
-        quizId -= 1;
-        navigation.replace("QuizDetail", { quizId, firstQuizId, lastQuizId } )
-      }
     } else {
       Alert.alert("현재 퀴즈를 풀어야 넘어갈 수 있습니다.");
     }
-  }
+  };
 
   const addReview = async () => {
     const token = await AsyncStorage.getItem("accessToken");

@@ -62,7 +62,12 @@ const QuizList = ({route}) => {
   };
 
   const handleQuizPress = (quizId) => {
-    navigation.navigate("QuizDetail", { quizId, firstQuizId, lastQuizId });
+    navigation.navigate("QuizDetail", {
+      quizId,
+      quizzes, 
+      firstQuizId,
+      lastQuizId,
+    });
   };
 
   useEffect(() => {

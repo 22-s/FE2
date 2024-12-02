@@ -23,16 +23,18 @@ export default function ReviewMannerList() {
   const [reviewMannerList, setReviewMannerList] = useState([]); // API 데이터를 저장
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
 
-  const fetchReviewMannerData = async (param) => {
-    //매너설명서 리스트 조회
 
+  const fetchReviewMannerData = async () => {
     try {
-      console.log(param);
       setLoading(true);
       const response = await get(`/manners/likes`);
       if (response.isSuccess) {
-        //api 응답 데이터 저장
-        setReviewMannerList(response.result);
+        // 데이터에 favorited: true 추가
+        const processedManners = response.result.map((manner) => ({
+          ...manner,
+          favorited: true, // favorited 필드 추가
+        }));
+        setReviewMannerList(processedManners);
       }
     } catch (error) {
       console.error("매너설명서 복습 리스트를 가져오는 중 오류 발생:", error);
@@ -40,6 +42,7 @@ export default function ReviewMannerList() {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchReviewMannerData(); // 원하는 카테고리로 요청
