@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Animated,
 } from "react-native";
+import axios from "axios";
 import DatePicker from "react-native-date-picker";
 import LogoText from "../../assets/images/Logo/logo2.svg";
 import QuizIcon from "../../assets/images/Logo/quiz.svg";
@@ -77,29 +78,51 @@ const Signup = () => {
     setIsPasswordMatch(password === text || text === "");
   };
 
-  const handleEmailCheck = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 형식 검증 정규식
-    if (!emailRegex.test(email)) {
-      setEmailAvailable(false);
-      setEmailStatusMessage("올바른 이메일 형식을 입력해주세요.");
-      setEmailStatusColor("red");
-      showToast("올바른 이메일 형식을 입력해주세요.");
-      return;
-    }
-    // Example 데이터, 실제 백엔드와 연동 시 교체
-    const isAvailable = email !== "haeun9394@gmail.com";
-    setEmailAvailable(isAvailable);
-
-    if (isAvailable) {
-      setEmailStatusMessage("사용 가능한 이메일입니다.");
-      setEmailStatusColor("#268AFF"); // 성공 메시지 색상
-      showToast("사용 가능한 이메일입니다.");
-    } else {
-      setEmailStatusMessage("중복된 이메일입니다.");
-      setEmailStatusColor("red"); // 실패 메시지 색상
-      showToast("이미 가입된 이메일입니다.");
+  const handleEmailCheck = async () => {
+    try {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 형식 검증 정규식
+      if (!emailRegex.test(email)) {
+        setEmailAvailable(false);
+        setEmailStatusMessage("올바른 이메일 형식을 입력해주세요.");
+        setEmailStatusColor("red");
+        showToast("올바른 이메일 형식을 입력해주세요.");
+        return;
+      }
+  
+      const response = await axios({
+        method: 'POST', // HTTP POST 메서드를 사용
+        url: 'https://22s.store/api/user/check-email',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          email, // 요청 본문에 이메일 추가
+        },
+      });
+  
+      if (response.status === 200) {
+        setEmailAvailable(true);
+        setEmailStatusMessage("사용 가능한 이메일입니다.");
+        setEmailStatusColor("#268AFF");
+        showToast("사용 가능한 이메일입니다.");
+      }
+    } catch (error) {
+      if (error.response) {
+        // 상태 코드에 따라 메시지 출력
+        if (error.response.status === 400) {
+          setEmailAvailable(false);
+          setEmailStatusMessage("이미 존재하는 사용자입니다.");
+          setEmailStatusColor("red");
+          showToast("이미 가입된 이메일입니다.");
+          return;
+        }
+      }
+      console.error("이메일 확인 중 오류가 발생했습니다:", error);
+      showToast("이메일 확인 중 문제가 발생했습니다.");
     }
   };
+  
+  
 
   const handleSignUpButton = async () => {
     if (!name || !email || !password || !confirmPassword) {

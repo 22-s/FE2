@@ -113,7 +113,7 @@ const QuizDetail = ({ route }) => {
   // };
 
   const nextQuiz = (quizId) => {
-    if(quiz.solved) {
+    if(isSolved) {
       if(quizId == lastQuizId) { 
         Alert.alert("마지막 퀴즈입니다."); 
       }

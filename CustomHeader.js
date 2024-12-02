@@ -43,6 +43,7 @@ const CustomHeader = ({ title, navigation, routeName }) => {
       await AsyncStorage.removeItem("accessToken"); // 토큰 제거
       logout(); // 상태 업데이트
       Alert.alert("알림", "로그아웃되었습니다.");
+      navigation.replace("AuthStack");
     } catch (error) {
       console.error("로그아웃 실패:", error);
       Alert.alert("오류", "로그아웃 중 문제가 발생했습니다.");
@@ -60,6 +61,7 @@ const CustomHeader = ({ title, navigation, routeName }) => {
         ],
         { cancelable: true }
       );
+      
     } else {
       navigation.replace("AuthStack");
     }

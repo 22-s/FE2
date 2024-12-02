@@ -1,7 +1,7 @@
 // DeletedPost.js
 import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
-import BuizContentsListBox from "../../components/BuizContents/BuizContentsListBox";
+import LinkButton from "../../components/BuizContents/LinkButton";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -53,6 +53,7 @@ export default function BuizContent() {
           </Text>
         </View>
       </ScrollView>
+      <LinkButton />
     </View>
   );
 }

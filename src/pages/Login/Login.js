@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Animated,
+  Alert
 } from "react-native";
 import LogoText from "../../assets/images/Logo/logo2.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
@@ -53,15 +54,14 @@ const LoginPage = () => {
       showToast("모든 입력란을 입력하세요.");
       return;
     }
-
+  
     await CookieManager.clearAll();
     await AsyncStorage.removeItem("accessToken");
-
+  
     try {
       const requestBody = { email, password };
       const response = await post("/user/signin", requestBody);
-      console.log("Response 전체:", response);
-
+  
       if (response.isSuccess) {
         console.log("로그인 성공");
         login();
@@ -69,11 +69,23 @@ const LoginPage = () => {
       } else {
         showToast("로그인에 실패했습니다. 다시 시도해주세요.");
       }
-    } catch (e) {
-      console.error("Login Error:", e);
-      showToast("로그인에 실패했습니다. 다시 시도해주세요.");
+    } catch (error) {
+      if (error.response) {
+        // 상태 코드에 따라 메시지 출력
+        if (error.response.status === 400) {
+          Alert.alert("존재하지 않는 사용자입니다.");
+        } else if (error.response.status === 401) {
+          Alert.alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+        } else {
+          Alert.alert("로그인에 실패했습니다. 다시 시도해주세요.");
+        }
+      } else {
+        console.error("Login Error:", error);
+        showToast("로그인에 실패했습니다. 다시 시도해주세요.");
+      }
     }
   };
+  
 
   // 토큰 추출 함수
   const extractAccessToken = (setCookieHeader) => {
