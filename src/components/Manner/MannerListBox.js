@@ -46,7 +46,7 @@ export default function MannerListBox({ item }) {
           <View>
             <Image
               source={{
-                uri: "https://www.w3schools.com/w3images/lights.jpg",
+                uri: item.imageUrl,
               }}
               style={styles.imageContainer}
             />

@@ -95,7 +95,7 @@ export default function MannerContent({ route }) {
       <ScrollView contentContainerStyle={styles.listArea}>
         <Image
           source={{
-            uri: "https://www.w3schools.com/w3images/lights.jpg",
+            uri: item.imageUrl,
           }}
           style={styles.imageContainer} 
         />
