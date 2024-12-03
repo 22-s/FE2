@@ -40,7 +40,10 @@ export default function BuizContentsListBox({
             </Text>
           </View>
 
-          <View style={styles.imageContainer}></View>
+          <Image
+              style={styles.imageContainer}
+              source={{ uri: images.url }} // 이미지 URL 설정
+            />
         </View>
         <View style={{ width: "100%", height: 5 }}></View>
         <View style={styles.lowBox}>
