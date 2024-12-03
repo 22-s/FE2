@@ -1,83 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Text, Alert, Image, ActivityIndicator } from "react-native";
+import React from "react";
+import { View, StyleSheet, ScrollView, Dimensions, Text, Alert, Image } from "react-native";
+import Clipboard from "@react-native-clipboard/clipboard";
 import LinkButton from "../../components/BuizContents/LinkButton";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
+const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 const LinkCopy = () => {
-  Alert.alert("링크가 복사되었습니다.");
+  const url = "https://newneek.co/@techissue/article/12568";
+  Clipboard.setString(url); // 클립보드에 URL 복사
+  Alert.alert("알림", "링크가 클립보드에 복사되었습니다.");
 };
 
-export default function BuizContent() {
-  const [data, setData] = useState(null); // 데이터 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태
-
-  const fetchContent = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
-
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
-
-    try {
-      setLoading(true);
-      const response = await axios.get("/api/trends");
-      if (response.data.isSuccess) {
-        setData(response.data.result);
-      } else {
-        Alert.alert("오류", response.data.message || "데이터를 가져오지 못했습니다.");
-      }
-    } catch (error) {
-      console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
-      Alert.alert("오류", "데이터를 가져오는 중 문제가 발생했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchContent(); // 데이터 가져오기
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#268AFF" />
-      </View>
-    );
-  }
-
-  if (!data) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>데이터를 가져올 수 없습니다.</Text>
-      </View>
-    );
-  }
+export default function BuizContent({ route }) {
+  const { item } = route.params;
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
-        <Image style={styles.imageContainer} source={{ uri: data.imageUrl }} />
+        <Image style={styles.imageContainer} source={{ uri: item.images.url }} />
         <View style={styles.categoryBox}>
-          <Text style={styles.categoryText}>{data.category}</Text>
+          <Text style={styles.categoryText}>{item.category}</Text>
         </View>
         <View style={styles.titleArea}>
-          <Text style={styles.titleText}>{data.title}</Text>
+          <Text style={styles.titleText}>{item.title}</Text>
         </View>
         <View style={styles.dateArea}>
-          <Text style={styles.dateText}>{data.date}</Text>
+          <Text style={styles.dateText}>{item.date}</Text>
         </View>
         <View style={styles.sourcesArea}>
-          <Image style={styles.sourcesProfile} source={{ uri: data.authorProfile }} />
-          <Text style={styles.sourcesName}>{data.source}</Text>
+          <View style={styles.sourcesProfile}></View>
+          <Text style={styles.sourcesName}>뉴닉</Text>
+          <Text style={styles.sourcesTag}>@</Text>
+          <Text style={styles.sourcesTag}>newneek</Text>
         </View>
         <View style={styles.line} />
         <View style={styles.contentBox}>
-          <Text style={styles.contentText}>{data.content}</Text>
+          <Text style={styles.categoryText}>{item.content}</Text>
         </View>
       </ScrollView>
       <LinkButton onPress={LinkCopy} />
@@ -95,15 +57,9 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
   imageContainer: {
     width: "100%",
-    minHeight: 200,
+    minHeight: widthPercentage(50),
     backgroundColor: "gray",
     alignItems: "center",
     justifyContent: "center",
@@ -123,37 +79,44 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   categoryText: {
+    textAlign: "left",
+    fontFamily: "Pretendard",
     fontSize: 12,
     fontWeight: "bold",
     color: "#72777A",
   },
   titleArea: {
     width: "100%",
+    height: 40,
     justifyContent: "center",
     paddingLeft: 7,
-    marginVertical: 5,
   },
   titleText: {
+    textAlign: "left",
+    fontFamily: "Pretendard",
     fontSize: 19,
     fontWeight: "bold",
     color: "#383F49",
   },
   dateArea: {
     width: "100%",
+    height: 25,
     justifyContent: "center",
     paddingLeft: 7,
-    marginBottom: 10,
   },
   dateText: {
+    textAlign: "left",
+    fontFamily: "Pretendard",
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: "semibold",
     color: "#72777A",
   },
   sourcesArea: {
+    width: "100%",
+    height: 40,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 7,
-    marginBottom: 10,
   },
   sourcesProfile: {
     width: 20,
@@ -163,22 +126,35 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   sourcesName: {
+    textAlign: "left",
+    fontFamily: "Pretendard",
     fontSize: 12,
     fontWeight: "bold",
     color: "#313131",
+    marginRight: 7,
+  },
+  sourcesTag: {
+    textAlign: "left",
+    fontFamily: "Pretendard",
+    fontSize: 12,
+    fontWeight: "semibold",
+    color: "#B0B0B0",
   },
   line: {
     width: "100%",
     height: 1,
     backgroundColor: "#DDDDDD",
-    marginBottom: 10,
   },
   contentBox: {
+    width: "100%",
     padding: 7,
+    paddingTop: 10,
   },
   contentText: {
-    fontSize: 14,
-    fontWeight: "400",
+    textAlign: "left",
+    fontFamily: "Pretendard",
+    fontSize: 12,
+    fontWeight: "semibold",
     color: "#353535",
   },
 });
