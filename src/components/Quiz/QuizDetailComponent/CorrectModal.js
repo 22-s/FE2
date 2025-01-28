@@ -6,6 +6,7 @@ import AddReviewButton from "./button/AddReviewButton";
 import XButton from "../../../assets/images/QuizDetail/XButton.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import axiosInstance from "../../../api/axiosInstance";
 
 const CorrectModal = ({
   content,
@@ -43,9 +44,7 @@ const CorrectModal = ({
         Alert.alert("이미 복습리스트에 추가되어 있습니다.");
       } else {
         // 복습하기 추가 API 호출
-        await axios.post(`https://22s.store/api/quiz/${quizId}/review`, {
-          headers,
-        });
+        await axiosInstance.post(`/api/quiz/${quizId}/review`);
         Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
         // navigation.replace("QuizDetail", {
         //   quizId,

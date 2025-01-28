@@ -14,6 +14,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import axiosInstance from "../../api/axiosInstance";
 
 const QuizDetail = ({ route }) => {
   const navigation = useNavigation();
@@ -36,19 +37,18 @@ const QuizDetail = ({ route }) => {
   const fetchQuizzes = async (quizId) => {
     console.log("quizId:", quizId);
     // setIsQuizId(quizId);
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
+    // const token = await AsyncStorage.getItem("accessToken");
+    // console.log("토큰이당: " + token);
 
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
 
     try {
-      const response = await axios.get(
-        `https://22s.store/api/quiz/${quizId}`,
-        { headers }
+      const response = await axiosInstance.get(
+        `/api/quiz/${quizId}`
       );
       console.log(response.data);
       console.log("solved: "+response.data.result.solved);
@@ -70,20 +70,19 @@ const QuizDetail = ({ route }) => {
 
   const submitAnswer = async (quizId, selectedAnswer) => {
     console.log("quizId:", quizId);
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
+    // const token = await AsyncStorage.getItem("accessToken");
+    // console.log("토큰이당: " + token);
 
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
 
     try {
-      const response = await axios.post(
-        `https://22s.store/api/quiz/${quizId}/submit`,
+      const response = await axiosInstance.post(
+        `/api/quiz/${quizId}/submit`,
         { selectedAnswer }, // Request body에 selectedAnswer 추가
-        { headers }
       );
       console.log(response.data);
 
@@ -167,7 +166,7 @@ const QuizDetail = ({ route }) => {
         Alert.alert("이미 복습리스트에 추가되어 있습니다.");
       } else {
         // 복습하기 추가 API 호출
-        await axios.post(`https://22s.store/api/quiz/${quizId}/review`, {
+        await axiosInstance.post(`/api/quiz/${quizId}/review`, {
           headers,
         });
         Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");

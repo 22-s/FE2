@@ -6,6 +6,7 @@ import BookmarkFilled from "../../../assets/images/QuizList/BookmarkFilled.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import axiosInstance from "../../../api/axiosInstance";
 
 const Title = ({ content, review, quizId, solved, isSubmit }) => {
   const navigation = useNavigation();
@@ -13,13 +14,13 @@ const Title = ({ content, review, quizId, solved, isSubmit }) => {
   const [containerHeight, setContainerHeight] = useState(50); // 기본 높이를 50으로 설정
 
   const handleReview = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const token = await AsyncStorage.getItem("accessToken");
+    // console.log("토큰이당: " + token);
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
 
     try {
       if(!solved) {
@@ -27,23 +28,19 @@ const Title = ({ content, review, quizId, solved, isSubmit }) => {
       } else {
         if (review) {
           // 복습하기 해제 API 호출
-          await axios.delete(`https://22s.store/api/quiz/${quizId}/review`, {
-            headers,
-          });
+          await axiosInstance.delete(`/api/quiz/${quizId}/review`);
           Alert.alert("알림", "복습하기 리스트에서 삭제하였습니다.");
         } else {
           // 복습하기 추가 API 호출
-          await axios.post(`https://22s.store/api/quiz/${quizId}/review`, {}, {
-            headers,
-          });
+          await axiosInstance.post(`/api/quiz/${quizId}/review`, {});
           Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
         }
         //setBookmark((prev) => !prev); // 상태 변경
 
         navigation.replace("QuizDetail", {
           quizId,
-          review: !review, // review 상태 반대로 전달
-          isSubmit, // 유지하고 싶은 값 전달
+          review: !review,
+          isSubmit, 
         });
       }
     } catch (error) {

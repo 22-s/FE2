@@ -25,6 +25,7 @@ const QuizLikeList = () => {
   const navigation = useNavigation();
 
   const fetchQuizzes = async () => {
+    // axios로 연결한 코드드
     const token = await AsyncStorage.getItem("accessToken");
     console.log("토큰이당: " + token);
   
@@ -36,9 +37,7 @@ const QuizLikeList = () => {
   
     try {
       setLoading(true);
-      const response = await axios.get(`https://22s.store/api/quiz/review`, {
-        headers,
-      });
+      const response = await axiosInstance.get(`/api/quiz/review`);
       console.log(response.data);
   
       if (response.data.isSuccess) {

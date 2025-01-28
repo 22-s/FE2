@@ -27,18 +27,19 @@ const QuizList = ({route}) => {
 
   const fetchQuizzes = async (category) => {
     console.log("Fetching quizzes for category:", category);
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: "+token);
+    // axios로 연결 한 코드
+    // const token = await AsyncStorage.getItem("accessToken");
+    // console.log("토큰이당: "+token);
     
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
     
     try {
       setLoading(true);
-      const response = await axios.get(`https://22s.store/api/quiz?category=${category}`, { headers });
+      const response = await axiosInstance.get(`/api/quiz?category=${category}`);
       console.log(response.data);
   
       if (response.data.isSuccess) {

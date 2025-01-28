@@ -24,6 +24,7 @@ import { useNavigation } from "@react-navigation/native";
 import { post } from "../../api/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CookieManager from "@react-native-cookies/cookies";
+import axiosInstance from "../../api/axiosInstance";
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -89,15 +90,11 @@ const Signup = () => {
         return;
       }
   
-      const response = await axios({
-        method: 'POST', // HTTP POST 메서드를 사용
-        url: 'https://22s.store/api/user/check-email',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          email, // 요청 본문에 이메일 추가
-        },
+      // const token = await AsyncStorage.getItem("accessToken");
+      // console.log(token);
+
+      const response = await axiosInstance.post(`/api/user/check-email`, {
+        email,
       });
   
       if (response.status === 200) {
@@ -145,7 +142,7 @@ const Signup = () => {
         join_date: date.toISOString().split("T")[0],
       };
 
-      const response = await post("/user/signup", requestBody);
+      const response = await axiosInstance.post("/api/user/signup", requestBody);
       console.log("Response Data:", response?.message);
 
       navigation.navigate("Login");

@@ -17,6 +17,7 @@ import { post } from "../../api/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CookieManager from "@react-native-cookies/cookies";
 import { useAuth } from "../../contexts/AuthContext";
+import axiosInstance from "../../api/axiosInstance";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -56,22 +57,31 @@ const LoginPage = () => {
     }
   
     await CookieManager.clearAll();
-    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]); // 기존 토큰 제거
   
     try {
       const requestBody = { email, password };
-      const response = await post("/user/signin", requestBody);
+      const response = await axiosInstance.post("/api/user/signin", requestBody);
   
-      if (response.isSuccess) {
-        console.log("로그인 성공");
+      if (response.data.isSuccess) {
+        const { accessToken, refreshToken } = response.data.result;
+  
+        // 토큰 저장
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+  
+        console.log("로그인 성공: ", response.data.message);
+  
+        // useAuth의 login 메서드 호출
         login();
+  
+        // 홈 화면으로 이동
         navigation.replace("TabNavigator");
       } else {
         showToast("로그인에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
       if (error.response) {
-        // 상태 코드에 따라 메시지 출력
         if (error.response.status === 400) {
           Alert.alert("존재하지 않는 사용자입니다.");
         } else if (error.response.status === 401) {
@@ -85,6 +95,7 @@ const LoginPage = () => {
       }
     }
   };
+  
   
 
   // 토큰 추출 함수

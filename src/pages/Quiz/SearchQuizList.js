@@ -12,6 +12,7 @@ import LockedQuizListComponent from "../../components/Quiz/QuizListComponent/Loc
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import axiosInstance from "../../api/axiosInstance";
 
 const SearchQuizList = ({ route }) => {
   const navigation = useNavigation();
@@ -22,20 +23,19 @@ const SearchQuizList = ({ route }) => {
   const [lastQuizId, setLastQuizId] = useState(null); // 마지막 퀴즈 ID
 
   const searchQuiz = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const token = await AsyncStorage.getItem("accessToken");
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
 
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://22s.store/api/quiz/search?keyword=${encodeURIComponent(
+      const response = await axiosInstance.get(
+        `/api/quiz/search?keyword=${encodeURIComponent(
           keyword
-        )}`,
-        { headers }
+        )}`
       );
 
       if (response.data.isSuccess) {

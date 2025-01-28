@@ -1,6 +1,6 @@
+// DeletedPost.js
 import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions, Text, Alert, Image } from "react-native";
-import Clipboard from "@react-native-clipboard/clipboard";
 import LinkButton from "../../components/BuizContents/LinkButton";
 
 const windowWidth = Dimensions.get("window").width;
@@ -10,10 +10,8 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 const LinkCopy = () => {
-  const url = "https://newneek.co/@techissue/article/12568";
-  Clipboard.setString(url); // 클립보드에 URL 복사
-  Alert.alert("알림", "링크가 클립보드에 복사되었습니다.");
-};
+  Alert.alert("링크가 복사되었습니다.");
+}
 
 export default function BuizContent({ route }) {
   const { item } = route.params;
@@ -21,7 +19,7 @@ export default function BuizContent({ route }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.listArea}>
-        <Image style={styles.imageContainer} source={{ uri: item.images.url }} />
+        <Image style={styles.imageContainer} source={{ uri: item.images.url }}></Image>
         <View style={styles.categoryBox}>
           <Text style={styles.categoryText}>{item.category}</Text>
         </View>
@@ -39,10 +37,29 @@ export default function BuizContent({ route }) {
         </View>
         <View style={styles.line} />
         <View style={styles.contentBox}>
-          <Text style={styles.categoryText}>{item.content}</Text>
+          <Text style={styles.categoryText}>
+            최근 흥미로운 기사를 하나 읽었습니다. 한국생성형AI연구원에서
+            발표한 생성형AI 활용 조사 결과에 대한 내용이었는데요. 구체적으로는
+            '활용 효과'와 '활용 수준'에 대한 결과가 인상적이었습니다.
+            <Text>{"\n\n"}</Text>
+            먼저 활용 효과에 대한 조사 결과를 살펴보면, 응답자의 56.7%는 효과가
+            있다고 답했고, 27.6%는 효과가 매우 크다고 응답했습니다. 즉, 85%
+            이상의 응답자가 생성형 AI의 긍정적인 효과를 체감하고 있다는
+            의미로 해석할 수 있습니다. 
+            <Text>{"\n\n"}</Text>
+            반면, 자신의 생성형 AI 활용 수준에 대해서는 '보통'이라고 답한 사람이
+            40.9%, '조금 안다'라고 답한 사람이 20.5%, '잘 모른다'라고 답변한
+            사람이 9.4%였습니다. 이는 많은 사람들이 생성형 AI를 충분히 활용하지
+            못하고 있다고 느끼고 있음을 보여줍니다. 
+            <Text>{"\n\n"}</Text>이 두 가지 결과를 종합해 보면, 생성형 AI가
+            효과적이지만 그 능력만큼 잘 활용되지 못하고 있다는 결론에 이르게
+            되는데요. 이러한 현상의 배경에는 생성형 AI 기술 트렌드 변화가
+            있습니다. 2022년 11월 ChatGPT가 출시 이후, 2023년까지 생성형 AI의
+            기술 경쟁이 치열하게 전개되었고...
+          </Text>
         </View>
       </ScrollView>
-      <LinkButton onPress={LinkCopy} />
+      <LinkButton onPress={LinkCopy}/>
     </View>
   );
 }
@@ -88,6 +105,7 @@ const styles = StyleSheet.create({
   titleArea: {
     width: "100%",
     height: 40,
+    // backgroundColor: 'pink',
     justifyContent: "center",
     paddingLeft: 7,
   },
@@ -101,6 +119,7 @@ const styles = StyleSheet.create({
   dateArea: {
     width: "100%",
     height: 25,
+    // backgroundColor: 'orange',
     justifyContent: "center",
     paddingLeft: 7,
   },
@@ -114,6 +133,7 @@ const styles = StyleSheet.create({
   sourcesArea: {
     width: "100%",
     height: 40,
+    // backgroundColor: 'yellow',
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 7,
