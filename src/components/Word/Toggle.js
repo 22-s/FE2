@@ -7,6 +7,7 @@ import ToggleTouched from "../../assets/images/Word/아래세모.svg";
 import StarFull from "../../assets/images/Word/채운별.svg";
 import Star from "../../assets/images/Word/빈별.svg";
 import ToggleContent from "./ToggleContent";
+import axiosInstance from "../../api/axiosInstance";
 
 const Toggle = ({ vocaId, term, description, example, favorited }) => {
   const [isToggled, setIsToggled] = useState(false);
@@ -17,27 +18,23 @@ const Toggle = ({ vocaId, term, description, example, favorited }) => {
   };
 
   const handleFavorite = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: "+token);
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const token = await AsyncStorage.getItem("accessToken");
+    // console.log("토큰이당: "+token);
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
 
     console.log(vocaId);
     try {
       if (isFavorite) {
         // 즐겨찾기 해제 API 호출
-        await axios.delete(`https://22s.store/api/voca/likes/${vocaId}`, {
-          headers,
-        });
+        await axiosInstance.delete(`/api/voca/likes/${vocaId}`);
         Alert.alert("알림", "용어를 즐겨찾기 리스트에서 삭제하였습니다.");
       } else {
         // 즐겨찾기 추가 API 호출
-        await axios.post(`https://22s.store/api/voca/likes/${vocaId}`, {}, {
-          headers,
-        });
+        await axiosInstance.post(`/api/voca/likes/${vocaId}`);
         Alert.alert("알림", "용어를 즐겨찾기 리스트에 추가하였습니다.");
       }
       setIsFavorite((prev) => !prev); // 상태 변경

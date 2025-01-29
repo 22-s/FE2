@@ -132,7 +132,6 @@ const QuizDetail = ({ route }) => {
   };
 
   const prevQuiz = () => {
-    if (isSolved) {
       if (currentIndex > 0) {
         const prevQuizId = quizzes[currentIndex - 1].quizId;
         navigation.replace("QuizDetail", {
@@ -144,9 +143,6 @@ const QuizDetail = ({ route }) => {
       } else {
         Alert.alert("이전 퀴즈가 없습니다.");
       }
-    } else {
-      Alert.alert("현재 퀴즈를 풀어야 넘어갈 수 있습니다.");
-    }
   };
 
   const addReview = async () => {

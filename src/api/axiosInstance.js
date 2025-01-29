@@ -66,4 +66,4 @@ axiosInstance.interceptors.request.use(
 //   return null;
 // };
 
-// export default axiosInstance;
+export default axiosInstance;

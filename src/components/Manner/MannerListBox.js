@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   contentBox: {
-    width: "100%",
-    height: widthPercentage(18),
+    width: "95%",
+    height: widthPercentage(20),
     // backgroundColor: "lightgreen",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
   textArea: {
     width: widthPercentage(69),
     height: widthPercentage(18),
-    //backgroundColor: "gray",
-    paddingRight: 15,
+    // backgroundColor: "gray",
+    paddingRight: 0,
   },
   title: {
     textAlign: "left",
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     paddingRight: 5,
   },
   content: {
+    flexWrap: "wrap",
     textAlign: "left",
     fontFamily: "Pretendard",
     fontSize: 14,

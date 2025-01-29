@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
 import SearchBar from "../../components/Home/searchBarQuiz";
 import { get } from "../../api/request";
+import axiosInstance from "../../api/axiosInstance";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,10 +28,10 @@ export default function ReviewMannerList() {
   const fetchReviewMannerData = async () => {
     try {
       setLoading(true);
-      const response = await get(`/manners/likes`);
-      if (response.isSuccess) {
+      const response = await axiosInstance.get(`/api/manners/likes`);
+      if (response.data.isSuccess) {
         // 데이터에 favorited: true 추가
-        const processedManners = response.result.map((manner) => ({
+        const processedManners = response.data.result.map((manner) => ({
           ...manner,
           favorited: true, // favorited 필드 추가
         }));

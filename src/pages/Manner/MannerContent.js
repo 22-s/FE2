@@ -13,6 +13,7 @@ import StarFull from "../../assets/images/Manner/bigStar_full.svg";
 import StarEmpty from "../../assets/images/Manner/bigStar_empty.svg";
 import { Image } from "react-native";
 import { get, post, deleteRequest } from "../../api/request";
+import axiosInstance from "../../api/axiosInstance";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -28,11 +29,12 @@ export default function MannerContent({ route }) {
   //매너 설명서 상세 정보 조회
   const fetchMannerInfo = async () => {
     try {
-      const response = await get(`/manners/${item.mannerId}`);
+      console.log(item.mannerId);
+      const response = await axiosInstance.get(`/api/manners/${item.mannerId}`);
 
-      if (response.isSuccess) {
-        setMannerInfo(response.result);
-        setIsStarFull(response.result.favorited);
+      if (response.data.isSuccess) {
+        setMannerInfo(response.data.result);
+        setIsStarFull(response.data.result.favorited);
       }
     } catch (e) {
       console.log("매너설명서 상세 조회 실패: ", e);
@@ -44,10 +46,11 @@ export default function MannerContent({ route }) {
   }, []);
 
   const addMannerLikes = async () => {
-    //즐겨찾기 추가
     try {
-      const response = await post(`/manners/likes/${item.mannerId}`);
-      if (response.isSuccess) {
+      console.log(item.mannerId);
+      const response = await axiosInstance.post(`/api/manners/likes/${item.mannerId}`);
+      console.log("야야야"+response.isSuccess);
+      if (response.data.isSuccess) {
         Alert.alert("즐겨찾기에 추가되었습니다.");
         return true;
       } else {
@@ -61,10 +64,10 @@ export default function MannerContent({ route }) {
   };
 
   const removeMannerLikes = async () => {
-    //즐겨찾기 삭제
     try {
-      const response = await deleteRequest(`/manners/likes/${item.mannerId}`);
-      if (response.isSuccess) {
+      console.log(item.mannerId);
+      const response = await axiosInstance.delete(`/api/manners/likes/${item.mannerId}`);
+      if (response.data.isSuccess) {
         Alert.alert("즐겨찾기에서 삭제되었습니다.");
         return true;
       } else {
@@ -78,7 +81,6 @@ export default function MannerContent({ route }) {
   };
 
   const toggleStar = async () => {
-    //즐겨찾기 Handler
     if (isStarFull) {
       //즐겨찾기 삭제
       const isSuccess = await removeMannerLikes();

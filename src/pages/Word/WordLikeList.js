@@ -5,24 +5,24 @@ import Star from '../../assets/images/Word/별.svg';
 import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 const WordLikeList = () => {
   const [terms, setTerms] = useState([]); // API 데이터 저장
   const [loading, setLoading] = useState(true);
 
   const fetchQuizzes = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const token = await AsyncStorage.getItem("accessToken");
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
   
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://22s.store/api/voca/likes`,
-        { headers }
+      const response = await axiosInstance.get(
+        `/api/voca/likes`
       );
   
       if (response.data.isSuccess) {

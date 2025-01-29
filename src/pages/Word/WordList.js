@@ -11,6 +11,7 @@ import Nego from '../../assets/images/Home/negotiate.svg';
 import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 const WordList = ({ route }) => {
   const { category, title, subtitle } = route.params;
@@ -30,18 +31,17 @@ const WordList = ({ route }) => {
   const SelectedSVG = svgMapping[category]; // 매핑에서 선택된 SVG 컴포넌트
 
   const fetchQuizzes = async (category) => {
-    const token = await AsyncStorage.getItem("accessToken");
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
+    // const token = await AsyncStorage.getItem("accessToken");
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   ...(token && { Authorization: `Bearer ${token}` }),
+    // };
 
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://22s.store/api/voca?category=${category}`,
-        { headers }
+      const response = await axiosInstance.get(
+        `/api/voca?category=${category}`
       );
 
       if (response.data.isSuccess) {

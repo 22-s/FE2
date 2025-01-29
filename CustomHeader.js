@@ -5,6 +5,7 @@ import Logo from "./src/assets/images/Header/Logo.png";
 import axios from "axios";
 import { useAuth } from "./src/contexts/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axiosInstance from "./src/api/axiosInstance";
 
 const CustomHeader = ({ title, navigation, routeName }) => {
   const [isLogoVisible, setIsLogoVisible] = useState(false);
@@ -25,19 +26,8 @@ const CustomHeader = ({ title, navigation, routeName }) => {
 
   const handleLogout = async () => {
     try {
-      const token = await AsyncStorage.getItem("accessToken"); // 토큰 가져오기
-      if (!token) {
-        throw new Error("로그인 상태가 아닙니다.");
-      }
-
-      await axios.post(
-        "https://22s.store/api/user/signout",
-        {}, // 요청 본문이 없으면 빈 객체를 전달
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      await axiosInstance.post(
+        "/api/user/signout"
       );
 
       await AsyncStorage.removeItem("accessToken"); // 토큰 제거

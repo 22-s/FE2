@@ -14,6 +14,7 @@ import MannerListBox from "../../components/Manner/MannerListBox";
 import SearchBar from "../../components/Home/searchBarQuiz";
 import MannerSearchBar from "../../components/Home/MannerSearchBar";
 import { get } from "../../api/request";
+import axiosInstance from "../../api/axiosInstance";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -22,16 +23,15 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function MannerList({ route }) {
-  const navigation = useNavigation(); // navigation 훅 사용
-  const [data, setData] = useState([]); // API 데이터를 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태 관리
+  const navigation = useNavigation(); 
+  const [data, setData] = useState([]); 
+  const [loading, setLoading] = useState(true); 
   const { category, searchText: routeSearchText } = route.params || {};
   const [searchText, setSearchText] = useState(routeSearchText || "");
 
   useEffect(() => {}, [routeSearchText, searchText]);
 
   const fetchMannerListData = async () => {
-    //데이터 로드 함수
     try {
       setLoading(true);
       let response;
@@ -39,17 +39,18 @@ export default function MannerList({ route }) {
 
       // 1. 카테고리 내 검색 결과 조회
       if (category && searchText) {
-        response = await get(
-          `/manners/search/category?category=${category}&keyword=${searchText}`
+        response = await axiosInstance.get(
+          `/api/manners/search/category?category=${category}&keyword=${searchText}`
         );
       }
       // 2. 카테고리별 매너 설명서 리스트 조회
       else if (category) {
-        response = await get(`/manners?category=${category}`);
+        console.log(category);
+        response = await axiosInstance.get(`/api/manners?category=${category}`);
       }
       // 3. 전체 검색 결과 조회
       else if (searchText) {
-        response = await get(`/manners/search?keyword=${searchText}`);
+        response = await axiosInstance.get(`/api/manners/search?keyword=${searchText}`);
       }
       // 4. 둘 다 없을 때
       else {
@@ -57,13 +58,15 @@ export default function MannerList({ route }) {
         return;
       }
 
-      if (response.isSuccess) {
-        if (response.result.length === 0) {
+      console.log("API 응답 데이터:", response);
+
+      if (response.data && response.data.isSuccess) {
+        if (response.data.result.length === 0) {
           Alert.alert("검색 결과가 없습니다. 다시 시도해주세요.");
         }
-        setData(response.result);
+        setData(response.data.result); 
       } else {
-        console.error("API 호출 실패:", response?.message);
+        console.error("API 호출 실패:", response?.data?.message || "응답 데이터 없음");
       }
     } catch (error) {
       console.error("데이터 로드 중 오류 발생:", error);
@@ -74,12 +77,10 @@ export default function MannerList({ route }) {
   };
 
   const handleSearch = (newSearchText) => {
-    //검색 결과 처리
     setSearchText(newSearchText);
   };
 
   useEffect(() => {
-    //초기 카테고리 데이터 로드
     fetchMannerListData();
   }, [category, searchText]);
 

@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import Toggle from "../../components/Word/Toggle";
 import WordSearchBar from "../../components/Home/WordSearchBar";
 import { get } from "../../api/request";
+import axiosInstance from "../../api/axiosInstance";
 
 const WordSearchList = ({ route }) => {
   const { searchText: routeSearchText } = route.params || {};
@@ -18,7 +19,7 @@ const WordSearchList = ({ route }) => {
     try {
       setLoading(true);
 
-      const response = await get(`/voca/search?keyword=${param}`);
+      const response = await axiosInstance.get(`/api/voca/search?keyword=${param}`);
 
       if (response.isSuccess) {
         setWords(response.result);
