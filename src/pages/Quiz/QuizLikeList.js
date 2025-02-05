@@ -25,7 +25,6 @@ const QuizLikeList = () => {
   const navigation = useNavigation();
 
   const fetchQuizzes = async () => {
-    // axios로 연결한 코드드
     const token = await AsyncStorage.getItem("accessToken");
     console.log("토큰이당: " + token);
   
@@ -50,13 +49,12 @@ const QuizLikeList = () => {
         }
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
-        Alert.alert("오류", response.data.message);
       }
     } catch (error) {
-      console.error("퀴즈 데이터를 가져오는 중 오류가 발생했습니다:", error);
-      Alert.alert("오류", "퀴즈 데이터를 가져오는 중 문제가 발생했습니다.");
+      console.log("퀴즈 데이터를 가져오는 중 오류가 발생했습니다:", error);
     } finally {
       setLoading(false);
+      console.log("ㅎㅎㅎㅎ");
     }
   };
   

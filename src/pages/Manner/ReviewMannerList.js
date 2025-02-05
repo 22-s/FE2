@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -6,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
@@ -22,7 +24,7 @@ const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 export default function ReviewMannerList() {
   const navigation = useNavigation();
   const [reviewMannerList, setReviewMannerList] = useState([]); // API 데이터를 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태 관리
+  const [loading, setLoading] = useState(true); 
 
 
   const fetchReviewMannerData = async () => {
@@ -36,27 +38,45 @@ export default function ReviewMannerList() {
           favorited: true, // favorited 필드 추가
         }));
         setReviewMannerList(processedManners);
+      }else {
+        console.error("데이터를 가져오지 못했습니다:", response.data.message);
+        setReviewMannerList([]);
       }
     } catch (error) {
       console.error("매너설명서 복습 리스트를 가져오는 중 오류 발생:", error);
+      setReviewMannerList([]);
     } finally {
       setLoading(false);
+      console.log("ㅎㅎㅎㅎ");
     }
   };
   
+  // if (loading) {
+  //     return (
+  //       <View style={styles.loadingContainer}>
+  //         <ActivityIndicator size="large" color="#268AFF" />
+  //       </View>
+  //     );
+  //   }
+  
+    if (reviewMannerList.length === 0) {
+      return (
+        <View style={styles.loadingContainer}>
+          <Text>매너설명서 데이터가 없습니다.</Text>
+        </View>
+      );
+    }
 
   useEffect(() => {
-    fetchReviewMannerData(); // 원하는 카테고리로 요청
+    console.log("useEffect 실행됨!"); 
+    fetchReviewMannerData();
   }, []);
 
-  if (loading) {
-    //로딩 Logic
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#268AFF" />
-      </View>
-    );
-  }
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchReviewMannerData(); 
+  //   }, [navigation])
+  // );
 
   return (
     <View style={styles.container}>

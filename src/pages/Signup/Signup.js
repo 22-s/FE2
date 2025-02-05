@@ -44,6 +44,7 @@ const Signup = () => {
 
   const [emailStatusMessage, setEmailStatusMessage] = useState(""); // 이메일 상태 메시지
   const [emailStatusColor, setEmailStatusColor] = useState("#5A5A5A"); // 메시지 색상
+  const [dateStatusMessage, setDateStatusMessage] = useState("");
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -129,6 +130,21 @@ const Signup = () => {
 
     if (!isPasswordMatch) {
       showToast("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    if (emailAvailable === null) {
+      setEmailStatusMessage("이메일 중복 체크를 완료해주세요.");
+      setEmailStatusColor("red");
+      showToast("이메일 중복 체크를 완료해주세요.");
+      setEmailAvailable(false);
+      return;
+    }
+  
+    if (date.toDateString() === new Date().toDateString()) {
+      setDateStatusMessage("입사일을 선택해주세요.");
+      showToast("입사일을 선택해주세요.");
+      setOpenDatePicker(true);
       return;
     }
 
@@ -265,7 +281,12 @@ const Signup = () => {
       )}
 
       {/* 입사일 입력 필드 */}
-      <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.inputContainer,
+          openDatePicker && styles.inputError, // 입사일 미선택 시 빨간 테두리 적용
+        ]}
+      >
         <TouchableOpacity
           onPress={() => setOpenDatePicker(true)}
           style={styles.dateButton}
@@ -299,6 +320,11 @@ const Signup = () => {
         confirmText="확인"
         cancelText="취소"
       />
+      {dateStatusMessage && (
+        <Text style={styles.errorText}>
+          입사일을 선택해주세요.
+        </Text>
+      )}
 
       {/* 회원가입 버튼 */}
       <TouchableOpacity

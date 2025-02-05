@@ -27,11 +27,16 @@ export default function MannerHome() {
     navigation.navigate("MannerList", { searchText });
   };
 
+  const handleClickReviewBox = () => {
+    console.log("ㅇㅇㅇㅇ");
+    navigation.navigate("ReviewMannerList");
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <MannerSearchBar onSearch={handleSearch} />
-        <MannerReviewBar />
+        <MannerReviewBar onPress={handleClickReviewBox} />
         <View style={styles.categoryArea}>
           <CategoryBox
             title="업무의 첫걸음"
@@ -42,7 +47,7 @@ export default function MannerHome() {
               </>
             }
             icon={<Bag />}
-            onPress={() => handlePress("기본 매너")}
+            onPress={() => handlePress(1)}
           />
           <CategoryBox
             title="첫인상을 좌우하는"
@@ -53,7 +58,7 @@ export default function MannerHome() {
               </>
             }
             icon={<Card />}
-            onPress={() => handlePress("명함 공유 매너")}
+            onPress={() => handlePress(2)}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -68,7 +73,7 @@ export default function MannerHome() {
               </>
             }
             icon={<Email />}
-            onPress={() => handlePress("팀장님께 메일 보내기")}
+            onPress={() => handlePress(3)}
           />
           <CategoryBox
             title="명확하고 간결하게,"
@@ -80,7 +85,7 @@ export default function MannerHome() {
               </>
             }
             icon={<Pen />}
-            onPress={() => handlePress("직장인 글쓰기 Tip")}
+            onPress={() => handlePress(4)}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -94,7 +99,7 @@ export default function MannerHome() {
               </>
             }
             icon={<Outfit />}
-            onPress={() => handlePress("TPO에 맞는 복장")}
+            onPress={() => handlePress(5)}
           />
           <CategoryBox
             title="원활한 의견 전달"
@@ -105,7 +110,7 @@ export default function MannerHome() {
               </>
             }
             icon={<Meeting />}
-            onPress={() => handlePress("커뮤니케이션 매너")}
+            onPress={() => handlePress(6)}
           />
         </View>
       </ScrollView>

@@ -34,14 +34,12 @@ export default function QuizHome() {
             title="업무의 첫걸음"
             subtitle={
               <>
-                <Text style={{ color: "#F2892E" }}>매너</Text>
-                <Text>와 </Text>
-                <Text style={{ color: "#F2892E" }}>일</Text>
-                <Text>의 기본</Text>
+                <Text style={{ color: "#F2892E" }}>기본</Text>
+                <Text> 매너</Text>
               </>
             }
             icon={<Bag />}
-            onPress={() => handlePress("기본 매너")}
+            onPress={() => handlePress(1)}
           />
           <CategoryBox
             title="첫인상을 좌우하는"
@@ -52,7 +50,7 @@ export default function QuizHome() {
               </>
             }
             icon={<Card />}
-            onPress={() => handlePress("명함 공유 매너")}
+            onPress={() => handlePress(2)}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -67,18 +65,19 @@ export default function QuizHome() {
               </>
             }
             icon={<Email />}
-            onPress={() => handlePress("팀장님께 메일 보내기")}
+            onPress={() => handlePress(3)}
           />
           <CategoryBox
             title="명확하고 간결하게,"
             subtitle={
               <>
-                <Text style={{ color: "#FD553E" }}>보고서</Text>
-                <Text> 작성법</Text>
+                <Text>직장인 </Text>
+                <Text style={{ color: "#FD553E" }}>글쓰기 </Text>
+                <Text>Tip</Text>
               </>
             }
             icon={<Pen />}
-            onPress={() => handlePress("직장인 글쓰기 Tip")}
+            onPress={() => handlePress(4)}
           />
         </View>
         <View style={styles.categoryArea}>
@@ -92,18 +91,18 @@ export default function QuizHome() {
               </>
             }
             icon={<Outfit />}
-            onPress={() => handlePress("TPO에 맞는 복장")}
+            onPress={() => handlePress(5)}
           />
           <CategoryBox
             title="원활한 의견 전달"
             subtitle={
-              <>
-                <Text style={{ color: "#98A304" }}>회의</Text>
-                <Text> 시 소통 전략</Text>
+          <>
+                <Text style={{ color: "#98A304" }}>커뮤니케이션 </Text>
+                <Text>매너</Text>
               </>
             }
             icon={<Meeting />}
-            onPress={() => handlePress("커뮤니케이션 매너")}
+            onPress={() => handlePress(6)}
           />
         </View>
       </ScrollView>

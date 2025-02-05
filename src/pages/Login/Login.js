@@ -57,7 +57,7 @@ const LoginPage = () => {
     }
   
     await CookieManager.clearAll();
-    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]); // 기존 토큰 제거
+    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]); 
   
     try {
       const requestBody = { email, password };
@@ -89,7 +89,10 @@ const LoginPage = () => {
         } else {
           Alert.alert("로그인에 실패했습니다. 다시 시도해주세요.");
         }
-      } else {
+      } else if(error.message == "Network Error") {
+        Alert.alert("네트워크 오류", "인터넷 연결을 확인하고 다시 시도해주세요.");
+      }
+      else {
         console.error("Login Error:", error);
         showToast("로그인에 실패했습니다. 다시 시도해주세요.");
       }

@@ -38,6 +38,7 @@ const QuizList = ({route}) => {
     // };
     
     try {
+      console.log(category);
       setLoading(true);
       const response = await axiosInstance.get(`/api/quiz?category=${category}`);
       console.log(response.data);

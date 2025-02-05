@@ -19,15 +19,11 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerReviewBar() {
+export default function MannerReviewBar({onPress}) {
   const navigation = useNavigation();
 
-  const handleClickReviewBox = () => {
-    navigation.navigate("ReviewMannerList");
-  };
-
   return (
-    <TouchableOpacity style={styles.reviewBox} onPress={handleClickReviewBox}>
+    <TouchableOpacity style={styles.reviewBox} onPress={onPress}>
       <View style={{ flexDirection: "row" }}>
         <Star style={{ marginRight: 4 }} />
         <Text style={styles.reviewBoxTitle}>즐겨찾기</Text>

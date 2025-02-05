@@ -40,7 +40,7 @@ export default function MannerListBox({ item }) {
             </View>
             <View style={styles.textAreaGap} />
             <Text style={styles.content} numberOfLines={2} ellipsizeMode="tail">
-              {item.contentPreview}
+              {item.content}
             </Text>
           </View>
           <View>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover", // or 'stretch' or 'contain'
   },
   textArea: {
-    width: widthPercentage(69),
+    width: widthPercentage(66),
     height: widthPercentage(18),
     // backgroundColor: "gray",
     paddingRight: 0,
