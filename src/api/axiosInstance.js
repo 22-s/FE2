@@ -10,6 +10,24 @@ const axiosInstance = axios.create({
   },
 });
 
+const refreshAccessToken = async () => {
+  try {
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    if(!refreshToken) throw new Error("Refresh Token이 존재하지 않습니다.");
+
+    const response = await axiosInstance.post("/api/user/refresh", {refreshToken});
+
+    const { accessToken, refreshToken: newRefreshToken } = response.data.result;
+    await AsyncStorage.setItem("accessToken", accessToken);
+    await AsyncStorage.setItem("refreshToken", newRefreshToken);
+
+    console.log("AccessToken 갱신 완료");
+    return accessToken;
+  } catch (error) {
+    console.error("AccessToken 갱신 실패: ", error);
+    throw error;
+  }
+}
 // 요청 인터셉터: Authorization 헤더 추가
 axiosInstance.interceptors.request.use(
   async (config) => {
@@ -27,43 +45,27 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 응답 인터셉터: 쿠키에서 토큰 추출 및 저장
-// axiosInstance.interceptors.response.use(
-//   async (response) => {
-//     const setCookieHeader = response.headers["set-cookie"];
-//     if (setCookieHeader) {
-//       const token = extractAccessToken(setCookieHeader)?.trim(); 
-//       console.log("토큰:", token);
-      
-//       if (token) {
-//         try {
-//           await AsyncStorage.setItem("accessToken", token);
-//           console.log("AccessToken 저장 완료:", token);
-//         } catch (error) {
-//           console.error("AccessToken 저장 실패:", error);
-//         }
-//       } else {
-//         console.error("set-cookie 헤더에서 accessToken을 찾을 수 없습니다.");
-//       }
-//     }
-//     return response;
-//   },
-//   (error) => Promise.reject(error)
-// );
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-// 토큰 추출 함수
-// const extractAccessToken = (setCookieHeader) => {
-//   if (!setCookieHeader || !Array.isArray(setCookieHeader)) {
-//     console.error("set-cookie 헤더가 잘못되었습니다.");
-//     return null;
-//   }
-//   const cookieParts = setCookieHeader[0].split(";");
-//   for (const part of cookieParts) {
-//     if (part.trim().startsWith("accessToken=")) {
-//       return part.split("=")[1]; 
-//     }
-//   }
-//   return null;
-// };
+    if(error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const newAccessToken = await refreshAccessToken();
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        await AsyncStorage.multiRemove(['accessToken', "refreshToken"]);
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+)
 
 export default axiosInstance;
