@@ -19,7 +19,7 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function MannerReviewBar({onPress}) {
+export default function MannerReviewBar({ onPress }) {
   const navigation = useNavigation();
 
   return (

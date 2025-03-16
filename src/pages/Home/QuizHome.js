@@ -3,108 +3,60 @@ import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Navigation hook
 import SearchBar from "../../components/Home/searchBarQuiz";
 import ReviewBar from "../../components/Home/reviewBarQuiz";
-import CategoryBox from "../../components/Home/categoryBox";
-import Bag from "../../assets/images/Home/bag.svg";
-import Card from "../../assets/images/Home/card.svg";
-import Email from "../../assets/images/Home/email.svg";
-import Pen from "../../assets/images/Home/pen.svg";
-import Outfit from "../../assets/images/Home/outfit.svg";
-import Meeting from "../../assets/images/Home/meeting.svg";
+import TitleBar from "../../components/Home/titleBar";
+import ReviewQuizBox from "../../components/Home/ReviewQuizBox";
+import SolveQuizBox from "../../components/Home/SolveQuizBox";
+import TestBox from "../../components/Home/TestBox";
+import QuizList from "../../components/Home/quizList";
 
 const windowWidth = Dimensions.get("window").width;
 
 export default function QuizHome() {
-  const navigation = useNavigation(); // Access navigation object
+  const navigation = useNavigation();
 
   const goLikeList = () => {
     navigation.navigate("QuizLikeList");
   };
 
-  const handlePress = (category) => {
-    navigation.navigate("QuizList", {category});
+  const goQuizCategory = () => {
+    navigation.navigate("QuizCategory");
   };
+
+  const quizData = [
+    { num: 1, question: "어떤 동물이 가장 빠를까요?" },
+    { num: 2, question: "태양계에서 가장 큰 행성은?" },
+    { num: 3, question: "물의 화학식은 무엇인가요?" },
+    { num: 4, question: "피타고라스 정리는 어떤 삼각형에 적용되나요?" },
+    { num: 5, question: "세계에서 가장 긴 강은?" },
+  ];
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <SearchBar />
-        <ReviewBar onPress={goLikeList}/>
-        <View style={styles.categoryArea}>
-          <CategoryBox
-            title="업무의 첫걸음"
-            subtitle={
-              <>
-                <Text style={{ color: "#F2892E" }}>기본</Text>
-                <Text> 매너</Text>
-              </>
-            }
-            icon={<Bag />}
-            onPress={() => handlePress(1)}
-          />
-          <CategoryBox
-            title="첫인상을 좌우하는"
-            subtitle={
-              <>
-                <Text style={{ color: "#007AFF" }}>명함</Text>
-                <Text> 공유 매너</Text>
-              </>
-            }
-            icon={<Card />}
-            onPress={() => handlePress(2)}
-          />
+        <ReviewBar onPress={goLikeList} />
+        <TitleBar
+          title={"Quiz"}
+          subTitle={"매일 퀴즈를 풀고 실력을 향상시켜보세요."}
+        />
+        <View style={styles.quizBoxArea}>
+          <ReviewQuizBox number={12} />
+          <SolveQuizBox percentage={34} onPress={goQuizCategory} />
         </View>
-        <View style={styles.categoryArea}>
-          <CategoryBox
-            title="이렇게 보내면 OK!"
-            subtitle={
-              <>
-                <Text>팀장님께</Text>
-                <Text>{"\n"}</Text>
-                <Text style={{ color: "#008D39" }}>메일</Text>
-                <Text> 보내기</Text>
-              </>
-            }
-            icon={<Email />}
-            onPress={() => handlePress(3)}
-          />
-          <CategoryBox
-            title="명확하고 간결하게,"
-            subtitle={
-              <>
-                <Text>직장인 </Text>
-                <Text style={{ color: "#FD553E" }}>글쓰기 </Text>
-                <Text>Tip</Text>
-              </>
-            }
-            icon={<Pen />}
-            onPress={() => handlePress(4)}
-          />
+        <TitleBar
+          title={"Test"}
+          subTitle={"테스트를 통해 실력을 검증해보세요."}
+        />
+        <View style={styles.quizBoxArea}>
+          <TestBox name={"박주형"} score={74} percentage={16} />
         </View>
-        <View style={styles.categoryArea}>
-          <CategoryBox
-            title="상황별 스타일링 가이드"
-            subtitle={
-              <>
-                <Text style={{ color: "#141587" }}>TPO</Text>
-                <Text>에 맞는 </Text>
-                <Text style={{ color: "#B14D00" }}>복장</Text>
-              </>
-            }
-            icon={<Outfit />}
-            onPress={() => handlePress(5)}
-          />
-          <CategoryBox
-            title="원활한 의견 전달"
-            subtitle={
-          <>
-                <Text style={{ color: "#98A304" }}>커뮤니케이션 </Text>
-                <Text>매너</Text>
-              </>
-            }
-            icon={<Meeting />}
-            onPress={() => handlePress(6)}
-          />
-        </View>
+        <TitleBar
+          title={"Daily Quiz"}
+          subTitle={"어제 사람들이 가장 많이 틀린 Top5 퀴즈입니다."}
+        />
+        {quizData.map((quiz) => (
+          <QuizList key={quiz.num} num={quiz.num} question={quiz.question} />
+        ))}
       </ScrollView>
     </View>
   );
@@ -114,6 +66,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     padding: 20,
+  },
+  quizBoxArea: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 30,
+    paddingHorizontal: 7,
   },
   categoryArea: {
     flexDirection: "row",

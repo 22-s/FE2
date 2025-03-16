@@ -1,10 +1,11 @@
 import React from "react";
+import { Alert } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Import Stack Navigators
 import QuizStack from "./QuizStack";
 import MannerStack from "./MannerStack";
-import WordStack from  "./WordStack";
+import WordStack from "./WordStack";
 import BuizContentStack from "./BuizContentStack";
 
 // Import Tab Icons
@@ -20,10 +21,18 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          if (route.name === "퀴즈") return <Quiz focused={focused} color={color} size={size} />;
-          if (route.name === "매너설명서") return <Manner focused={focused} color={color} size={size} />;
-          if (route.name === "업무용어") return <Term focused={focused} color={color} size={size} />;
-          if (route.name === "트렌드") return <Trend focused={focused} color={color} size={size} />;
+          if (route.name === "퀴즈") {
+            return <Quiz focused={focused} color={color} size={size} />;
+          }
+          if (route.name === "매너설명서") {
+            return <Manner focused={focused} color={color} size={size} />;
+          }
+          if (route.name === "업무용어") {
+            return <Term focused={focused} color={color} size={size} />;
+          }
+          if (route.name === "트렌드") {
+            return <Trend focused={focused} color={color} size={size} />;
+          }
         },
         tabBarActiveTintColor: "#268AFF",
         tabBarInactiveTintColor: "#BAC4CE",
@@ -31,10 +40,33 @@ const TabNavigator = () => {
         labelStyle: { fontSize: 10 },
       })}
     >
-      <Tab.Screen name="퀴즈" component={QuizStack} options={{ tabBarLabel: "퀴즈", headerShown: false }} />
-      <Tab.Screen name="매너설명서" component={MannerStack} options={{ tabBarLabel: "매너설명서", headerShown: false }} />
-      <Tab.Screen name="업무용어" component={WordStack} options={{ tabBarLabel: "업무용어", headerShown: false }} />
-      <Tab.Screen name="트렌드" component={BuizContentStack} options={{ tabBarLabel: "트렌드", headerShown: false }} />
+      <Tab.Screen
+        name="퀴즈"
+        component={QuizStack}
+        options={{ tabBarLabel: "퀴즈", headerShown: false }}
+      />
+      <Tab.Screen
+        name="매너설명서"
+        component={MannerStack}
+        options={{ tabBarLabel: "매너설명서", headerShown: false }}
+      />
+      <Tab.Screen
+        name="업무용어"
+        component={WordStack}
+        options={{ tabBarLabel: "업무용어", headerShown: false }}
+      />
+      {/* <Tab.Screen name="트렌드" component={BuizContentStack} options={{ tabBarLabel: "트렌드", headerShown: false }} /> */}
+      <Tab.Screen
+        name="트렌드"
+        component={BuizContentStack}
+        options={{ tabBarLabel: "마이페이지", headerShown: false }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault(); // 기본 동작 방지
+            Alert.alert("알림", "추후 업데이트 예정입니다.");
+          },
+        })}
+      />
     </Tab.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { Modal, View, StyleSheet, Text, Alert, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import NextQuizButton from "./button/NextQuizButton";
@@ -18,7 +18,7 @@ const CorrectModal = ({
   updateQuizId,
   isSubmit,
   firstQuizId,
-  lastQuizId
+  lastQuizId,
 }) => {
   const navigation = useNavigation();
   //const [bookmark, setBookmark] = useState(review);
@@ -29,7 +29,7 @@ const CorrectModal = ({
 
   const addReview = async () => {
     const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: "+token);
+    console.log("토큰이당: " + token);
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -53,7 +53,6 @@ const CorrectModal = ({
         // });
       }
       //setBookmark((prev) => !prev); // 상태 변경
-      
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
@@ -66,9 +65,9 @@ const CorrectModal = ({
   };
 
   const nextQuizPress = () => {
-    console.log('함수 실행');
+    console.log("함수 실행");
     updateQuizId(quizId);
-  };  
+  };
 
   return (
     <Modal
@@ -102,7 +101,7 @@ const CorrectModal = ({
           </ScrollView>
           <View style={styles.bottom}>
             <NextQuizButton onPress={nextQuizPress} />
-            <AddReviewButton onPress={addReview}/>
+            <AddReviewButton onPress={addReview} />
           </View>
         </View>
       </View>
