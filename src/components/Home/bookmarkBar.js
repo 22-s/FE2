@@ -7,7 +7,7 @@ import {
   Dimensions,
   Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import Star from "../../assets/images/Home/star.svg";
 import Arrow from "../../assets/images/Home/arrow_yellow.svg";
@@ -18,7 +18,7 @@ const windowHeight = Dimensions.get("window").height;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
-export default function BookmarkBar({onPress}) {
+export default function BookmarkBar({ onPress }) {
   return (
     <TouchableOpacity style={styles.reviewBox} onPress={onPress}>
       <View style={{ flexDirection: "row" }}>

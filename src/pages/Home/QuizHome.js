@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // Navigation hook
+import { useNavigation } from "@react-navigation/native";
 import SearchBar from "../../components/Home/searchBarQuiz";
 import ReviewBar from "../../components/Home/reviewBarQuiz";
 import TitleBar from "../../components/Home/titleBar";
@@ -48,7 +48,12 @@ export default function QuizHome() {
           subTitle={"테스트를 통해 실력을 검증해보세요."}
         />
         <View style={styles.quizBoxArea}>
-          <TestBox name={"박주형"} score={74} percentage={16} />
+          <TestBox
+            name={"박주형"}
+            score={74}
+            percentage={16}
+            // navigation={navigation}
+          />
         </View>
         <TitleBar
           title={"Daily Quiz"}

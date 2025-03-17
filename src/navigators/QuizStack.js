@@ -4,13 +4,15 @@ import CustomHeader from "../../CustomHeader.js";
 
 // Pages
 import QuizHome from "../pages/Home/QuizHome.js";
-import QuizCategory from "../pages/Home/QuizCategory.js";
+import QuizCategory from "../pages/Quiz/QuizCategory.js";
 import QuizList from "../pages/Quiz/QuizList";
 import QuizDetail from "../pages/Quiz/QuizDetail";
 import QuizDetail2 from "../pages/Quiz/QuizDetail2.js";
 import AfterQuiz from "../pages/Quiz/AfterQuiz";
 import QuizLikeList from "../pages/Quiz/QuizLikeList.js";
 import SearchQuizList from "../pages/Quiz/SearchQuizList.js";
+import TestStep1 from "../pages/Quiz/TestStep1";
+import TestStep2 from "../pages/Quiz/TestStep2";
 
 const Stack = createStackNavigator();
 
@@ -116,6 +118,32 @@ const QuizStack = () => (
             title="퀴즈 검색 리스트"
             navigation={navigation}
             routeName={"SearchQuizList"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="TestStep1"
+      component={TestStep1}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="모의고사 테스트"
+            navigation={navigation}
+            routeName={"TestStep1"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="TestStep2"
+      component={TestStep2}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="모의고사 테스트"
+            navigation={navigation}
+            routeName={"TestStep2"}
           />
         ),
       }}

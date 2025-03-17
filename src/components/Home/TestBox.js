@@ -1,20 +1,40 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import WriteArm from "../../assets/images/Home/writeArm.png";
 import Arrow from "../../assets/images/Home/arrow_orange.svg";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
 export default function TestBox({ name, score, percentage }) {
+  const navigation = useNavigation();
+
+  const goTest = () => {
+    navigation.navigate("TestStep1");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.titleArea}>
         <Text style={styles.lefttitle}>{name}님의 매너 점수는?</Text>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+          onPress={goTest}
+        >
           <Text style={styles.righttitle}>모의고사 풀러 가기</Text>
-          <Arrow style={{ marginLeft: 4 }} />
-        </View>
+          <Arrow style={{ marginLeft: 4 }} onPress={goTest} />
+        </TouchableOpacity>
       </View>
       <View style={styles.innerBox}>
         <View style={styles.innerContentBox}>
