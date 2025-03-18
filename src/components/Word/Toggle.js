@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Dimensions,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import TogglePic from "../../assets/images/Word/오른쪽세모.svg";
@@ -8,6 +15,9 @@ import StarFull from "../../assets/images/Word/채운별.svg";
 import Star from "../../assets/images/Word/빈별.svg";
 import ToggleContent from "./ToggleContent";
 import axiosInstance from "../../api/axiosInstance";
+
+const windowWidth = Dimensions.get("window").width;
+const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
 const Toggle = ({ vocaId, term, description, example, favorited }) => {
   const [isToggled, setIsToggled] = useState(false);
@@ -52,14 +62,16 @@ const Toggle = ({ vocaId, term, description, example, favorited }) => {
   return (
     <View style={styles.container}>
       <View style={styles.toggleArea}>
-        <TouchableOpacity onPress={handleToggle}>
-          {isToggled ? (
-            <ToggleTouched width={14} height={14} />
-          ) : (
-            <TogglePic width={14} height={14} />
-          )}
-        </TouchableOpacity>
-        <Text style={styles.toggleText}>{term}</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity onPress={handleToggle}>
+            {isToggled ? (
+              <ToggleTouched width={14} height={14} />
+            ) : (
+              <TogglePic width={14} height={14} />
+            )}
+          </TouchableOpacity>
+          <Text style={styles.toggleText}>{term}</Text>
+        </View>
         <TouchableOpacity style={{ marginLeft: 7 }} onPress={handleFavorite}>
           {isFavorite ? <StarFull /> : <Star />}
         </TouchableOpacity>
@@ -80,16 +92,24 @@ const Toggle = ({ vocaId, term, description, example, favorited }) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginBottom: 10,
+    // marginBottom: 10,
+    // backgroundColor: "#F8F8F8",
+    padding: 5,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#D3D3D3",
   },
   toggleArea: {
     flexDirection: "row",
     alignItems: "center",
     height: 30,
+    justifyContent: "space-between",
   },
   toggleText: {
-    color: "#000",
-    fontSize: 18,
+    color: "#383F49",
+    fontSize: 16,
     fontWeight: "600",
     marginLeft: 7,
   },

@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    height: widthPercentage(9),
+    height: widthPercentage(11),
     backgroundColor: "#FAFBFF",
     borderRadius: 15,
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 15,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 4,
   },
   titleArea: {
     flexDirection: "row",
