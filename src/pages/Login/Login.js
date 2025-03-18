@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Animated,
-  Alert
+  Alert,
 } from "react-native";
 import LogoText from "../../assets/images/Logo/logo2.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
@@ -18,6 +18,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CookieManager from "@react-native-cookies/cookies";
 import { useAuth } from "../../contexts/AuthContext";
 import axiosInstance from "../../api/axiosInstance";
+import KakaoButton from "../../assets/images/Login/kakaoButton.svg";
+import NaverButton from "../../assets/images/Login/naverButton.svg";
+import GoogleButton from "../../assets/images/Login/googleButton.svg";
+import AppleButton from "../../assets/images/Login/appleButton.svg";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -55,26 +59,22 @@ const LoginPage = () => {
       showToast("모든 입력란을 입력하세요.");
       return;
     }
-  
     await CookieManager.clearAll();
-    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]); 
-  
+    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
     try {
       const requestBody = { email, password };
-      const response = await axiosInstance.post("/api/user/signin", requestBody);
-  
+      const response = await axiosInstance.post(
+        "/api/user/signin",
+        requestBody
+      );
       if (response.data.isSuccess) {
         const { accessToken, refreshToken } = response.data.result;
-  
         // 토큰 저장
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
-  
         console.log("로그인 성공: ", response.data.message);
-  
         // useAuth의 login 메서드 호출
         login();
-  
         // 홈 화면으로 이동
         navigation.replace("TabNavigator");
       } else {
@@ -89,17 +89,17 @@ const LoginPage = () => {
         } else {
           Alert.alert("로그인에 실패했습니다. 다시 시도해주세요.");
         }
-      } else if(error.message == "Network Error") {
-        Alert.alert("네트워크 오류", "인터넷 연결을 확인하고 다시 시도해주세요.");
-      }
-      else {
+      } else if (error.message == "Network Error") {
+        Alert.alert(
+          "네트워크 오류",
+          "인터넷 연결을 확인하고 다시 시도해주세요."
+        );
+      } else {
         console.error("Login Error:", error);
         showToast("로그인에 실패했습니다. 다시 시도해주세요.");
       }
     }
   };
-  
-  
 
   // 토큰 추출 함수
   const extractAccessToken = (setCookieHeader) => {
@@ -156,6 +156,19 @@ const LoginPage = () => {
       >
         계정이 없으신가요? <Text style={styles.signUpLink}>회원가입</Text>
       </Text>
+      <View style={styles.socialLoginContainer}>
+        <View style={styles.socialLineContainer}>
+          <View style={styles.line} />
+          <Text style={styles.lineText}>간편 로그인</Text>
+          <View style={styles.line} />
+        </View>
+        <View style={styles.buttonContainer}>
+          <KakaoButton />
+          <NaverButton />
+          <GoogleButton />
+          <AppleButton />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -218,6 +231,35 @@ const styles = StyleSheet.create({
     color: "#5A5A5A",
     fontWeight: "bold",
     textDecorationLine: "underline",
+  },
+  socialLoginContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  socialLineContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 5,
+    gap: 7,
+  },
+  line: {
+    width: "30%",
+    height: 0.8,
+    backgroundColor: "#BAC4CE",
+  },
+  lineText: {
+    color: "#BAC4CE",
+    fontSize: 11,
+    fontWeight: "bold",
+  },
+  buttonContainer: {
+    width: "58%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
   },
 });
 

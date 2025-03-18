@@ -20,6 +20,10 @@ import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import DateIcon from "../../assets/images/Logo/date.svg";
 import Box1 from "../../assets/images/Logo/box1.svg";
 import Box2 from "../../assets/images/Logo/box2.svg";
+import KakaoButton from "../../assets/images/Login/kakaoButton.svg";
+import NaverButton from "../../assets/images/Login/naverButton.svg";
+import GoogleButton from "../../assets/images/Login/googleButton.svg";
+import AppleButton from "../../assets/images/Login/appleButton.svg";
 import { useNavigation } from "@react-navigation/native";
 import { post } from "../../api/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -90,14 +94,14 @@ const Signup = () => {
         showToast("올바른 이메일 형식을 입력해주세요.");
         return;
       }
-  
+
       // const token = await AsyncStorage.getItem("accessToken");
       // console.log(token);
 
       const response = await axiosInstance.post(`/api/user/check-email`, {
         email,
       });
-  
+
       if (response.status === 200) {
         setEmailAvailable(true);
         setEmailStatusMessage("사용 가능한 이메일입니다.");
@@ -119,8 +123,6 @@ const Signup = () => {
       showToast("이메일 확인 중 문제가 발생했습니다.");
     }
   };
-  
-  
 
   const handleSignUpButton = async () => {
     if (!name || !email || !password || !confirmPassword) {
@@ -140,7 +142,7 @@ const Signup = () => {
       setEmailAvailable(false);
       return;
     }
-  
+
     if (date.toDateString() === new Date().toDateString()) {
       setDateStatusMessage("입사일을 선택해주세요.");
       showToast("입사일을 선택해주세요.");
@@ -158,7 +160,10 @@ const Signup = () => {
         join_date: date.toISOString().split("T")[0],
       };
 
-      const response = await axiosInstance.post("/api/user/signup", requestBody);
+      const response = await axiosInstance.post(
+        "/api/user/signup",
+        requestBody
+      );
       console.log("Response Data:", response?.message);
 
       navigation.navigate("Login");
@@ -321,9 +326,7 @@ const Signup = () => {
         cancelText="취소"
       />
       {dateStatusMessage && (
-        <Text style={styles.errorText}>
-          입사일을 선택해주세요.
-        </Text>
+        <Text style={styles.errorText}>입사일을 선택해주세요.</Text>
       )}
 
       {/* 회원가입 버튼 */}
@@ -361,6 +364,19 @@ const Signup = () => {
           <Text style={styles.navText}>트랜드</Text>
         </TouchableOpacity>
       </View> */}
+      <View style={styles.socialLoginContainer}>
+        <View style={styles.socialLineContainer}>
+          <View style={styles.line} />
+          <Text style={styles.lineText}>간편 로그인</Text>
+          <View style={styles.line} />
+        </View>
+        <View style={styles.buttonContainer}>
+          <KakaoButton />
+          <NaverButton />
+          <GoogleButton />
+          <AppleButton />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -569,6 +585,35 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "flex-start",
     marginLeft: 35,
+  },
+  socialLoginContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  socialLineContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 5,
+    gap: 7,
+  },
+  line: {
+    width: "30%",
+    height: 0.8,
+    backgroundColor: "#BAC4CE",
+  },
+  lineText: {
+    color: "#BAC4CE",
+    fontSize: 11,
+    fontWeight: "bold",
+  },
+  buttonContainer: {
+    width: "58%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
   },
 });
 
