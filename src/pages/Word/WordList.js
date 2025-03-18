@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 
-import Accounting from '../../assets/images/Home/accounting.svg';
-import IT from '../../assets/images/Home/it.svg';
-import Marketing from '../../assets/images/Home/marketing.svg';
-import HR from '../../assets/images/Home/hr.svg';
-import Captin from '../../assets/images/Home/captain.svg';
-import Nego from '../../assets/images/Home/negotiate.svg';
+import Accounting from "../../assets/images/Home/accounting.svg";
+import IT from "../../assets/images/Home/it.svg";
+import Marketing from "../../assets/images/Home/marketing.svg";
+import HR from "../../assets/images/Home/hr.svg";
+import Captin from "../../assets/images/Home/captain.svg";
+import Nego from "../../assets/images/Home/negotiate.svg";
 
 import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,12 +20,12 @@ const WordList = ({ route }) => {
 
   // category와 SVG 컴포넌트 매핑
   const svgMapping = {
-    "회계재무": Accounting,
-    "기술IT": IT,
-    "마케팅세일즈": Marketing,
-    "HR조직": HR,
-    "리더십팀워크": Captin,
-    "협상의사결정": Nego,
+    회계재무: Accounting,
+    기술IT: IT,
+    마케팅세일즈: Marketing,
+    HR조직: HR,
+    리더십팀워크: Captin,
+    협상의사결정: Nego,
   };
 
   const SelectedSVG = svgMapping[category]; // 매핑에서 선택된 SVG 컴포넌트
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   scrollContent: {
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     paddingBottom: 20,
   },
 });

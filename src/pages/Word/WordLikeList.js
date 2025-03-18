@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import Pic from "../../assets/images/Word/회계재무.svg";
-import Star from '../../assets/images/Word/별.svg';
+import Star from "../../assets/images/Word/별.svg";
 import Toggle from "../../components/Word/Toggle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -18,13 +18,11 @@ const WordLikeList = () => {
     //   Accept: "application/json",
     //   ...(token && { Authorization: `Bearer ${token}` }),
     // };
-  
+
     try {
       setLoading(true);
-      const response = await axiosInstance.get(
-        `/api/voca/likes`
-      );
-  
+      const response = await axiosInstance.get(`/api/voca/likes`);
+
       if (response.data.isSuccess) {
         const processedTerms = response.data.result.map((term) => ({
           ...term,
@@ -43,7 +41,6 @@ const WordLikeList = () => {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchQuizzes();
@@ -116,7 +113,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   scrollContent: {
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     paddingBottom: 20,
   },
 });
