@@ -17,7 +17,7 @@ import axios from "axios";
 
 //const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
 
-const QuizList = ({route}) => {
+const QuizList = ({ route }) => {
   const { category } = route.params;
   const [quizzes, setQuizzes] = useState([]); // 퀴즈 데이터 저장
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -30,19 +30,20 @@ const QuizList = ({route}) => {
     // axios로 연결 한 코드
     // const token = await AsyncStorage.getItem("accessToken");
     // console.log("토큰이당: "+token);
-    
+
     // const headers = {
     //   "Content-Type": "application/json",
     //   Accept: "application/json",
     //   ...(token && { Authorization: `Bearer ${token}` }),
     // };
-    
+
     try {
       console.log(category);
       setLoading(true);
-      const response = await axiosInstance.get(`/api/quiz?category=${category}`);
+      const response = await axiosInstance.get(
+        `/api/quiz?category=${category}`
+      );
       console.log(response.data);
-  
       if (response.data.isSuccess) {
         const quizData = response.data.result;
         setQuizzes(quizData); // 퀴즈 데이터 저장
@@ -66,7 +67,7 @@ const QuizList = ({route}) => {
   const handleQuizPress = (quizId) => {
     navigation.navigate("QuizDetail", {
       quizId,
-      quizzes, 
+      quizzes,
       firstQuizId,
       lastQuizId,
     });
@@ -103,7 +104,10 @@ const QuizList = ({route}) => {
       <ScrollView>
         {quizzes.map((quiz) => {
           return quiz.locked ? (
-            <LockedQuizListComponent key={quiz.quizId} content={quiz.question} />
+            <LockedQuizListComponent
+              key={quiz.quizId}
+              content={quiz.question}
+            />
           ) : (
             <QuizListComponent
               key={quiz.quizId}

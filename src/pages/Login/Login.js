@@ -101,15 +101,25 @@ const LoginPage = () => {
     }
   };
 
-  // 토큰 추출 함수
-  const extractAccessToken = (setCookieHeader) => {
-    const cookieParts = setCookieHeader[0].split(";");
-    for (const part of cookieParts) {
-      if (part.trim().startsWith("accessToken=")) {
-        return part.split("=")[1];
+  const handleKakaoLogin = async () => {
+    await CookieManager.clearAll();
+    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
+    try {
+      const response = await axiosInstance.post(`/api/auth/kakao/login/`);
+      if (response.data.isSuccess) {
+        const { accessToken, refreshToken } = response.data.result;
+        // 토큰 저장
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+        console.log("로그인 성공: ", response.data.message);
+        // useAuth의 login 메서드 호출
+        login();
+        // 홈 화면으로 이동
+        navigation.navigate("TabNavigator");
+      } else {
+        showToast("로그인에 실패했습니다. 다시 시도해주세요.");
       }
-    }
-    return null;
+    } catch (error) {}
   };
 
   return (

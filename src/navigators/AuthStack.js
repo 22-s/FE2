@@ -9,6 +9,7 @@ import Signup from "../pages/Signup/Signup";
 import EmailVerification from "../pages/Login/EmailVerification";
 import VerificationCode from "../pages/Login/VerificationCode";
 import NewPassword from "../pages/Login/NewPassword";
+import JoiningDate from "../pages/Signup/JoiningDate.js";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,15 @@ const AuthStack = () => (
       options={{
         header: ({ navigation }) => (
           <CustomHeader title="비밀번호 설정" navigation={navigation} />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="JoiningDate"
+      component={JoiningDate}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader title="입사일 선택" navigation={navigation} />
         ),
       }}
     />
