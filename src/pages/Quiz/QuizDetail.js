@@ -12,13 +12,18 @@ import AddReviewButton from "../../components/Quiz/AfterQuizComponent/AddReviewB
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../api/axiosInstance";
 
 const QuizDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { quizId, quizzes, firstQuizId, lastQuizId, isSubmit: initialIsSubmit } = route.params;
+  const {
+    quizId,
+    quizzes,
+    firstQuizId,
+    lastQuizId,
+    isSubmit: initialIsSubmit,
+  } = route.params;
   //const [ currentQuizId, setIsQuizId ] = useState(quizId);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -36,22 +41,11 @@ const QuizDetail = ({ route }) => {
 
   const fetchQuizzes = async (quizId) => {
     console.log("quizId:", quizId);
-    // setIsQuizId(quizId);
-    // const token = await AsyncStorage.getItem("accessToken");
-    // console.log("토큰이당: " + token);
-
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Accept: "application/json",
-    //   ...(token && { Authorization: `Bearer ${token}` }),
-    // };
 
     try {
-      const response = await axiosInstance.get(
-        `/api/quiz/${quizId}`
-      );
+      const response = await axiosInstance.get(`/api/quiz/${quizId}`);
       console.log(response.data);
-      console.log("solved: "+response.data.result.solved);
+      console.log("solved: " + response.data.result.solved);
       if (response.data.isSuccess) {
         setQuiz(response.data.result);
         setIsSolved(response.data.result.solved);
@@ -82,7 +76,7 @@ const QuizDetail = ({ route }) => {
     try {
       const response = await axiosInstance.post(
         `/api/quiz/${quizId}/submit`,
-        { selectedAnswer }, // Request body에 selectedAnswer 추가
+        { selectedAnswer } // Request body에 selectedAnswer 추가
       );
       console.log(response.data);
 
@@ -93,7 +87,6 @@ const QuizDetail = ({ route }) => {
         setModalVisible(true); // 모달 열기
         setIsSubmit(true);
         setIsSolved(true);
-        
       } else {
         console.error("데이터를 가져오지 못했습니다:", response.data.message);
         Alert.alert("오류", response.data.message);
@@ -132,22 +125,22 @@ const QuizDetail = ({ route }) => {
   };
 
   const prevQuiz = () => {
-      if (currentIndex > 0) {
-        const prevQuizId = quizzes[currentIndex - 1].quizId;
-        navigation.replace("QuizDetail", {
-          quizId: prevQuizId,
-          quizzes,
-          firstQuizId,
-          lastQuizId,
-        });
-      } else {
-        Alert.alert("이전 퀴즈가 없습니다.");
-      }
+    if (currentIndex > 0) {
+      const prevQuizId = quizzes[currentIndex - 1].quizId;
+      navigation.replace("QuizDetail", {
+        quizId: prevQuizId,
+        quizzes,
+        firstQuizId,
+        lastQuizId,
+      });
+    } else {
+      Alert.alert("이전 퀴즈가 없습니다.");
+    }
   };
 
   const addReview = async () => {
     const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: "+token);
+    console.log("토큰이당: " + token);
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -170,7 +163,6 @@ const QuizDetail = ({ route }) => {
         // fetchQuizzes(quizId);
         // setIsSubmit(true);
       }
-      
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
@@ -185,30 +177,36 @@ const QuizDetail = ({ route }) => {
   return (
     <View style={styles.container}>
       <View marginBottom={12}>
-        <Title content={quiz.question} review={quiz.inReviewList} quizId={quizId} solved={quiz.solved} isSubmit={quiz.isSubmit}/>
+        <Title
+          content={quiz.question}
+          review={quiz.inReviewList}
+          quizId={quizId}
+          solved={quiz.solved}
+          isSubmit={quiz.isSubmit}
+        />
       </View>
       <View marginBottom={17}>
         <Content content={quiz.questionDetail} />
       </View>
       <View style={styles.buttonContainer}>
-        <NavButtonPrev onPress={() => prevQuiz(quizId)}/>
-        <NavButtonNext onPress={() => nextQuiz(quizId)}/>
+        <NavButtonPrev onPress={() => prevQuiz(quizId)} />
+        <NavButtonNext onPress={() => nextQuiz(quizId)} />
       </View>
-      { isSubmit ?
-      <View style={styles.bottomContainer}>
-        <OpenModalButton onPress={openModal} />
-        <AddReviewButton onPress={addReview}/>
-      </View>
-      :
-      <View style={styles.answer}>
-        <TouchableOpacity onPress={() => submitAnswer(quizId, "O")}>
-          <O width={165} height={75} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => submitAnswer(quizId, "X")}>
-          <X width={165} height={75} />
-        </TouchableOpacity>
-      </View>
-      }
+      {isSubmit ? (
+        <View style={styles.bottomContainer}>
+          <OpenModalButton onPress={openModal} />
+          <AddReviewButton onPress={addReview} />
+        </View>
+      ) : (
+        <View style={styles.answer}>
+          <TouchableOpacity onPress={() => submitAnswer(quizId, "O")}>
+            <O width={165} height={75} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => submitAnswer(quizId, "X")}>
+            <X width={165} height={75} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <CorrectModal
         content={quiz.description}

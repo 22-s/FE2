@@ -13,9 +13,7 @@ import QuizListComponent from "../../components/Quiz/QuizListComponent/QuizCompo
 import LockedQuizListComponent from "../../components/Quiz/QuizListComponent/LockedQuizListComponent";
 import axiosInstance from "../../api/axiosInstance";
 
-//const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
-
-const QuizLikeList = () => {
+const QuizReviewList = () => {
   const [quizzes, setQuizzes] = useState([]); // 퀴즈 데이터 저장
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [firstQuizId, setFirstQuizId] = useState(null); // 첫 번째 퀴즈 ID
@@ -25,7 +23,7 @@ const QuizLikeList = () => {
   const fetchQuizzes = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/api/quiz/review`);
+      const response = await axiosInstance.get(`/api/quiz/yesterday`);
       console.log(response.data);
 
       if (response.data.isSuccess) {
@@ -99,6 +97,7 @@ const QuizLikeList = () => {
               correct={quiz.correct}
               review={quiz.inReviewList}
               solved={quiz.solved}
+              retriedToday={quiz.retriedToday}
               onPress={() => handleQuizPress(quiz.quizId)}
             />
           );
@@ -126,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizLikeList;
+export default QuizReviewList;
