@@ -1,19 +1,27 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import Arrow from "../../assets/images/Home/arrow_blue.svg";
 
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-export default function QuizList({ num, question }) {
+export default function QuizList({ num, question, onPress }) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.titleArea}>
         <Text style={styles.number}>{num}</Text>
-        <Text style={styles.title}>{question}</Text>
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+          {question}
+        </Text>
       </View>
       <Arrow />
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -21,6 +29,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
+    // width: "90%",
     height: widthPercentage(11),
     backgroundColor: "#FAFBFF",
     borderRadius: 15,
@@ -31,6 +40,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   titleArea: {
+    width: "85%",
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",

@@ -12,8 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import QuizListComponent from "../../components/Quiz/QuizListComponent/QuizComponent";
 import LockedQuizListComponent from "../../components/Quiz/QuizListComponent/LockedQuizListComponent";
 import axiosInstance from "../../api/axiosInstance";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 
 //const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
 
@@ -25,24 +23,15 @@ const QuizLikeList = () => {
   const navigation = useNavigation();
 
   const fetchQuizzes = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
-  
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
-  
     try {
       setLoading(true);
       const response = await axiosInstance.get(`/api/quiz/review`);
       console.log(response.data);
-  
+
       if (response.data.isSuccess) {
         const quizData = response.data.result;
         setQuizzes(quizData); // 퀴즈 데이터 저장
-  
+
         if (quizData.length > 0) {
           setFirstQuizId(quizData[0].quizId); // 첫 번째 퀴즈 ID 저장
           setLastQuizId(quizData[quizData.length - 1].quizId); // 마지막 퀴즈 ID 저장
@@ -57,12 +46,11 @@ const QuizLikeList = () => {
       console.log("ㅎㅎㅎㅎ");
     }
   };
-  
 
   const handleQuizPress = (quizId) => {
     navigation.navigate("QuizDetail", {
       quizId,
-      quizzes, 
+      quizzes,
       firstQuizId,
       lastQuizId,
     });
@@ -74,7 +62,7 @@ const QuizLikeList = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchQuizzes(); 
+      fetchQuizzes();
     }, [])
   );
 
@@ -99,7 +87,10 @@ const QuizLikeList = () => {
       <ScrollView>
         {quizzes.map((quiz) => {
           return quiz.locked ? (
-            <LockedQuizListComponent key={quiz.quizId} content={quiz.question} />
+            <LockedQuizListComponent
+              key={quiz.quizId}
+              content={quiz.question}
+            />
           ) : (
             <QuizListComponent
               key={quiz.quizId}
