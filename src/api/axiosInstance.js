@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const axiosInstance = axios.create({
   baseURL: "https://port-0-twotwos-m69bdqoxaa7c9913.sel4.cloudtype.app",
-  timeout: 5000, 
+  timeout: 5000,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -13,9 +13,13 @@ const axiosInstance = axios.create({
 const refreshAccessToken = async () => {
   try {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
-    if(!refreshToken) throw new Error("Refresh Token이 존재하지 않습니다.");
+    if (!refreshToken) {
+      throw new Error("Refresh Token이 존재하지 않습니다.");
+    }
 
-    const response = await axiosInstance.post("/api/user/refresh", {refreshToken});
+    const response = await axiosInstance.post("/api/user/refresh", {
+      refreshToken,
+    });
 
     const { accessToken, refreshToken: newRefreshToken } = response.data.result;
     await AsyncStorage.setItem("accessToken", accessToken);
@@ -27,12 +31,12 @@ const refreshAccessToken = async () => {
     console.error("AccessToken 갱신 실패: ", error);
     throw error;
   }
-}
+};
 // 요청 인터셉터: Authorization 헤더 추가
 axiosInstance.interceptors.request.use(
   async (config) => {
     try {
-      const token = await AsyncStorage.getItem("accessToken"); 
+      const token = await AsyncStorage.getItem("accessToken");
       console.log("토큰 가져오기: ", token);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -50,7 +54,7 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if(error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -59,13 +63,13 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        await AsyncStorage.multiRemove(['accessToken', "refreshToken"]);
+        await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
         return Promise.reject(refreshError);
       }
     }
 
     return Promise.reject(error);
   }
-)
+);
 
 export default axiosInstance;
