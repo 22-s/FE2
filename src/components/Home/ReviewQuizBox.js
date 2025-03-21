@@ -1,14 +1,20 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import Check from "../../assets/images/Home/check.svg";
 import Fire from "../../assets/images/Home/fire.svg";
 
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-export default function ReviewQuizBox({ number }) {
+export default function ReviewQuizBox({ number, onPress }) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.titleArea}>
         <Check style={{ marginRight: 4 }} />
         <Text style={styles.title}>복습하기</Text>
@@ -18,7 +24,7 @@ export default function ReviewQuizBox({ number }) {
         <Text style={styles.highlightedSubTitle}>{number}개</Text>
       </View>
       <Fire style={styles.fire} />
-    </View>
+    </TouchableOpacity>
   );
 }
 

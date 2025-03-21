@@ -10,6 +10,7 @@ import QuizDetail from "../pages/Quiz/QuizDetail";
 import QuizDetail2 from "../pages/Quiz/QuizDetail2.js";
 import AfterQuiz from "../pages/Quiz/AfterQuiz";
 import QuizLikeList from "../pages/Quiz/QuizLikeList.js";
+import QuizReviewList from "../pages/Quiz/QuizReviewList.js";
 import SearchQuizList from "../pages/Quiz/SearchQuizList.js";
 import TestStep1 from "../pages/Quiz/TestStep1";
 import TestStep2 from "../pages/Quiz/TestStep2";
@@ -102,9 +103,22 @@ const QuizStack = () => (
       options={{
         header: ({ navigation }) => (
           <CustomHeader
-            title="퀴즈 복습 리스트"
+            title="퀴즈 즐겨찾기기 리스트"
             navigation={navigation}
             routeName={"QuizLikeList"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="QuizReviewList"
+      component={QuizReviewList}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="퀴즈 복습 리스트"
+            navigation={navigation}
+            routeName={"QuizReviewList"}
           />
         ),
       }}
