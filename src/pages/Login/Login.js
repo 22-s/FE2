@@ -131,7 +131,7 @@ const LoginPage = () => {
       const response = await axiosInstance.post(`/api/auth/kakao/login`, {
         accessToken: kakaoAccessToken,
       });
-      
+
       if (response.data.isSuccess) {
         const { accessToken, refreshToken } = response.data.result;
         await AsyncStorage.setItem("accessToken", accessToken);
@@ -197,7 +197,7 @@ const LoginPage = () => {
       >
         <Text
           style={styles.signUpLink}
-          onPress={() => navigation.navigate("NewPassword")}
+          onPress={() => navigation.navigate("EmailVerification")}
         >
           비밀 번호를 잊어버리셨나요?
         </Text>
