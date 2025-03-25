@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Animated,
   Alert,
+  Dimensions
 } from "react-native";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
@@ -18,6 +19,9 @@ import CookieManager from "@react-native-cookies/cookies";
 import { useAuth } from "../../contexts/AuthContext";
 import axiosInstance from "../../api/axiosInstance";
 
+const windowWidth = Dimensions.get("window").width;
+const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
+
 const EmailVerification = () => {
   const navigation = useNavigation();
   const { login } = useAuth();
@@ -26,6 +30,9 @@ const EmailVerification = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [isEmailMatch, setIsEmailMatch] = useState(true);
+  const [isCodeButtonEnabled, setIsCodeButtonEnabled] = useState(false);
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const showToast = (message) => {
@@ -49,70 +56,58 @@ const EmailVerification = () => {
     });
   };
 
-  const handleLoginButton = async () => {
-    if (!email || !password) {
-      showToast("모든 입력란을 입력하세요.");
-      return;
-    }
-    await CookieManager.clearAll();
-    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
+  const EmailConfirmButton = async () => {
+    
     try {
-      const requestBody = { email, password };
+      const requestBody = { email };
       const response = await axiosInstance.post(
-        "/api/user/signin",
+        "/api/user/password/verify-email",
         requestBody
       );
       if (response.data.isSuccess) {
-        const { accessToken, refreshToken } = response.data.result;
-        // 토큰 저장
-        await AsyncStorage.setItem("accessToken", accessToken);
-        await AsyncStorage.setItem("refreshToken", refreshToken);
-        console.log("로그인 성공: ", response.data.message);
-        // useAuth의 login 메서드 호출
-        login();
-        // 홈 화면으로 이동
-        navigation.replace("TabNavigator");
+        console.log("이메일 인증 성공!");
+        setIsCodeButtonEnabled(true);
+        setIsEmailMatch(true);
+        // navigation.replace("VerificationCode");
+        Alert.alert("이메일 인증에 성공하였습니다.");
       } else {
-        showToast("로그인에 실패했습니다. 다시 시도해주세요.");
+        showToast("이메일 인증에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 400) {
-          Alert.alert("존재하지 않는 사용자입니다.");
-        } else if (error.response.status === 401) {
-          Alert.alert("이메일 또는 비밀번호가 올바르지 않습니다.");
-        } else {
-          Alert.alert("로그인에 실패했습니다. 다시 시도해주세요.");
-        }
-      } else if (error.message == "Network Error") {
-        Alert.alert(
-          "네트워크 오류",
-          "인터넷 연결을 확인하고 다시 시도해주세요."
-        );
-      } else {
-        console.error("Login Error:", error);
-        showToast("로그인에 실패했습니다. 다시 시도해주세요.");
-      }
+      Alert.alert("이메일 인증에 실패했습니다. 다시 시도해주세요.");
+      setIsEmailMatch(false);
     }
   };
 
-  // 토큰 추출 함수
-  const extractAccessToken = (setCookieHeader) => {
-    const cookieParts = setCookieHeader[0].split(";");
-    for (const part of cookieParts) {
-      if (part.trim().startsWith("accessToken=")) {
-        return part.split("=")[1];
+  const CodeSendButton = async () => {
+    
+    try {
+      const requestBody = { email };
+      const response = await axiosInstance.post(
+        "/api/user/password/send-code",
+        requestBody
+      );
+      if (response.data.isSuccess) {
+        console.log("인증번호 전송 성공!");
+        navigation.navigate("VerificationCode", { email });
+      } else {
+        showToast("인증번호 전송을 실패했습니다. 다시 시도해주세요.");
       }
+    } catch (error) {
+      Alert.alert("인증번호 전송을 실패했습니다. 다시 시도해주세요.");
+      setIsEmailMatch(false);
     }
-    return null;
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
         이메일 인증을 위한 {"\n"}이메일을 입력해주세요.
       </Text>
-      <View style={styles.inputContainer}>
+      <View
+        style={[styles.inputContainer, !isEmailMatch && styles.inputError]}
+      >
         <TextInput
           value={email}
           onChangeText={setEmail}
@@ -121,10 +116,32 @@ const EmailVerification = () => {
           placeholderTextColor="#4D678C"
         />
       </View>
+      {!isEmailMatch && (
+        <Text style={styles.errorText}>
+          존재하지 않는 이메일입니다. 다시 확인해주세요.
+        </Text>
+      )}
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLoginButton}>
-        <Text style={styles.loginButtonText}>인증코드 받기</Text>
-      </TouchableOpacity>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button1} onPress={EmailConfirmButton}>
+          <Text style={styles.Text1}>이메일 확인</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.button2,
+            !isCodeButtonEnabled && { backgroundColor: "#CCCCCC" },
+          ]}
+          disabled={!isCodeButtonEnabled}
+          onPress={() => {
+            if (isCodeButtonEnabled) {
+              CodeSendButton();
+            }
+          }}
+        >
+          <Text style={styles.Text2}>인증번호 받기</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -175,6 +192,55 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     width: "70%",
     marginBottom: 30,
+  },
+  inputError: {
+    borderColor: "red",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -10,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+    marginLeft: 35,
+  },
+
+
+  buttonContainer: {
+    width: widthPercentage(80),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    // backgroundColor: "pink",
+    marginTop: 10,
+  },
+  button1: {
+    display: "flex",
+    width: widthPercentage(37),
+    height: widthPercentage(12),
+    backgroundColor: "#D2E7FF",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button2: {
+    display: "flex",
+    width: widthPercentage(37),
+    height: widthPercentage(12),
+    backgroundColor: "#268AFF",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  Text1: {
+    color: "#268AFF",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  Text2: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 
