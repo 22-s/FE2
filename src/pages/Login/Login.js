@@ -9,6 +9,11 @@ import {
   Animated,
   Alert,
 } from "react-native";
+import {
+  login as KakaoLogin,
+  loginWithKakaoTalk,
+  loginWithKakaoAccount,
+} from '@react-native-seoul/kakao-login';
 import LogoText from "../../assets/images/Logo/logo2.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
@@ -101,26 +106,47 @@ const LoginPage = () => {
     }
   };
 
+
   const handleKakaoLogin = async () => {
-    await CookieManager.clearAll();
-    await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
     try {
-      const response = await axiosInstance.post(`/api/auth/kakao/login/`);
+      let token;
+  
+      // 1. 먼저 카카오톡 앱 로그인 시도
+      try {
+        token = await loginWithKakaoTalk();
+      } catch (err) {
+        console.log("카카오톡 로그인 실패, 계정 로그인 시도:", err);
+        // 2. 실패 시 카카오 계정 로그인으로 fallback
+        token = await loginWithKakaoAccount();
+      }
+  
+      if (!token || !token.accessToken) {
+        throw new Error("카카오 로그인 실패: accessToken 없음");
+      }
+  
+      const kakaoAccessToken = token.accessToken;
+      console.log("✅ 카카오 accessToken:", kakaoAccessToken);
+  
+      // 백엔드로 토큰 보내기
+      const response = await axiosInstance.post(`/api/auth/kakao/login`, {
+        accessToken: kakaoAccessToken,
+      });
+      
       if (response.data.isSuccess) {
         const { accessToken, refreshToken } = response.data.result;
-        // 토큰 저장
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
-        console.log("로그인 성공: ", response.data.message);
-        // useAuth의 login 메서드 호출
         login();
-        // 홈 화면으로 이동
-        navigation.navigate("TabNavigator");
+        navigation.replace("TabNavigator");
       } else {
-        showToast("로그인에 실패했습니다. 다시 시도해주세요.");
+        Alert.alert("로그인 실패", "다시 시도해주세요.");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("❌ 카카오 로그인 실패:", error);
+      Alert.alert("카카오 로그인 오류", "로그인 중 오류가 발생했습니다.");
+    }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -189,7 +215,9 @@ const LoginPage = () => {
           <View style={styles.line} />
         </View>
         <View style={styles.buttonContainer}>
-          <KakaoButton />
+          <TouchableOpacity onPress={handleKakaoLogin}>
+            <KakaoButton />
+          </TouchableOpacity>
           <NaverButton />
           <GoogleButton />
           <AppleButton />
