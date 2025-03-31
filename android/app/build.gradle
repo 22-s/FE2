@@ -81,6 +81,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
         versionName "1.0.1"
+        manifestPlaceholders = [
+            NaverClientId: "mCbv2AKdsPzIuKmevpaB",
+            NaverClientSecret: "Fq0iQWrhkI",
+            NaverClientName: "신입사UP"
+        ]
     }
     signingConfigs {
         debug {

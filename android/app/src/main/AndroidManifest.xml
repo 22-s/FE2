@@ -26,7 +26,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-            <!-- ✅ Redirect 처리용 Activity -->
+            <!-- ✅ 카카오 로그인 Redirect Activity -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -38,6 +38,18 @@
                 <data
                     android:host="oauth"
                     android:scheme="kakao275fcfd9cb97820a438d199f9bcb6bd1" />
+            </intent-filter>
+        </activity>
+
+        <!-- ✅ 네이버 로그인 Redirect Activity -->
+        <activity
+            android:name="com.naver.oneid.sdk.activity.OAuthLoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="naverlogin" />
             </intent-filter>
         </activity>
 

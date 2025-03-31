@@ -14,6 +14,11 @@ import {
   loginWithKakaoTalk,
   loginWithKakaoAccount,
 } from '@react-native-seoul/kakao-login';
+import {
+  NaverLogin,
+  getProfile,
+} from '@react-native-seoul/naver-login';
+
 import LogoText from "../../assets/images/Logo/logo2.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
@@ -148,6 +153,47 @@ const LoginPage = () => {
   };
   
 
+  const handleNaverLogin = async () => {
+    const initials = {
+      kConsumerKey: 'mCbv2AKdsPzIuKmevpaB',        
+      kConsumerSecret: 'Fq0iQWrhkI', 
+      kServiceAppName: '신입사UP',          
+      kServiceAppUrlScheme: 'naverlogin', 
+    };
+  
+    try {
+      console.log("🔥 NaverLogin 객체 확인:", NaverLogin);
+      const result = await NaverLogin.login(initials);
+  
+      if (result.success) {
+        const profileResult = await getProfile(result.accessToken);
+        console.log('✅ 네이버 사용자 정보:', profileResult.response);
+  
+        // 백엔드에 accessToken 전달
+        const response = await axiosInstance.post('/api/auth/naver/login', {
+          accessToken: result.accessToken,
+        });
+  
+        if (response.data.isSuccess) {
+          const { accessToken, refreshToken } = response.data.result;
+          await AsyncStorage.setItem("accessToken", accessToken);
+          await AsyncStorage.setItem("refreshToken", refreshToken);
+          login();
+          navigation.replace("TabNavigator");
+        } else {
+          Alert.alert("로그인 실패", "다시 시도해주세요.");
+        }
+      } else {
+        console.log("❌ 네이버 로그인 실패:", result.message);
+        Alert.alert("네이버 로그인 실패", result.message || "알 수 없는 오류");
+      }
+    } catch (error) {
+      console.error("❌ 네이버 로그인 중 오류:", error);
+      Alert.alert("네이버 로그인 오류", "로그인 중 문제가 발생했습니다.");
+    }
+  };
+
+  
   return (
     <SafeAreaView style={styles.container}>
       <LogoText width={400} height={120} style={styles.logo} />
@@ -218,7 +264,9 @@ const LoginPage = () => {
           <TouchableOpacity onPress={handleKakaoLogin}>
             <KakaoButton />
           </TouchableOpacity>
-          <NaverButton />
+          <TouchableOpacity onPress={handleNaverLogin}>
+            <NaverButton />
+          </TouchableOpacity>
           <GoogleButton />
           <AppleButton />
         </View>
