@@ -69,8 +69,8 @@ const MyPage = () => {
   };
 
   const handleChangePassword = () => {
-    navigation.navigate("PasswordChangeScreen");
-  };
+    navigation.navigate("EmailVerification");
+  };  
 
   if (loading) {
     return (
