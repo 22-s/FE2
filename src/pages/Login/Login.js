@@ -245,7 +245,7 @@ const LoginPage = () => {
           style={styles.signUpLink}
           onPress={() => navigation.navigate("EmailVerification")}
         >
-          비밀 번호를 잊어버리셨나요?
+          비밀번호를 잊어버리셨나요?
         </Text>
         <Text
           style={styles.signUpLink}

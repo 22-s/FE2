@@ -1,82 +1,135 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
   Dimensions,
   TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Profile from "../../assets/images/MyPage/profile.svg";
 import RightArrow from "../../assets/images/MyPage/arrow.svg";
+import axiosInstance from "../../api/axiosInstance";
 
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
 const MyPage = () => {
   const navigation = useNavigation();
+  const [profile, setProfile] = useState({
+    nickname: "",
+    email: "",
+    joinDate: "",
+    profileImage: "",
+  });
+  const [loading, setLoading] = useState(true);
+
+  const fetchMyPage = async () => {
+    try {
+      const response = await axiosInstance.get("/api/user/mypage");
+
+      if (response.data.isSuccess) {
+        const { nickname, email, joinDate, profileImage } = response.data.result;
+
+        const formattedDate =
+          joinDate && joinDate !== "1970-01-01"
+            ? new Date(joinDate).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : null; // null이면 표시하지 않음
+
+        setProfile({
+          nickname,
+          email,
+          joinDate: formattedDate,
+          profileImage: profileImage ?? "", // null 방지
+        });
+      } else {
+        Alert.alert("불러오기 실패", response.data.message);
+      }
+    } catch (error) {
+      console.error("❌ 마이페이지 에러:", error);
+      Alert.alert("오류", "사용자 정보를 불러오는 중 문제가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyPage();
+  }, []);
 
   const handleChangeJoinDate = () => {
-    console.log("입사일 변경하기 클릭");
-    // navigation.navigate("JoinDateChangeScreen"); // 네비게이션 연결 가능
+    navigation.navigate("JoinDateChangeScreen");
   };
 
   const handleChangePassword = () => {
-    console.log("비밀번호 변경하기 클릭");
-    // navigation.navigate("PasswordChangeScreen"); // 네비게이션 연결 가능
-  };
+    navigation.navigate("EmailVerification");
+  };  
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#97A4B0" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      {/* 프로필 섹션 */}
       <Text style={styles.infoTitle}>프로필</Text>
       <View style={styles.profileBox}>
-        <Profile />
+        {!!profile.profileImage ? (
+          <Image
+            source={{ uri: profile.profileImage }}
+            style={styles.profileImage}
+          />
+        ) : (
+          <Profile width={55} height={55} />
+        )}
         <View style={{ marginLeft: 10, gap: 5 }}>
-          <Text style={styles.name}>박주형</Text>
-          <Text style={styles.date}>입사일: 2025년 1월 29일</Text>
+          <Text style={styles.name}>{profile.nickname}</Text>
+          <Text style={styles.date}>
+            입사일 : {profile.joinDate ? profile.joinDate : "정보 없음"}
+          </Text>
         </View>
       </View>
 
-      {/* 기본 정보 섹션 */}
       <Text style={styles.infoTitle}>기본 정보</Text>
       <View style={styles.infoBox}>
-        {/* 입사일 */}
-        <View style={styles.infoRow}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.infoLabel}>입사일</Text>
-            <Text style={styles.infoText}>2025년 1월 29일</Text>
-          </View>
-          <View style={styles.rightContainer}>
-            <TouchableOpacity
-              onPress={handleChangeJoinDate}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>입사일 변경하기</Text>
-              <RightArrow />
-            </TouchableOpacity>
-          </View>
+      <View style={styles.infoRow}>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.infoLabel}>입사일</Text>
+          <Text style={styles.infoText}>
+            {profile.joinDate ? profile.joinDate : "정보 없음"}
+          </Text>
         </View>
-
-        {/* 이메일 */}
+        <View style={styles.rightContainer}>
+          <TouchableOpacity onPress={handleChangeJoinDate} style={styles.button}>
+            <Text style={styles.buttonText}>입사일 변경하기</Text>
+            <RightArrow />
+          </TouchableOpacity>
+        </View>
+      </View>
         <View style={styles.infoRow}>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.infoLabel}>이메일</Text>
-            <Text style={styles.infoText}>2025123456@dgu.ac.kr</Text>
+            <Text style={styles.infoText}>{profile.email}</Text>
           </View>
         </View>
 
-        {/* 비밀번호 */}
         <View style={styles.infoRow}>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.infoLabel}>비밀번호</Text>
-            <Text style={styles.infoText}>********</Text>
+            <Text style={styles.infoText}>*****</Text>
           </View>
           <View style={styles.rightContainer}>
-            <TouchableOpacity
-              onPress={handleChangePassword}
-              style={styles.button}
-            >
+            <TouchableOpacity onPress={handleChangePassword} style={styles.button}>
               <Text style={styles.buttonText}>비밀번호 변경하기</Text>
               <RightArrow />
             </TouchableOpacity>
@@ -95,9 +148,13 @@ const styles = StyleSheet.create({
     height: "100%",
     paddingHorizontal: 30,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   infoTitle: {
     width: widthPercentage(80),
-    fontFamily: "Pretendard",
     fontSize: 16,
     fontWeight: "bold",
     color: "#2A2A2A",
@@ -105,7 +162,6 @@ const styles = StyleSheet.create({
   },
   profileBox: {
     flexDirection: "row",
-    justifyContent: "flex-start",
     alignItems: "center",
     marginTop: 10,
     width: "100%",
@@ -113,14 +169,18 @@ const styles = StyleSheet.create({
     padding: 13,
     borderRadius: 20,
   },
+  profileImage: {
+    width: 55,
+    height: 55,
+    borderRadius: 999,
+    backgroundColor: "#e5e5e5",
+  },
   name: {
-    fontFamily: "Pretendard",
     fontSize: 15,
     fontWeight: "bold",
     color: "#2A2A2A",
   },
   date: {
-    fontFamily: "Pretendard",
     fontSize: 11,
     color: "#97A4B0",
     fontWeight: "700",
@@ -137,19 +197,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // borderBottomWidth: 1,
-    // borderBottomColor: "#E5E5E5",
     paddingVertical: 7,
   },
   infoLabel: {
     width: widthPercentage(16),
-    fontFamily: "Pretendard",
     fontSize: 14,
     fontWeight: "bold",
     color: "#595959",
   },
   infoText: {
-    fontFamily: "Pretendard",
     fontSize: 14,
     color: "#828282",
   },
@@ -163,7 +219,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   buttonText: {
-    fontFamily: "Pretendard",
     fontSize: 12,
     fontWeight: "500",
     color: "#97A4B0",

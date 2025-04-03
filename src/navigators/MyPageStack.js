@@ -3,10 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CustomHeader from "../../CustomHeader.js";
 
 import MyPage from "../pages/MyPage/MyPage.js";
+import EmailVerification from "../pages/Login/EmailVerification"; // ✅ 추가
 
 const Stack = createStackNavigator();
 
-const BuizContentStack = () => (
+const MyPageStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="MyPage"
@@ -21,7 +22,20 @@ const BuizContentStack = () => (
         ),
       }}
     />
+    <Stack.Screen
+      name="EmailVerification"
+      component={EmailVerification}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="이메일 인증"
+            navigation={navigation}
+            routeName={"EmailVerification"}
+          />
+        ),
+      }}
+    />
   </Stack.Navigator>
 );
 
-export default BuizContentStack;
+export default MyPageStack;
