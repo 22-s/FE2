@@ -113,7 +113,7 @@ export default function MannerContent({ route }) {
 
         <View style={styles.line} />
         <View style={styles.contentBox}>
-          <Text style={styles.categoryText}>{mannerInfo.content}</Text>
+          <Text style={styles.contentText}>{mannerInfo.content}</Text>
         </View>
       </ScrollView>
     </View>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   contentText: {
     textAlign: "left",
     fontFamily: "Pretendard",
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: "semibold",
     color: "#353535",
   },

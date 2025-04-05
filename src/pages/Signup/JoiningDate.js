@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useRoute } from "@react-navigation/native";
 import {
   SafeAreaView,
   Text,
@@ -22,6 +23,8 @@ import DateIcon from "../../assets/images/Logo/date.svg";
 
 const JoiningDate = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const fromLogin = route.params?.fromLogin === true;
   const { login } = useAuth();
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -50,6 +53,44 @@ const JoiningDate = () => {
       }, 3000);
     });
   };
+
+  const handleSubmitJoiningDate = async () => {
+    if (!date) {
+      setDateStatusMessage("입사일을 선택해주세요.");
+      return;
+    }
+  
+    try {
+      const formattedDate = date.toISOString().split("T")[0]; 
+
+      const response = fromLogin
+        ? await axiosInstance.post("/api/user/join-date", {
+            joinDate: formattedDate,
+          })
+        : await axiosInstance.patch("/api/user/join-date", {
+            joinDate: formattedDate,
+          });
+  
+      if (response.data.isSuccess) {
+        Alert.alert("입사일이 성공적으로 등록되었습니다.");
+        navigation.navigate("MyPageStack", {
+          screen: "MyPage",
+        });
+      } else {
+        showToast("입사일 등록에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.log("입사일 등록 에러:", error);
+      if (error.response) {
+        Alert.alert("서버 오류", error.response.data?.message || "에러 응답이 도착했습니다.");
+      } else if (error.request) {
+        Alert.alert("네트워크 오류", "서버로부터 응답이 없습니다.");
+      } else {
+        Alert.alert("오류 발생", error.message);
+      }
+    }
+  };
+  
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -103,8 +144,8 @@ const JoiningDate = () => {
         <Text style={styles.errorText}>입사일을 선택해주세요.</Text>
       )}
 
-      <TouchableOpacity style={styles.loginButton} onPress={{}}>
-        <Text style={styles.loginButtonText}>인증코드 받기</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleSubmitJoiningDate}>
+        <Text style={styles.loginButtonText}>입사일 등록</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -127,6 +168,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 10,
     width: "90%",
+    height: 50,
   },
   input: {
     flex: 1,
@@ -156,6 +198,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     width: "70%",
     marginBottom: 30,
+  },
+  dateButton: {
+    flex: 1,
+    justifyContent: "center",
+    paddingLeft: 12,
   },
 });
 

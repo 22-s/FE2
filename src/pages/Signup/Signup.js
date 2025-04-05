@@ -8,13 +8,18 @@ import {
   TouchableOpacity,
   Animated,
 } from "react-native";
-import axios from "axios";
+import {
+  login as KakaoLogin,
+  loginWithKakaoTalk,
+  loginWithKakaoAccount,
+} from '@react-native-seoul/kakao-login';
+import { useAuth } from "../../contexts/AuthContext";
 import DatePicker from "react-native-date-picker";
 import LogoText from "../../assets/images/Logo/logo2.svg";
-import QuizIcon from "../../assets/images/Logo/quiz.svg";
-import MannerIcon from "../../assets/images/Logo/manner.svg";
-import WordIcon from "../../assets/images/Logo/word.svg";
-import TrendIcon from "../../assets/images/Logo/trend.svg";
+// import QuizIcon from "../../assets/images/Logo/quiz.svg";
+// import MannerIcon from "../../assets/images/Logo/manner.svg";
+// import WordIcon from "../../assets/images/Logo/word.svg";
+// import TrendIcon from "../../assets/images/Logo/trend.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import DateIcon from "../../assets/images/Logo/date.svg";
@@ -32,6 +37,7 @@ import axiosInstance from "../../api/axiosInstance";
 
 const Signup = () => {
   const navigation = useNavigation();
+  const { login } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -157,7 +163,7 @@ const Signup = () => {
         nickname: name,
         email,
         password,
-        join_date: date.toISOString().split("T")[0],
+        joinDate: date.toISOString().split("T")[0],
       };
 
       const response = await axiosInstance.post(
@@ -170,9 +176,46 @@ const Signup = () => {
     } catch (e) {
       console.error("Signup Error: ", e);
       console.error(e.response?.data.message);
-      // showToast(
-      //   e.response?.data?.message || "회원가입 요청 중 문제가 발생했습니다."
-      // );
+    }
+  };
+
+  const handleKakaoLogin = async () => {
+    try {
+      let token;
+  
+      // 1. 먼저 카카오톡 앱 로그인 시도
+      try {
+        token = await loginWithKakaoTalk();
+      } catch (err) {
+        console.log("카카오톡 로그인 실패, 계정 로그인 시도:", err);
+        // 2. 실패 시 카카오 계정 로그인으로 fallback
+        token = await loginWithKakaoAccount();
+      }
+  
+      if (!token || !token.accessToken) {
+        throw new Error("카카오 로그인 실패: accessToken 없음");
+      }
+  
+      const kakaoAccessToken = token.accessToken;
+      console.log("✅ 카카오 accessToken:", kakaoAccessToken);
+  
+      // 백엔드로 토큰 보내기
+      const response = await axiosInstance.post(`/api/auth/kakao/login`, {
+        accessToken: kakaoAccessToken,
+      });
+      
+      if (response.data.isSuccess) {
+        const { accessToken, refreshToken } = response.data.result;
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+        login();
+        navigation.replace("TabNavigator");
+      } else {
+        Alert.alert("로그인 실패", "다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("❌ 카카오 로그인 실패:", error);
+      Alert.alert("카카오 로그인 오류", "로그인 중 오류가 발생했습니다.");
     }
   };
 
@@ -371,10 +414,12 @@ const Signup = () => {
           <View style={styles.line} />
         </View>
         <View style={styles.buttonContainer}>
-          <KakaoButton />
-          <NaverButton />
+          <TouchableOpacity onPress={handleKakaoLogin}>
+            <KakaoButton />
+          </TouchableOpacity>
+          {/* <NaverButton /> */}
           <GoogleButton />
-          <AppleButton />
+          {/* <AppleButton /> */}
         </View>
       </View>
     </SafeAreaView>
@@ -610,7 +655,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonContainer: {
-    width: "58%",
+    width: "28%",
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,

@@ -37,6 +37,7 @@ const MyPage = () => {
       if (response.data.isSuccess) {
         const { nickname, email, joinDate, profileImage } = response.data.result;
 
+        console.log("마이페이지 데이터:", response.data.result);
         const formattedDate =
           joinDate && joinDate !== "1970-01-01"
             ? new Date(joinDate).toLocaleDateString("ko-KR", {
@@ -69,12 +70,16 @@ const MyPage = () => {
 
   const handleChangeJoinDate = () => {
     console.log("입사일 변경하기 클릭");
-    // navigation.navigate("JoinDateChangeScreen"); // 네비게이션 연결 가능
+    navigation.navigate("AuthStack", {
+      screen: "JoiningDate",
+    });
   };
 
   const handleChangePassword = () => {
     console.log("비밀번호 변경하기 클릭");
-    navigation.navigate("EmailVerification");
+    navigation.navigate("AuthStack", {
+      screen: "EmailVerification",
+    });
   };
 
 

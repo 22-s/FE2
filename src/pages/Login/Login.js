@@ -137,11 +137,18 @@ const LoginPage = () => {
       });
       
       if (response.data.isSuccess) {
-        const { accessToken, refreshToken } = response.data.result;
+        const { accessToken, refreshToken, new: isNewUser } = response.data.result;
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
         login();
-        navigation.replace("TabNavigator");
+        if (isNewUser) {
+          navigation.navigate("AuthStack", {
+            screen: "JoiningDate",
+            params: { fromLogin: true },
+          });
+        } else {
+          navigation.replace("TabNavigator");
+        }
       } else {
         Alert.alert("로그인 실패", "다시 시도해주세요.");
       }
@@ -150,47 +157,6 @@ const LoginPage = () => {
       Alert.alert("카카오 로그인 오류", "로그인 중 오류가 발생했습니다.");
     }
   };
-
-
-  // const handleNaverLogin = async () => {
-  //   const initials = {
-  //     kConsumerKey: 'mCbv2AKdsPzIuKmevpaB',        
-  //     kConsumerSecret: 'Fq0iQWrhkI', 
-  //     kServiceAppName: '신입사UP',          
-  //     kServiceAppUrlScheme: 'naverlogin', 
-  //   };
-
-  //   try {
-  //     console.log("🔥 NaverLogin 객체 확인:", NaverLogin);
-  //     const result = await NaverLogin.login(initials);
-
-  //     if (result.success) {
-  //       const profileResult = await getProfile(result.accessToken);
-  //       console.log('✅ 네이버 사용자 정보:', profileResult.response);
-
-  //       // 백엔드에 accessToken 전달
-  //       const response = await axiosInstance.post('/api/auth/naver/login', {
-  //         accessToken: result.accessToken,
-  //       });
-
-  //       if (response.data.isSuccess) {
-  //         const { accessToken, refreshToken } = response.data.result;
-  //         await AsyncStorage.setItem("accessToken", accessToken);
-  //         await AsyncStorage.setItem("refreshToken", refreshToken);
-  //         login();
-  //         navigation.replace("TabNavigator");
-  //       } else {
-  //         Alert.alert("로그인 실패", "다시 시도해주세요.");
-  //       }
-  //     } else {
-  //       console.log("❌ 네이버 로그인 실패:", result.message);
-  //       Alert.alert("네이버 로그인 실패", result.message || "알 수 없는 오류");
-  //     }
-  //   } catch (error) {
-  //     console.error("❌ 네이버 로그인 중 오류:", error);
-  //     Alert.alert("네이버 로그인 오류", "로그인 중 문제가 발생했습니다.");
-  //   }
-  // };
 
   
 
@@ -265,10 +231,10 @@ const LoginPage = () => {
             <KakaoButton />
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={handleNaverLogin}> */}
-            <NaverButton />
+            {/* <NaverButton /> */}
           {/* </TouchableOpacity> */}
           <GoogleButton />
-          <AppleButton />
+          {/* <AppleButton /> */}
         </View>
       </View>
     </SafeAreaView>
@@ -358,7 +324,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonContainer: {
-    width: "58%",
+    width: "28%",
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,

@@ -9,6 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import TabNavigator from "./src/navigators/TabNavigator";
 import AuthStack from "./src/navigators/AuthStack";
+import MyPageStack from "./src/navigators/MyPageStack";
 import { name as appName } from "./app.json";
 
 const Stack = createStackNavigator();
@@ -26,6 +27,11 @@ function App() {
           <Stack.Screen
             name="AuthStack"
             component={AuthStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MyPageStack"
+            component={MyPageStack}
             options={{ headerShown: false }}
           />
           {/* TabNavigator */}
