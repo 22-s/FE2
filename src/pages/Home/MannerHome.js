@@ -11,6 +11,7 @@ import Email from "../../assets/images/Home/email.svg";
 import Pen from "../../assets/images/Home/pen.svg";
 import Outfit from "../../assets/images/Home/outfit.svg";
 import Meeting from "../../assets/images/Home/meeting.svg";
+import TitleBar from "../../components/Home/titleBar";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -37,6 +38,10 @@ export default function MannerHome() {
       <ScrollView>
         <MannerSearchBar onSearch={handleSearch} />
         <MannerReviewBar onPress={handleClickReviewBox} />
+        <TitleBar
+          title={"Manner Category"}
+          subTitle={"원하는 카테고리의 매너설명서를 읽어보세요."}
+        />
         <View style={styles.categoryArea}>
           <CategoryBox
             title="업무의 첫걸음"

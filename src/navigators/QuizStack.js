@@ -14,6 +14,10 @@ import QuizReviewList from "../pages/Quiz/QuizReviewList.js";
 import SearchQuizList from "../pages/Quiz/SearchQuizList.js";
 import TestStep1 from "../pages/Quiz/TestStep1";
 import TestStep2 from "../pages/Quiz/TestStep2";
+import TestDetail from "../pages/Quiz/TestDetail.js";
+import TestLoading from "../pages/Quiz/TestLoading.js";
+import TestResult from "../pages/Quiz/TestResult.js";
+import TestResultQuiz from "../pages/Quiz/TestResultQuiz.js";
 
 const Stack = createStackNavigator();
 
@@ -158,6 +162,58 @@ const QuizStack = () => (
             title="모의고사 테스트"
             navigation={navigation}
             routeName={"TestStep2"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="TestDetail"
+      component={TestDetail}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="모의고사 테스트"
+            navigation={navigation}
+            routeName={"TestDetail"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="TestLoading"
+      component={TestLoading}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="모의고사 테스트"
+            navigation={navigation}
+            routeName={"TestLoading"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="TestResult"
+      component={TestResult}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="모의고사 테스트"
+            navigation={navigation}
+            routeName={"TestResult"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="TestResultQuiz"
+      component={TestResultQuiz}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="모의고사 테스트"
+            navigation={navigation}
+            routeName={"TestResultQuiz"}
           />
         ),
       }}

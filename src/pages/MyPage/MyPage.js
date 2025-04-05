@@ -1,20 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
   Dimensions,
   TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Profile from "../../assets/images/MyPage/profile.svg";
 import RightArrow from "../../assets/images/MyPage/arrow.svg";
+import { useAuth } from "../../contexts/AuthContext";
+import axiosInstance from "../../api/axiosInstance";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
 const MyPage = () => {
   const navigation = useNavigation();
+  const { isLoggedIn, logout } = useAuth();
+  const [profile, setProfile] = useState({
+    nickname: "",
+    email: "",
+    joinDate: "",
+    profileImage: "",
+  });
+  const [loading, setLoading] = useState(true);
+
+  const fetchMyPage = async () => {
+    try {
+      const response = await axiosInstance.get("/api/user/mypage");
+
+      if (response.data.isSuccess) {
+        const { nickname, email, joinDate, profileImage } = response.data.result;
+
+        const formattedDate =
+          joinDate && joinDate !== "1970-01-01"
+            ? new Date(joinDate).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : null; // null이면 표시하지 않음
+
+        setProfile({
+          nickname,
+          email,
+          joinDate: formattedDate,
+          profileImage: profileImage ?? "", // null 방지
+        });
+      } else {
+        Alert.alert("불러오기 실패", response.data.message);
+      }
+    } catch (error) {
+      console.error("❌ 마이페이지 에러:", error);
+      Alert.alert("오류", "사용자 정보를 불러오는 중 문제가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyPage();
+  }, []);
 
   const handleChangeJoinDate = () => {
     console.log("입사일 변경하기 클릭");
@@ -23,46 +74,95 @@ const MyPage = () => {
 
   const handleChangePassword = () => {
     console.log("비밀번호 변경하기 클릭");
-    // navigation.navigate("PasswordChangeScreen"); // 네비게이션 연결 가능
+    navigation.navigate("EmailVerification");
   };
 
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post(
+        "/api/user/signout"
+      );
+
+      await AsyncStorage.removeItem("accessToken"); // 토큰 제거
+      logout(); // 상태 업데이트
+      Alert.alert("알림", "로그아웃되었습니다.");
+      navigation.replace("AuthStack");
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+      Alert.alert("오류", "로그아웃 중 문제가 발생했습니다.");
+    }
+  };
+
+  const handleAuthAction = () => {
+    // if (isLoggedIn) {
+      Alert.alert(
+        "로그아웃",
+        "로그아웃을 하시겠습니까?",
+        [
+          { text: "취소", style: "cancel" },
+          { text: "확인", onPress: handleLogout },
+        ],
+        { cancelable: true }
+      );
+      
+    // } else {
+    //   navigation.replace("AuthStack");
+    // }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#97A4B0" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       {/* 프로필 섹션 */}
       <Text style={styles.infoTitle}>프로필</Text>
       <View style={styles.profileBox}>
-        <Profile />
+        {/* <Profile /> */}
+        {!!profile.profileImage ? (
+          <Image
+            source={{ uri: profile.profileImage }}
+            style={styles.profileImage}
+          />
+        ) : (
+          <Profile width={55} height={55} />
+        )}
         <View style={{ marginLeft: 10, gap: 5 }}>
-          <Text style={styles.name}>박주형</Text>
-          <Text style={styles.date}>입사일: 2025년 1월 29일</Text>
+          <Text style={styles.name}>{profile.nickname}</Text>
+          <Text style={styles.date}>
+            입사일 : {profile.joinDate ? profile.joinDate : "정보 없음"}
+          </Text>
         </View>
       </View>
 
       {/* 기본 정보 섹션 */}
       <Text style={styles.infoTitle}>기본 정보</Text>
       <View style={styles.infoBox}>
-        {/* 입사일 */}
         <View style={styles.infoRow}>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.infoLabel}>입사일</Text>
-            <Text style={styles.infoText}>2025년 1월 29일</Text>
+            <Text style={styles.infoText}>
+              {profile.joinDate ? profile.joinDate : "정보 없음"}
+            </Text>
           </View>
+
+          {/* 이메일 */}
           <View style={styles.rightContainer}>
-            <TouchableOpacity
-              onPress={handleChangeJoinDate}
-              style={styles.button}
-            >
+            <TouchableOpacity onPress={handleChangeJoinDate} style={styles.button}>
               <Text style={styles.buttonText}>입사일 변경하기</Text>
               <RightArrow />
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* 이메일 */}
         <View style={styles.infoRow}>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.infoLabel}>이메일</Text>
-            <Text style={styles.infoText}>2025123456@dgu.ac.kr</Text>
+            <Text style={styles.infoText}>{profile.email}</Text>
           </View>
         </View>
 
@@ -70,7 +170,7 @@ const MyPage = () => {
         <View style={styles.infoRow}>
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.infoLabel}>비밀번호</Text>
-            <Text style={styles.infoText}>********</Text>
+            <Text style={styles.infoText}>*****</Text>
           </View>
           <View style={styles.rightContainer}>
             <TouchableOpacity
@@ -82,12 +182,30 @@ const MyPage = () => {
             </TouchableOpacity>
           </View>
         </View>
+
       </View>
+
+      <TouchableOpacity style={styles.logoutButton} onPress={handleAuthAction}>
+          <Text style={styles.logoutText}>
+            로그아웃
+          </Text>
+        </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profileImage: {
+    width: 55,
+    height: 55,
+    borderRadius: 999,
+    backgroundColor: "#e5e5e5",
+  },
   container: {
     flex: 1,
     alignItems: "center",
@@ -169,6 +287,20 @@ const styles = StyleSheet.create({
     color: "#97A4B0",
     marginRight: 5,
   },
+  logoutButton: {
+    width: "95%",
+    backgroundColor: "#61ABFF",
+    paddingVertical: 12,
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30,
+  },
+  logoutText:{
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  }
 });
 
 export default MyPage;

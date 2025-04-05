@@ -10,12 +10,7 @@ import {
   Alert,
   Dimensions
 } from "react-native";
-import EyeIcon1 from "../../assets/images/Logo/eye.svg";
-import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import { useNavigation } from "@react-navigation/native";
-import { post } from "../../api/request";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import CookieManager from "@react-native-cookies/cookies";
 import { useAuth } from "../../contexts/AuthContext";
 import axiosInstance from "../../api/axiosInstance";
 
