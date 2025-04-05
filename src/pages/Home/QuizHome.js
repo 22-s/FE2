@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -79,6 +80,10 @@ export default function QuizHome() {
     navigation.navigate("QuizReviewList");
   };
 
+  const goTest = () => {
+    navigation.navigate("TestStep1");
+  };
+
   const handleQuizPress = (quizId) => {
     navigation.navigate("QuizDetail", {
       quizId,
@@ -87,6 +92,12 @@ export default function QuizHome() {
       lastQuizId,
     });
   };
+
+  useFocusEffect(
+      React.useCallback(() => {
+        fetchMainInfo();
+      }, [])
+    );
 
   if (loading) {
     return (
@@ -118,6 +129,7 @@ export default function QuizHome() {
             name={"박주형"}
             score={latestMockExamScore}
             percentage={topPercentile}
+            onPress={goTest}
           />
         </View>
         <TitleBar

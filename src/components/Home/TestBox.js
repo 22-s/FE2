@@ -14,12 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-export default function TestBox({ name, score, percentage }) {
+export default function TestBox({ name, score, percentage, onPress }) {
   const navigation = useNavigation();
-
-  const goTest = () => {
-    navigation.navigate("TestStep1");
-  };
 
   return (
     <View style={styles.container}>
@@ -29,11 +25,12 @@ export default function TestBox({ name, score, percentage }) {
           style={{
             flexDirection: "row",
             alignItems: "center",
+            height: 22,
           }}
-          onPress={goTest}
+          onPress={onPress}
         >
           <Text style={styles.righttitle}>모의고사 풀러 가기</Text>
-          <Arrow style={{ marginLeft: 4 }} onPress={goTest} />
+          <Arrow style={{ marginLeft: 4 }} onPress={onPress} />
         </TouchableOpacity>
       </View>
       <View style={styles.innerBox}>
@@ -43,7 +40,9 @@ export default function TestBox({ name, score, percentage }) {
         </View>
         <View style={styles.innerContentBox}>
           <Text style={styles.innerBoxTitle}>상위</Text>
-          <Text style={styles.innerBoxContent2}>{percentage}%</Text>
+          <Text style={styles.innerBoxContent2}>
+            {Number(percentage).toFixed(1)}%
+          </Text>
         </View>
       </View>
       <Image source={WriteArm} style={styles.writeArm} resizeMode="contain" />

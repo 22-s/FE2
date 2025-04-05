@@ -15,6 +15,10 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 export default function TestStep1() {
   const navigation = useNavigation();
 
+  const goBeforeResult = () => {
+    navigation.navigate("TestResult");
+  };
+
   const goNextStep = () => {
     navigation.navigate("TestStep2");
   };
@@ -25,7 +29,7 @@ export default function TestStep1() {
       <Text style={styles.title}>환영해요!</Text>
       <Text style={styles.subTitle}>모의고사 테스트를 시작하시겠어요?</Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button1}>
+        <TouchableOpacity style={styles.button1} onPress={goBeforeResult}>
           <Text style={styles.Text1}>이전 결과 조회</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button2} onPress={goNextStep}>
@@ -49,6 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "700",
     color: "#383838",
+    marginTop: 12,
   },
   subTitle: {
     fontFamily: "Pretendard",

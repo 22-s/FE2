@@ -2,14 +2,20 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import Back from "./src/assets/images/Header/Back.svg";
 import Logo from "./src/assets/images/Header/Logo.png";
-import axios from "axios";
+import BellOn from "./src/assets/images/Header/Bell_on.svg";
+import BellOff from "./src/assets/images/Header/Bell_off.svg";
+import { useNavigation } from "@react-navigation/native";
+
 import { useAuth } from "./src/contexts/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosInstance from "./src/api/axiosInstance";
 
 const CustomHeader = ({ title, navigation, routeName }) => {
   const [isLogoVisible, setIsLogoVisible] = useState(false);
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth(); 
+
+  const hideHeaderIcons = routeName === "TestDetail" || routeName === "TestLoading";
+
 
   useEffect(() => {
     if (
@@ -76,27 +82,36 @@ const CustomHeader = ({ title, navigation, routeName }) => {
           width: "90%",
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            if (!isLogoVisible) navigation.goBack();
-          }}
-          style={{
-            width: 30,
-            height: 30,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {isLogoVisible ? (
-            <Image
-              source={Logo}
-              style={{ width: 35, height: 35 }}
-              resizeMode="contain"
-            />
-          ) : (
-            <Back />
-          )}
-        </TouchableOpacity>
+        {hideHeaderIcons ? (
+          <View style={{ width: 30 }} />
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              if (routeName === "TestResult") {
+                navigation.navigate("QuizHome");
+              } else if (!isLogoVisible) {
+                navigation.goBack();
+              }
+            }}
+            style={{
+              width: 30,
+              height: 30,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {isLogoVisible ? (
+              <Image
+                source={Logo}
+                style={{ width: 35, height: 35 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <Back />
+            )}
+          </TouchableOpacity>
+        )}
+
         <Text
           style={{
             fontSize: 16,
@@ -106,11 +121,15 @@ const CustomHeader = ({ title, navigation, routeName }) => {
         >
           {title}
         </Text>
-        <TouchableOpacity onPress={handleAuthAction}>
-          <Text style={{ color: "blue" }}>
-            {isLoggedIn ? "로그아웃" : "로그인"}
-          </Text>
-        </TouchableOpacity>
+        {hideHeaderIcons ? (
+          <View style={{ width: 30 }} />
+        ) : (
+          <TouchableOpacity onPress={handleAuthAction}>
+            <Text style={{ color: "blue" }}>
+              {isLoggedIn ? <BellOff /> : "로그인"}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
