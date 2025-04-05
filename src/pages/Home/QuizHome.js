@@ -25,6 +25,7 @@ export default function QuizHome() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [quizData, setQuizData] = useState([]);
+  const [nickname, setNickname] = useState("");
   const [progressRate, setProgressRate] = useState(0);
   const [latestMockExamScore, setLatestMockExamScore] = useState(0);
   const [topPercentile, setTopPercentile] = useState(0);
@@ -49,6 +50,7 @@ export default function QuizHome() {
         console.log(result);
         setYesterdaySolvedCount(result.yesterdaySolvedCount);
         setProgressRate(parseFloat(result.progressRate.toFixed(1)));
+        setNickname(result.nickname);
         setLatestMockExamScore(result.latestMockExamScore ?? 0);
         setTopPercentile(result.topPercentile);
         setQuizData(result.top5WrongQuizzes);
@@ -126,7 +128,7 @@ export default function QuizHome() {
         />
         <View style={styles.quizBoxArea}>
           <TestBox
-            name={"박주형"}
+            name={nickname}
             score={latestMockExamScore}
             percentage={topPercentile}
             onPress={goTest}

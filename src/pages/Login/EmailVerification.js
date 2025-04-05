@@ -52,7 +52,6 @@ const EmailVerification = () => {
   };
 
   const EmailConfirmButton = async () => {
-    
     try {
       const requestBody = { email };
       const response = await axiosInstance.post(
@@ -63,19 +62,33 @@ const EmailVerification = () => {
         console.log("이메일 인증 성공!");
         setIsCodeButtonEnabled(true);
         setIsEmailMatch(true);
-        // navigation.replace("VerificationCode");
         Alert.alert("이메일 인증에 성공하였습니다.");
       } else {
         showToast("이메일 인증에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      Alert.alert("이메일 인증에 실패했습니다. 다시 시도해주세요.");
+      console.log("이메일 인증 오류:", error);
+  
+      // 에러 상세 로그
+      if (error.response) {
+        console.log("응답 데이터:", error.response.data);
+        console.log("응답 상태 코드:", error.response.status);
+        console.log("응답 헤더:", error.response.headers);
+        Alert.alert("서버 오류", error.response.data?.message || "에러 응답이 도착했습니다.");
+      } else if (error.request) {
+        console.log("요청은 되었지만 응답 없음:", error.request);
+        Alert.alert("네트워크 오류", "서버로부터 응답이 없습니다.");
+      } else {
+        console.log("기타 오류:", error.message);
+        Alert.alert("오류 발생", error.message);
+      }
+  
       setIsEmailMatch(false);
     }
   };
+  
 
   const CodeSendButton = async () => {
-    
     try {
       const requestBody = { email };
       const response = await axiosInstance.post(
@@ -89,10 +102,25 @@ const EmailVerification = () => {
         showToast("인증번호 전송을 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      Alert.alert("인증번호 전송을 실패했습니다. 다시 시도해주세요.");
+      console.log("인증번호 전송 에러:", error);
+  
+      if (error.response) {
+        console.log("응답 데이터:", error.response.data);
+        console.log("응답 상태 코드:", error.response.status);
+        console.log("응답 헤더:", error.response.headers);
+        Alert.alert("서버 오류", error.response.data?.message || "서버 응답 오류가 발생했습니다.");
+      } else if (error.request) {
+        console.log("요청은 되었지만 응답 없음:", error.request);
+        Alert.alert("네트워크 오류", "서버로부터 응답이 없습니다.");
+      } else {
+        console.log("기타 오류:", error.message);
+        Alert.alert("에러 발생", error.message);
+      }
+  
       setIsEmailMatch(false);
     }
   };
+  
   
 
   return (

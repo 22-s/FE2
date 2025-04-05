@@ -16,7 +16,7 @@ import axiosInstance from "../../api/axiosInstance";
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-const EmailVerification = () => {
+const VerificationCode = () => {
   const route = useRoute();
   const { email } = route.params;
   const navigation = useNavigation();
@@ -229,4 +229,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default EmailVerification;
+export default VerificationCode;
