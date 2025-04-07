@@ -13,6 +13,9 @@
       <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
+      <meta-data
+    android:name="com.google.android.gms.client_id"
+    android:value="@string/default_web_client_id" />
 
       <activity
         android:name=".MainActivity"

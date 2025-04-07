@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -9,11 +9,13 @@ import {
   Animated,
   Alert,
 } from "react-native";
+// import { GOOGLE_CLIENT_ID } from '@env';
 import {
   login as KakaoLogin,
   loginWithKakaoTalk,
   loginWithKakaoAccount,
 } from '@react-native-seoul/kakao-login';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 // import {
 //   NaverLogin,
 //   getProfile,
@@ -138,6 +140,7 @@ const LoginPage = () => {
       
       if (response.data.isSuccess) {
         const { accessToken, refreshToken, new: isNewUser } = response.data.result;
+        console.log("카카오 로그인 응답:", response.data.result);
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
         login();
@@ -158,6 +161,62 @@ const LoginPage = () => {
     }
   };
 
+  // 구글 로그인
+  useEffect(() => {
+    GoogleSignin.configure({
+      scopes: ['profile', 'email'], 
+      webClientId: '846421192413-788b2a4ttarghk5ducafie8tuku6n3br.apps.googleusercontent.com',
+      offlineAccess: true,
+    });
+  }, []);
+
+  const handleGoogleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+  
+      // 👉 이름 구분!
+      const { idToken, accessToken: googleAccessToken } = await GoogleSignin.getTokens();
+  
+      console.log("🪙 Google accessToken:", googleAccessToken);
+  
+      // 백엔드로 전송할 때도 이름 명확하게
+      const response = await axiosInstance.post(`/api/auth/google/login`, {
+        accessToken: googleAccessToken,
+      });
+  
+      if (response.data.isSuccess) {
+        const {
+          accessToken, 
+          refreshToken,
+          new: isNewUser,
+        } = response.data.result;
+  
+        console.log("Google 로그인 응답:", response.data.result);
+  
+        // 저장도 명확하게
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+  
+        login();
+  
+        if (isNewUser) {
+          navigation.navigate("AuthStack", {
+            screen: "JoiningDate",
+            params: { fromLogin: true },
+          });
+        } else {
+          navigation.replace("TabNavigator");
+        }
+      } else {
+        Alert.alert("구글 로그인 실패", "다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("❌ Google 로그인 실패:", error);
+      Alert.alert("Google 로그인 오류", "로그인 중 오류가 발생했습니다.");
+    }
+  };  
+  
   
 
   return (
@@ -233,7 +292,9 @@ const LoginPage = () => {
           {/* <TouchableOpacity onPress={handleNaverLogin}> */}
             {/* <NaverButton /> */}
           {/* </TouchableOpacity> */}
-          <GoogleButton />
+          <TouchableOpacity onPress={handleGoogleLogin}>
+            <GoogleButton />
+          </TouchableOpacity>
           {/* <AppleButton /> */}
         </View>
       </View>

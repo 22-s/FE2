@@ -10,6 +10,7 @@ import { AuthProvider } from "./src/contexts/AuthContext";
 import TabNavigator from "./src/navigators/TabNavigator";
 import AuthStack from "./src/navigators/AuthStack";
 import MyPageStack from "./src/navigators/MyPageStack";
+import QuizStack from "./src/navigators/QuizStack";
 import { name as appName } from "./app.json";
 
 const Stack = createStackNavigator();
@@ -32,6 +33,11 @@ function App() {
           <Stack.Screen
             name="MyPageStack"
             component={MyPageStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="QuizStack"
+            component={QuizStack}
             options={{ headerShown: false }}
           />
           {/* TabNavigator */}

@@ -73,8 +73,8 @@ const JoiningDate = () => {
   
       if (response.data.isSuccess) {
         Alert.alert("입사일이 성공적으로 등록되었습니다.");
-        navigation.navigate("MyPageStack", {
-          screen: "MyPage",
+        navigation.navigate("QuizStack", {
+          screen: "QuizHome",
         });
       } else {
         showToast("입사일 등록에 실패했습니다. 다시 시도해주세요.");
