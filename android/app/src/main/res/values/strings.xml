@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TwoTwosFrontN1</string>
     <string name="kakao_app_key">275fcfd9cb97820a438d199f9bcb6bd1</string>
+    <string name="default_web_client_id">846421192413-788b2a4ttarghk5ducafie8tuku6n3br.apps.googleusercontent.com</string>
 </resources>
