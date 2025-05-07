@@ -195,7 +195,18 @@ const MyPage = () => {
             로그아웃
           </Text>
         </TouchableOpacity>
+
+      <View style={styles.policyContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate("TermsOfService")}>
+          <Text style={styles.policyText}>서비스 이용약관 보기</Text>
+        </TouchableOpacity>
+        <Text style={styles.separator}>|</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("PrivacyPolicy")}>
+          <Text style={styles.policyText}>개인정보 처리방침 보기</Text>
+        </TouchableOpacity>
+      </View>
     </View>
+    
   );
 };
 
@@ -305,6 +316,24 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  policyContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  policyText: {
+    fontSize: 12,
+    color: "#8E8E8E",
+    textDecorationLine: "underline",
+    fontFamily: "Pretendard",
+  },
+  separator: {
+    fontSize: 12,
+    marginHorizontal: 8,
+    color: "#C4C4C4",
   }
 });
 

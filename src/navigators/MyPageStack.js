@@ -3,6 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CustomHeader from "../../CustomHeader.js";
 
 import MyPage from "../pages/MyPage/MyPage.js";
+import TermsOfService from "../pages/MyPage/TermsOfService";
+import PrivacyPolicy from "../pages/MyPage/PrivacyPolicy";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +23,16 @@ const MyPageStack = () => (
         ),
       }}
     />
+  <Stack.Screen
+    name="TermsOfService"
+    component={TermsOfService}
+    options={{ title: "서비스 이용약관" }}
+  />
+  <Stack.Screen
+    name="PrivacyPolicy"
+    component={PrivacyPolicy}
+    options={{ title: "개인정보 처리방침" }}
+  />
   </Stack.Navigator>
 );
 
