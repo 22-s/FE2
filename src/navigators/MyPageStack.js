@@ -23,16 +23,32 @@ const MyPageStack = () => (
         ),
       }}
     />
-  <Stack.Screen
-    name="TermsOfService"
-    component={TermsOfService}
-    options={{ title: "서비스 이용약관" }}
-  />
-  <Stack.Screen
-    name="PrivacyPolicy"
-    component={PrivacyPolicy}
-    options={{ title: "개인정보 처리방침" }}
-  />
+    <Stack.Screen
+      name="TermsOfService"
+      component={TermsOfService}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="서비스 이용약관"
+            navigation={navigation}
+            routeName={"TermsOfService"}
+          />
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="PrivacyPolicy"
+      component={PrivacyPolicy}
+      options={{
+        header: ({ navigation }) => (
+          <CustomHeader
+            title="개인정보 처리방침"
+            navigation={navigation}
+            routeName={"PrivacyPolicy"}
+          />
+        ),
+      }}
+    />
   </Stack.Navigator>
 );
 
