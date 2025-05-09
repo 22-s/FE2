@@ -41,11 +41,11 @@ const CorrectModal = ({
     // console.log("Authorization 헤더: ", headers.Authorization);
     try {
       if (review) {
-        Alert.alert("이미 복습리스트에 추가되어 있습니다.");
+        Alert.alert("이미 즐겨찾기 리스트에 추가되어 있습니다.");
       } else {
         // 복습하기 추가 API 호출
         await axiosInstance.post(`/api/quiz/${quizId}/review`);
-        Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+        Alert.alert("알림", "즐겨찾기 리스트에 추가하였습니다.");
         // navigation.replace("QuizDetail", {
         //   quizId,
         //   review: !review, // review 상태 반대로 전달
@@ -58,8 +58,8 @@ const CorrectModal = ({
       Alert.alert(
         "오류",
         review
-          ? "복습하기 해제 중 문제가 발생했습니다."
-          : "복습하기 추가 중 문제가 발생했습니다."
+          ? "즐겨찾기 해제 중 문제가 발생했습니다."
+          : "즐겨찾기 추가 중 문제가 발생했습니다."
       );
     }
   };
