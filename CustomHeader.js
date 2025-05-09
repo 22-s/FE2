@@ -12,10 +12,10 @@ import axiosInstance from "./src/api/axiosInstance";
 
 const CustomHeader = ({ title, navigation, routeName }) => {
   const [isLogoVisible, setIsLogoVisible] = useState(false);
-  const { isLoggedIn, logout } = useAuth(); 
+  const { isLoggedIn, logout } = useAuth();
 
-  const hideHeaderIcons = routeName === "TestDetail" || routeName === "TestLoading";
-
+  const hideHeaderIcons =
+    routeName === "TestDetail" || routeName === "TestLoading";
 
   useEffect(() => {
     if (
@@ -32,9 +32,7 @@ const CustomHeader = ({ title, navigation, routeName }) => {
 
   const handleLogout = async () => {
     try {
-      await axiosInstance.post(
-        "/api/user/signout"
-      );
+      await axiosInstance.post("/api/user/signout");
 
       await AsyncStorage.removeItem("accessToken"); // 토큰 제거
       logout(); // 상태 업데이트
@@ -47,20 +45,20 @@ const CustomHeader = ({ title, navigation, routeName }) => {
   };
 
   const handleAuthAction = () => {
-    if (isLoggedIn) {
-      Alert.alert(
-        "로그아웃",
-        "로그아웃을 하시겠습니까?",
-        [
-          { text: "취소", style: "cancel" },
-          { text: "확인", onPress: handleLogout },
-        ],
-        { cancelable: true }
-      );
-      
-    } else {
-      navigation.replace("AuthStack");
-    }
+    // if (isLoggedIn) {
+    //   Alert.alert(
+    //     "로그아웃",
+    //     "로그아웃을 하시겠습니까?",
+    //     [
+    //       { text: "취소", style: "cancel" },
+    //       { text: "확인", onPress: handleLogout },
+    //     ],
+    //     { cancelable: true }
+    //   );
+    // } else {
+    //   navigation.replace("AuthStack");
+    // }
+    navigation.navigate("AlarmStack");
   };
 
   return (

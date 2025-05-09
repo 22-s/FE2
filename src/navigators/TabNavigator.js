@@ -1,19 +1,16 @@
 import React from "react";
-import { Alert } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Import Stack Navigators
 import QuizStack from "./QuizStack";
 import MannerStack from "./MannerStack";
 import WordStack from "./WordStack";
-import BuizContentStack from "./BuizContentStack";
 import MyPage from "./MyPageStack";
 
 // Import Tab Icons
 import Quiz from "../assets/images/TabBar/QuizSvg";
 import Manner from "../assets/images/TabBar/MannerSvg";
 import Term from "../assets/images/TabBar/TermSvg";
-import Trend from "../assets/images/TabBar/TrendSvg";
 import Profile from "../assets/images/TabBar/MyPageSvg";
 
 const Tab = createBottomTabNavigator();
