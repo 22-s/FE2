@@ -1,9 +1,11 @@
-/**
- * @format
- */
-import "react-native-gesture-handler";
 import React, { useState } from "react";
-import { AppRegistry } from "react-native";
+import {
+  AppRegistry,
+  SafeAreaView,
+  StatusBar,
+  Platform,
+  StyleSheet,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthProvider } from "./src/contexts/AuthContext";
@@ -16,41 +18,50 @@ import { name as appName } from "./app.json";
 const Stack = createStackNavigator();
 
 function App() {
-  const [isLoggedIn, setLoggedIn] = useState(false); // 초기 조건 설정
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   return (
     <AuthProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={isLoggedIn ? "TabNavigator" : "AuthStack"}
-        >
-          {/* AuthStack */}
-          <Stack.Screen
-            name="AuthStack"
-            component={AuthStack}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MyPageStack"
-            component={MyPageStack}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="QuizStack"
-            component={QuizStack}
-            options={{ headerShown: false }}
-          />
-          {/* TabNavigator */}
-          <Stack.Screen
-            name="TabNavigator"
-            component={TabNavigator}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={isLoggedIn ? "TabNavigator" : "AuthStack"}
+          >
+            <Stack.Screen
+              name="AuthStack"
+              component={AuthStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MyPageStack"
+              component={MyPageStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="QuizStack"
+              component={QuizStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TabNavigator"
+              component={TabNavigator}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
     </AuthProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 10, // iOS는 20, Android는 상태바 높이
+  },
+});
 
 AppRegistry.registerComponent(appName, () => App);
 export default App;
