@@ -418,7 +418,7 @@ const Signup = () => {
             <KakaoButton />
           </TouchableOpacity>
           {/* <NaverButton /> */}
-          <GoogleButton />
+          { /* <GoogleButton />*/ }
           {/* <AppleButton /> */}
         </View>
       </View>
