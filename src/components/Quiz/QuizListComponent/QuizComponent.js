@@ -21,20 +21,28 @@ const QuizListComponent = ({
 
   const handleReview = async () => {
     try {
-      if (!solved) {
-        Alert.alert("답을 제출해야 즐겨찾기 리스트에 추가할 수 있습니다.");
-      } else {
-        if (bookmark) {
-          // 복습하기 해제 API 호출
-          await axiosInstance.delete(`/api/quiz/${quizId}/review`);
-          Alert.alert("알림", "즐겨찾기 리스트에서 삭제하였습니다.");
-        } else {
-          // 복습하기 추가 API 호출
-          await axiosInstance.post(`/api/quiz/${quizId}/review`);
-          Alert.alert("알림", "즐겨찾기 리스트에 추가하였습니다.");
+      if (solved !== undefined && solved !== null) {
+        if (!solved) {
+          Alert.alert("답을 제출해야 즐겨찾기 리스트에 추가할 수 있습니다.");
+          return;
         }
-        setBookmark((prev) => !prev); // 상태 변경
+      } else {
+        // solved가 존재하지 않는 경우에는 retriedToday를 확인
+        if (retriedToday === null) {
+          Alert.alert("오늘 복습한 문제만 즐겨찾기 할 수 있습니다.");
+          return;
+        }
       }
+  
+      // 북마크 상태 토글 API 호출
+      if (bookmark) {
+        await axiosInstance.delete(`/api/quiz/${quizId}/review`);
+        Alert.alert("알림", "즐겨찾기 리스트에서 삭제하였습니다.");
+      } else {
+        await axiosInstance.post(`/api/quiz/${quizId}/review`);
+        Alert.alert("알림", "즐겨찾기 리스트에 추가하였습니다.");
+      }
+      setBookmark((prev) => !prev);
     } catch (error) {
       console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
       Alert.alert(
@@ -44,7 +52,7 @@ const QuizListComponent = ({
           : "즐겨찾기 추가 중 문제가 발생했습니다."
       );
     }
-  };
+  };  
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -68,16 +76,29 @@ const QuizListComponent = ({
           {content}
         </Text>
         <TouchableOpacity onPress={handleReview}>
-          {solved ? (
-            bookmark ? (
-              <BookmarkFilled style={styles.bookMarkButton} />
+          {(solved !== undefined && solved !== null) ? (
+            solved ? (
+              bookmark ? (
+                <BookmarkFilled style={styles.bookMarkButton} />
+              ) : (
+                <BookMarkButton style={styles.bookMarkButton} />
+              )
             ) : (
               <BookMarkButton style={styles.bookMarkButton} />
             )
           ) : (
-            <BookMarkButton style={styles.bookMarkButton} />
+            retriedToday !== null ? (
+              bookmark ? (
+                <BookmarkFilled style={styles.bookMarkButton} />
+              ) : (
+                <BookMarkButton style={styles.bookMarkButton} />
+              )
+            ) : (
+              <BookMarkButton style={styles.bookMarkButton} />
+            )
           )}
         </TouchableOpacity>
+
       </View>
     </TouchableOpacity>
   );
