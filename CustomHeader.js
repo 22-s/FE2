@@ -45,20 +45,12 @@ const CustomHeader = ({ title, navigation, routeName }) => {
   };
 
   const handleAuthAction = () => {
-    // if (isLoggedIn) {
-    //   Alert.alert(
-    //     "로그아웃",
-    //     "로그아웃을 하시겠습니까?",
-    //     [
-    //       { text: "취소", style: "cancel" },
-    //       { text: "확인", onPress: handleLogout },
-    //     ],
-    //     { cancelable: true }
-    //   );
-    // } else {
-    //   navigation.replace("AuthStack");
-    // }
-    navigation.navigate("AlarmStack");
+    if (isLoggedIn) {
+      Alert.alert("알림", "추후 업데이트 예정입니다.");
+    } else {
+      navigation.replace("AuthStack");
+    }
+    // navigation.navigate("AlarmStack");
   };
 
   return (
