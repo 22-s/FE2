@@ -22,16 +22,16 @@ const QuizListComponent = ({
   const handleReview = async () => {
     try {
       if (!solved) {
-        Alert.alert("답을 제출해야 복습 리스트에 추가할 수 있습니다.");
+        Alert.alert("답을 제출해야 즐겨찾기 리스트에 추가할 수 있습니다.");
       } else {
         if (bookmark) {
           // 복습하기 해제 API 호출
           await axiosInstance.delete(`/api/quiz/${quizId}/review`);
-          Alert.alert("알림", "복습하기 리스트에서 삭제하였습니다.");
+          Alert.alert("알림", "즐겨찾기 리스트에서 삭제하였습니다.");
         } else {
           // 복습하기 추가 API 호출
           await axiosInstance.post(`/api/quiz/${quizId}/review`);
-          Alert.alert("알림", "복습하기 리스트에 추가하였습니다.");
+          Alert.alert("알림", "즐겨찾기 리스트에 추가하였습니다.");
         }
         setBookmark((prev) => !prev); // 상태 변경
       }
@@ -40,8 +40,8 @@ const QuizListComponent = ({
       Alert.alert(
         "오류",
         bookmark
-          ? "복습하기 해제 중 문제가 발생했습니다."
-          : "복습하기 추가 중 문제가 발생했습니다."
+          ? "즐겨찾기 해제 중 문제가 발생했습니다."
+          : "즐겨찾기 추가 중 문제가 발생했습니다."
       );
     }
   };

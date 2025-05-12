@@ -13,6 +13,7 @@ import TabNavigator from "./src/navigators/TabNavigator";
 import AuthStack from "./src/navigators/AuthStack";
 import MyPageStack from "./src/navigators/MyPageStack";
 import QuizStack from "./src/navigators/QuizStack";
+import AlarmStack from "./src/navigators/AlarmStack";
 import { name as appName } from "./app.json";
 
 const Stack = createStackNavigator();
@@ -22,35 +23,34 @@ function App() {
 
   return (
     <AuthProvider>
-      <SafeAreaView style={styles.safeArea}>
-        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={isLoggedIn ? "TabNavigator" : "AuthStack"}
-          >
-            <Stack.Screen
-              name="AuthStack"
-              component={AuthStack}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="MyPageStack"
-              component={MyPageStack}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="QuizStack"
-              component={QuizStack}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="TabNavigator"
-              component={TabNavigator}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={isLoggedIn ? "TabNavigator" : "AuthStack"}
+        >
+          {/* AuthStack */}
+          <Stack.Screen
+            name="AuthStack"
+            component={AuthStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MyPageStack"
+            component={MyPageStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="QuizStack"
+            component={QuizStack}
+            options={{ headerShown: false }}
+          />
+          {/* TabNavigator */}
+          <Stack.Screen
+            name="TabNavigator"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </AuthProvider>
   );
 }

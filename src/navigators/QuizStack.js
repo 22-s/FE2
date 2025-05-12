@@ -1,22 +1,37 @@
 import React from "react";
+
 import { createStackNavigator } from "@react-navigation/stack";
+
 import CustomHeader from "../../CustomHeader.js";
 
 // Pages
+
 import QuizHome from "../pages/Home/QuizHome.js";
+
 import QuizCategory from "../pages/Quiz/QuizCategory.js";
+
 import QuizList from "../pages/Quiz/QuizList";
+
 import QuizDetail from "../pages/Quiz/QuizDetail";
-import QuizDetail2 from "../pages/Quiz/QuizDetail2.js";
+
 import AfterQuiz from "../pages/Quiz/AfterQuiz";
+
 import QuizLikeList from "../pages/Quiz/QuizLikeList.js";
+
 import QuizReviewList from "../pages/Quiz/QuizReviewList.js";
+
 import SearchQuizList from "../pages/Quiz/SearchQuizList.js";
+
 import TestStep1 from "../pages/Quiz/TestStep1";
+
 import TestStep2 from "../pages/Quiz/TestStep2";
+
 import TestDetail from "../pages/Quiz/TestDetail.js";
+
 import TestLoading from "../pages/Quiz/TestLoading.js";
+
 import TestResult from "../pages/Quiz/TestResult.js";
+
 import TestResultQuiz from "../pages/Quiz/TestResultQuiz.js";
 
 const Stack = createStackNavigator();
@@ -36,6 +51,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="QuizCategory"
       component={QuizCategory}
@@ -49,6 +65,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="QuizList"
       component={QuizList}
@@ -62,6 +79,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="QuizDetail"
       component={QuizDetail}
@@ -75,19 +93,7 @@ const QuizStack = () => (
         ),
       }}
     />
-    <Stack.Screen
-      name="QuizDetail2"
-      component={QuizDetail2}
-      options={{
-        header: ({ navigation }) => (
-          <CustomHeader
-            title="퀴즈 상세"
-            navigation={navigation}
-            routeName={"QuizDetail2"}
-          />
-        ),
-      }}
-    />
+
     <Stack.Screen
       name="AfterQuiz"
       component={AfterQuiz}
@@ -101,19 +107,21 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="QuizLikeList"
       component={QuizLikeList}
       options={{
         header: ({ navigation }) => (
           <CustomHeader
-            title="퀴즈 즐겨찾기기 리스트"
+            title="퀴즈 즐겨찾기 리스트"
             navigation={navigation}
             routeName={"QuizLikeList"}
           />
         ),
       }}
     />
+
     <Stack.Screen
       name="QuizReviewList"
       component={QuizReviewList}
@@ -127,6 +135,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="SearchQuizList"
       component={SearchQuizList}
@@ -140,6 +149,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="TestStep1"
       component={TestStep1}
@@ -153,6 +163,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="TestStep2"
       component={TestStep2}
@@ -166,6 +177,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="TestDetail"
       component={TestDetail}
@@ -179,6 +191,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="TestLoading"
       component={TestLoading}
@@ -192,6 +205,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="TestResult"
       component={TestResult}
@@ -205,6 +219,7 @@ const QuizStack = () => (
         ),
       }}
     />
+
     <Stack.Screen
       name="TestResultQuiz"
       component={TestResultQuiz}

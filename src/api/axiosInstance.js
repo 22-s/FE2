@@ -19,48 +19,36 @@ const refreshAccessToken = async () => {
       throw new Error("Refresh Token이 존재하지 않습니다.");
     }
 
-    const response = await axiosInstance.post("/api/user/refresh", {
-      refreshToken,
-    });
+    const response = await axios.post("/api/user/refresh", { refreshToken });
 
     const { accessToken, refreshToken: newRefreshToken } = response.data.result;
     await AsyncStorage.setItem("accessToken", accessToken);
     await AsyncStorage.setItem("refreshToken", newRefreshToken);
 
-    console.log("AccessToken 갱신 완료");
+    console.log("✅ AccessToken 갱신 완료");
     return accessToken;
   } catch (error) {
-    if (error.response) {
-      console.error("🔴 서버 응답 오류:", error.response.data);
-    } else if (error.request) {
-      console.error("🔴 요청 자체 실패:", error.request);
-    } else {
-      console.error("🔴 기타 오류:", error.message);
-    }
+    console.error("🔴 Refresh Token 실패:", error);
     throw error;
   }
 };
-// 요청 인터셉터: Authorization 헤더 추가
+
+// 요청 시 accessToken 삽입
 axiosInstance.interceptors.request.use(
   async (config) => {
-    try {
-      const token = await AsyncStorage.getItem("accessToken");
-      console.log("토큰 가져오기: ", token);
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    } catch (error) {
-      console.error("토큰 가져오기 실패:", error);
+    const token = await AsyncStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
+// 응답 시 에러 처리
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.error("응답 오류:", error.response);
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -70,7 +58,8 @@ axiosInstance.interceptors.response.use(
         const newAccessToken = await refreshAccessToken();
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        return axiosInstance(originalRequest);
+        // ✅ 여기서 기본 axios로 재요청 (interceptor 재탑승 방지)
+        return axios(originalRequest);
       } catch (refreshError) {
         await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
         return Promise.reject(refreshError);
