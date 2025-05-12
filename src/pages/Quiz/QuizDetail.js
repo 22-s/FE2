@@ -164,13 +164,16 @@ const QuizDetail = ({ route }) => {
         // setIsSubmit(true);
       }
     } catch (error) {
-      console.error("즐겨찾기 API 요청 중 오류가 발생했습니다:", error);
-      Alert.alert(
-        "오류",
-        bookmark
-          ? "즐겨찾기 해제 중 문제가 발생했습니다."
-          : "즐겨찾기 추가 중 문제가 발생했습니다."
-      );
+      // console.error("즐겨찾기 API 요청 중 오류가 발생했습니다:", error);
+      // Alert.alert(
+      //   "오류",
+      //   bookmark
+      //     ? "즐겨찾기 해제 중 문제가 발생했습니다."
+      //     : "즐겨찾기 추가 중 문제가 발생했습니다."
+      // );
+
+      //Alert 멘트 변경 
+      Alert.alert("이미 즐겨찾기 리스트에 추가되어 있습니다.");
     }
   };
 

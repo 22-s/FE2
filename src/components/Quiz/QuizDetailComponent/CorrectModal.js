@@ -54,13 +54,14 @@ const CorrectModal = ({
       }
       //setBookmark((prev) => !prev); // 상태 변경
     } catch (error) {
-      console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
-      Alert.alert(
-        "오류",
-        review
-          ? "즐겨찾기 해제 중 문제가 발생했습니다."
-          : "즐겨찾기 추가 중 문제가 발생했습니다."
-      );
+      // console.error("복습하기 API 요청 중 오류가 발생했습니다:", error);
+      // Alert.alert(
+      //   "오류",
+      //   review
+      //     ? "즐겨찾기 해제 중 문제가 발생했습니다."
+      //     : "즐겨찾기 추가 중 문제가 발생했습니다."
+      // );
+      Alert.alert("이미 즐겨찾기 리스트에 추가되어 있습니다.");
     }
   };
 
