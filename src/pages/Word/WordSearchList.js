@@ -4,8 +4,10 @@ import Toggle from "../../components/Word/Toggle";
 import WordSearchBar from "../../components/Home/WordSearchBar";
 import { get } from "../../api/request";
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigation } from "@react-navigation/native";
 
 const WordSearchList = ({ route }) => {
+  const navigation = useNavigation();
   const { searchText: routeSearchText } = route.params || {};
   const [searchText, setSearchText] = useState(routeSearchText || "");
   const [words, setWords] = useState([]);
@@ -18,24 +20,35 @@ const WordSearchList = ({ route }) => {
   const fetchWords = async (param) => {
     try {
       setLoading(true);
-
       const response = await axiosInstance.get(`/api/voca/search?keyword=${param}`);
-
-      if (response.isSuccess) {
-        setWords(response.result);
+  
+      const { isSuccess, result } = response.data;
+  
+      if (isSuccess) {
+        setWords(result);
+        if (result.length === 0) {
+          Alert.alert("검색 결과가 없습니다.", "이전 화면으로 돌아갑니다.");
+          navigation.goBack();
+        }
       } else {
-        Alert.alert("검색 결과가 없습니다. 다시 시도해주세요.");
+        Alert.alert("검색 결과가 없습니다.", "이전 화면으로 돌아갑니다.");
+        navigation.goBack();
       }
+  
+      console.log("📦 검색 결과:", result);
     } catch (error) {
+      console.error("❗ 오류:", error);
       if (error.response && error.response.status === 404) {
-        Alert.alert("검색 결과가 없습니다. 다시 시도해주세요.");
+        Alert.alert("검색 결과가 없습니다.", "이전 화면으로 돌아갑니다.");
+        navigation.goBack();
       } else {
-        console.error("단어 수집 중 오류 발생: ", error);
+        Alert.alert("오류 발생", "단어 데이터를 불러오는 중 문제가 발생했습니다.");
       }
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleSearch = (newSearchText) => {
     //검색 결과 처리
@@ -105,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   scrollContent: {
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     paddingBottom: 20,
   },
   searchBarContainer: {
