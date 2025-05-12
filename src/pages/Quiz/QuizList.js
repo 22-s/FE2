@@ -12,10 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import QuizListComponent from "../../components/Quiz/QuizListComponent/QuizComponent";
 import LockedQuizListComponent from "../../components/Quiz/QuizListComponent/LockedQuizListComponent";
 import axiosInstance from "../../api/axiosInstance";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-
-//const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
 
 const QuizList = ({ route }) => {
   const { category } = route.params;

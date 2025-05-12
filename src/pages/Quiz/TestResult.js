@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import Arrow_correct from "../../assets/images/TestStep/correctArrow.svg";
 import Arrow_incorrect from "../../assets/images/TestStep/incorrectArrow.svg";
@@ -15,8 +16,9 @@ import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-export default function TestStep1() {
+export default function TestResult() {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const [testResults, setTestResults] = useState([]);
@@ -28,16 +30,19 @@ export default function TestStep1() {
   useEffect(() => {
     const fetchTestResults = async () => {
       try {
+        setLoading(true);
         const response = await axiosInstance.get("/api/mockTest/result/all");
         if (response.data.isSuccess) {
           setTestResults(response.data.result);
-          setSelectedTest(response.data.result[response.data.result.length - 1]); // 최신 회차 선택
+          setSelectedTest(response.data.result[response.data.result.length - 1]);
           console.log(response.data.result);
         } else {
           Alert.alert("불러오기 실패", response.data.message);
         }
       } catch (err) {
         Alert.alert("오류 발생", "데이터를 불러오는 중 문제가 발생했습니다.");
+      } finally {
+        setLoading(false); 
       }
     };
   
@@ -50,6 +55,14 @@ export default function TestStep1() {
     attemptCount: test.attemptCount, 
     data: test
   }));
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFFFF" }}>
+        <ActivityIndicator size="large" color="#268AFF" />
+      </View>
+    );
+  }
 
   if (!selectedTest || testResults.length === 0) {
     return (
