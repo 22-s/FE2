@@ -30,19 +30,19 @@ const CustomHeader = ({ title, navigation, routeName }) => {
     }
   }, [routeName]);
 
-  const handleLogout = async () => {
-    try {
-      await axiosInstance.post("/api/user/signout");
+  // const handleLogout = async () => {
+  //   try {
+  //     await axiosInstance.post("/api/user/signout");
 
-      await AsyncStorage.removeItem("accessToken"); // 토큰 제거
-      logout(); // 상태 업데이트
-      Alert.alert("알림", "로그아웃되었습니다.");
-      navigation.replace("AuthStack");
-    } catch (error) {
-      console.error("로그아웃 실패:", error);
-      Alert.alert("오류", "로그아웃 중 문제가 발생했습니다.");
-    }
-  };
+  //     await AsyncStorage.removeItem("accessToken"); // 토큰 제거
+  //     logout(); // 상태 업데이트
+  //     Alert.alert("알림", "로그아웃되었습니다.");
+  //     navigation.replace("AuthStack");
+  //   } catch (error) {
+  //     console.error("로그아웃 실패:", error);
+  //     Alert.alert("오류", "로그아웃 중 문제가 발생했습니다.");
+  //   }
+  // };
 
   const handleAuthAction = () => {
     if (isLoggedIn) {
@@ -77,15 +77,24 @@ const CustomHeader = ({ title, navigation, routeName }) => {
         ) : (
           <TouchableOpacity
             onPress={() => {
-              if (routeName === "TestResult") {
-                navigation.navigate("QuizHome");
-              } else if (!isLogoVisible) {
-                navigation.goBack();
+              if (isLogoVisible) {
+                navigation.navigate("TabNavigator", {
+                  screen: "퀴즈",
+                  params: {
+                    screen: "QuizHome",
+                  },
+                });
+              } else {
+                if (routeName === "TestResult") {
+                  navigation.navigate("QuizHome");
+                } else {
+                  navigation.goBack();
+                }
               }
             }}
             style={{
-              width: 30,
-              height: 30,
+              width: 35,
+              height: 35,
               justifyContent: "center",
               alignItems: "center",
             }}
