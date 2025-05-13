@@ -36,11 +36,14 @@ export default function MannerList({ route }) {
       setLoading(true);
       let response;
       setData([]);
+      console.log("카테고리:", category);
+
+      const categoryInt = category ? parseInt(category, 10) : null;
 
       // 1. 카테고리 내 검색 결과 조회
-      if (category && searchText) {
+      if (categoryInt && searchText) {
         response = await axiosInstance.get(
-          `/api/manners/search/category?category=${category}&keyword=${searchText}`
+          `/api/manners/search/category?category=${categoryInt}&keyword=${searchText}`
         );
       }
       // 2. 카테고리별 매너 설명서 리스트 조회
