@@ -40,7 +40,7 @@ export default function MannerListBox({ item }) {
             </View>
             <View style={styles.textAreaGap} />
             <Text style={styles.content} numberOfLines={2} ellipsizeMode="tail">
-              {item.content}
+              {item.content || item.contentPreview}
             </Text>
           </View>
           <View>

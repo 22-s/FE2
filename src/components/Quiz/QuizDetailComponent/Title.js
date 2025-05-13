@@ -14,6 +14,7 @@ import axiosInstance from "../../../api/axiosInstance";
 
 const Title = ({ content, review, quizId, solved, isSubmit }) => {
   const navigation = useNavigation();
+  const [containerHeight, setContainerHeight] = useState(50);
 
   const handleReview = async () => {
     try {
@@ -40,16 +41,29 @@ const Title = ({ content, review, quizId, solved, isSubmit }) => {
     }
   };
 
+  const handleTextLayout = (e) => {
+    const { height } = e.nativeEvent.layout;
+    // 텍스트 높이에 따라 컨테이너 높이를 조정
+    if (height > 20) {
+      setContainerHeight(60); // 두 줄 이상
+    } else {
+      setContainerHeight(50); // 한 줄
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.contentArea}>
-        <ScrollView
+        <Text style={styles.text} onLayout={handleTextLayout}>
+          {content}
+        </Text>
+        {/* <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
           <Text style={styles.text}>{content}</Text>
-        </ScrollView>
+        </ScrollView> */}
         {/* 북마크 버튼 원하면 아래 주석 해제 */}
         {/* <TouchableOpacity onPress={handleReview}>
           {solved ? (

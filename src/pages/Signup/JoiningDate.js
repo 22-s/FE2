@@ -59,9 +59,9 @@ const JoiningDate = () => {
       setDateStatusMessage("입사일을 선택해주세요.");
       return;
     }
-  
+
     try {
-      const formattedDate = date.toISOString().split("T")[0]; 
+      const formattedDate = date.toISOString().split("T")[0];
 
       const response = fromLogin
         ? await axiosInstance.post("/api/user/join-date", {
@@ -70,7 +70,7 @@ const JoiningDate = () => {
         : await axiosInstance.patch("/api/user/join-date", {
             joinDate: formattedDate,
           });
-  
+
       if (response.data.isSuccess) {
         Alert.alert("입사일이 성공적으로 등록되었습니다.");
         navigation.navigate("TabNavigator", {
@@ -79,14 +79,16 @@ const JoiningDate = () => {
             screen: "QuizHome",
           },
         });
-        
       } else {
         showToast("입사일 등록에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
       console.log("입사일 등록 에러:", error);
       if (error.response) {
-        Alert.alert("서버 오류", error.response.data?.message || "에러 응답이 도착했습니다.");
+        Alert.alert(
+          "서버 오류",
+          error.response.data?.message || "에러 응답이 도착했습니다."
+        );
       } else if (error.request) {
         Alert.alert("네트워크 오류", "서버로부터 응답이 없습니다.");
       } else {
@@ -94,7 +96,6 @@ const JoiningDate = () => {
       }
     }
   };
-  
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -148,7 +149,10 @@ const JoiningDate = () => {
         <Text style={styles.errorText}>입사일을 선택해주세요.</Text>
       )}
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleSubmitJoiningDate}>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={handleSubmitJoiningDate}
+      >
         <Text style={styles.loginButtonText}>입사일 등록</Text>
       </TouchableOpacity>
     </SafeAreaView>

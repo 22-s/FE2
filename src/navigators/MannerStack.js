@@ -31,7 +31,7 @@ const MannerStack = () => (
       options={{
         header: ({ navigation }) => (
           <CustomHeader
-            title="매너 설명서"
+            title="매너 설명서 리스트"
             navigation={navigation}
             routeName={"MannerList"}
           />
@@ -57,7 +57,7 @@ const MannerStack = () => (
       options={{
         header: ({ navigation }) => (
           <CustomHeader
-            title="매너 설명서"
+            title="매너 설명서 즐겨찾기"
             navigation={navigation}
             routeName={"ReviewMannerList"}
           />
