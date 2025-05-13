@@ -23,9 +23,9 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function MannerList({ route }) {
-  const navigation = useNavigation(); 
-  const [data, setData] = useState([]); 
-  const [loading, setLoading] = useState(true); 
+  const navigation = useNavigation();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { category, searchText: routeSearchText } = route.params || {};
   const [searchText, setSearchText] = useState(routeSearchText || "");
 
@@ -50,7 +50,9 @@ export default function MannerList({ route }) {
       }
       // 3. 전체 검색 결과 조회
       else if (searchText) {
-        response = await axiosInstance.get(`/api/manners/search?keyword=${searchText}`);
+        response = await axiosInstance.get(
+          `/api/manners/search?keyword=${searchText}`
+        );
       }
       // 4. 둘 다 없을 때
       else {
@@ -64,9 +66,12 @@ export default function MannerList({ route }) {
         if (response.data.result.length === 0) {
           Alert.alert("검색 결과가 없습니다. 다시 시도해주세요.");
         }
-        setData(response.data.result); 
+        setData(response.data.result);
       } else {
-        console.error("API 호출 실패:", response?.data?.message || "응답 데이터 없음");
+        console.error(
+          "API 호출 실패:",
+          response?.data?.message || "응답 데이터 없음"
+        );
       }
     } catch (error) {
       console.error("데이터 로드 중 오류 발생:", error);
@@ -86,7 +91,7 @@ export default function MannerList({ route }) {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchMannerListData(); 
+      fetchMannerListData();
     }, [])
   );
 
