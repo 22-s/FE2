@@ -6,14 +6,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   Text,
-  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import QuizListComponent from "../../components/Quiz/QuizListComponent/QuizComponent";
 import LockedQuizListComponent from "../../components/Quiz/QuizListComponent/LockedQuizListComponent";
 import axiosInstance from "../../api/axiosInstance";
-
-//const CATEGORY_DEFAULT = "기본 매너"; // 카테고리 상수화
 
 const QuizLikeList = () => {
   const [quizzes, setQuizzes] = useState([]); // 퀴즈 데이터 저장

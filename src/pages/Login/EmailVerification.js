@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Animated,
   Alert,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../contexts/AuthContext";
@@ -68,13 +68,16 @@ const EmailVerification = () => {
       }
     } catch (error) {
       console.log("이메일 인증 오류:", error);
-  
+
       // 에러 상세 로그
       if (error.response) {
         console.log("응답 데이터:", error.response.data);
         console.log("응답 상태 코드:", error.response.status);
         console.log("응답 헤더:", error.response.headers);
-        Alert.alert("서버 오류", error.response.data?.message || "에러 응답이 도착했습니다.");
+        Alert.alert(
+          "서버 오류",
+          error.response.data?.message || "에러 응답이 도착했습니다."
+        );
       } else if (error.request) {
         console.log("요청은 되었지만 응답 없음:", error.request);
         Alert.alert("네트워크 오류", "서버로부터 응답이 없습니다.");
@@ -82,11 +85,10 @@ const EmailVerification = () => {
         console.log("기타 오류:", error.message);
         Alert.alert("오류 발생", error.message);
       }
-  
+
       setIsEmailMatch(false);
     }
   };
-  
 
   const CodeSendButton = async () => {
     try {
@@ -103,12 +105,15 @@ const EmailVerification = () => {
       }
     } catch (error) {
       console.log("인증번호 전송 에러:", error);
-  
+
       if (error.response) {
         console.log("응답 데이터:", error.response.data);
         console.log("응답 상태 코드:", error.response.status);
         console.log("응답 헤더:", error.response.headers);
-        Alert.alert("서버 오류", error.response.data?.message || "서버 응답 오류가 발생했습니다.");
+        Alert.alert(
+          "서버 오류",
+          error.response.data?.message || "서버 응답 오류가 발생했습니다."
+        );
       } else if (error.request) {
         console.log("요청은 되었지만 응답 없음:", error.request);
         Alert.alert("네트워크 오류", "서버로부터 응답이 없습니다.");
@@ -116,21 +121,17 @@ const EmailVerification = () => {
         console.log("기타 오류:", error.message);
         Alert.alert("에러 발생", error.message);
       }
-  
+
       setIsEmailMatch(false);
     }
   };
-  
-  
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
         이메일 인증을 위한 {"\n"}이메일을 입력해주세요.
       </Text>
-      <View
-        style={[styles.inputContainer, !isEmailMatch && styles.inputError]}
-      >
+      <View style={[styles.inputContainer, !isEmailMatch && styles.inputError]}>
         <TextInput
           value={email}
           onChangeText={setEmail}
@@ -144,7 +145,6 @@ const EmailVerification = () => {
           존재하지 않는 이메일입니다. 다시 확인해주세요.
         </Text>
       )}
-
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button1} onPress={EmailConfirmButton}>
@@ -227,7 +227,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginLeft: 35,
   },
-
 
   buttonContainer: {
     width: widthPercentage(80),
