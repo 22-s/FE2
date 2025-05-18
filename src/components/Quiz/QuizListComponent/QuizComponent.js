@@ -33,7 +33,7 @@ const QuizListComponent = ({
           return;
         }
       }
-  
+
       // 북마크 상태 토글 API 호출
       if (bookmark) {
         await axiosInstance.delete(`/api/quiz/${quizId}/review`);
@@ -52,7 +52,7 @@ const QuizListComponent = ({
           : "즐겨찾기 추가 중 문제가 발생했습니다."
       );
     }
-  };  
+  };
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -76,7 +76,7 @@ const QuizListComponent = ({
           {content}
         </Text>
         <TouchableOpacity onPress={handleReview}>
-          {(solved !== undefined && solved !== null) ? (
+          {solved !== undefined && solved !== null ? (
             solved ? (
               bookmark ? (
                 <BookmarkFilled style={styles.bookMarkButton} />
@@ -86,19 +86,16 @@ const QuizListComponent = ({
             ) : (
               <BookMarkButton style={styles.bookMarkButton} />
             )
-          ) : (
-            retriedToday !== null ? (
-              bookmark ? (
-                <BookmarkFilled style={styles.bookMarkButton} />
-              ) : (
-                <BookMarkButton style={styles.bookMarkButton} />
-              )
+          ) : retriedToday !== null ? (
+            bookmark ? (
+              <BookmarkFilled style={styles.bookMarkButton} />
             ) : (
               <BookMarkButton style={styles.bookMarkButton} />
             )
+          ) : (
+            <BookMarkButton style={styles.bookMarkButton} />
           )}
         </TouchableOpacity>
-
       </View>
     </TouchableOpacity>
   );

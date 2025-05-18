@@ -1,7 +1,7 @@
-import React from 'react';
-import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-const NextQuizButton = ({onPress}) => {
+const NextQuizButton = ({ onPress }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.text}>다음 문제</Text>
@@ -15,15 +15,15 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#268AFF',
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
+    borderColor: "#268AFF",
+    backgroundColor: "#FFF",
+    justifyContent: "center",
   },
   text: {
-    color: '#268AFF',
-    textAlign: 'center',
+    color: "#268AFF",
+    textAlign: "center",
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
 

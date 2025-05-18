@@ -8,12 +8,12 @@ import {
 } from "react-native";
 import LogoMan from "../../assets/images/Logo/logoMan.svg";
 import LogoText from "../../assets/images/Logo/logoWelcome.svg";
-import { useNavigation } from "@react-navigation/native"; 
+import { useNavigation } from "@react-navigation/native";
 
 const Welcome = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const handleGetStarted = () => {
-    navigation.navigate("Signup"); 
+    navigation.navigate("Signup");
   };
 
   return (
@@ -32,7 +32,10 @@ const Welcome = () => {
         <Text style={styles.primaryButtonText}>회원가입</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.secondaryButton} onPress={()=> navigation.navigate("Login")}>
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        onPress={() => navigation.navigate("Login")}
+      >
         <Text style={styles.secondaryButtonText}>로그인</Text>
       </TouchableOpacity>
     </SafeAreaView>

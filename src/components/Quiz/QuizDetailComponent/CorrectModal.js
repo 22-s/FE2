@@ -1,11 +1,8 @@
 import React from "react";
 import { Modal, View, StyleSheet, Text, Alert, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import NextQuizButton from "./button/NextQuizButton";
 import AddReviewButton from "./button/AddReviewButton";
 import XButton from "../../../assets/images/QuizDetail/XButton.svg";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import axiosInstance from "../../../api/axiosInstance";
 
 const CorrectModal = ({
@@ -20,22 +17,11 @@ const CorrectModal = ({
   firstQuizId,
   lastQuizId,
 }) => {
-  const navigation = useNavigation();
-  //const [bookmark, setBookmark] = useState(review);
-
   const handleClose = () => {
     setModalVisible(false);
   };
 
   const addReview = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
-
     // console.log(quizId);
     // console.log("요청 URL: ", `https://22s.store/api/quiz/${quizId}/review`);
     // console.log("Authorization 헤더: ", headers.Authorization);

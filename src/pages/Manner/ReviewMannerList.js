@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
   ScrollView,
-  Dimensions,
   TouchableOpacity,
   ActivityIndicator,
   Text,
@@ -12,18 +10,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
 import MannerSearchBar from "../../components/Home/MannerSearchBar";
-import { get } from "../../api/request";
 import axiosInstance from "../../api/axiosInstance";
-
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
-const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
-const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function ReviewMannerList() {
   const navigation = useNavigation();
-  const [reviewMannerList, setReviewMannerList] = useState([]); // API 데이터를 저장
+  const [reviewMannerList, setReviewMannerList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchReviewMannerData = async () => {

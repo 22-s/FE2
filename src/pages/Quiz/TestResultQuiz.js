@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Touchable, Alert, Text } from "react-native";
+import { View, StyleSheet, Alert, Text } from "react-native";
 import Title from "../../components/Quiz/QuizDetailComponent/Title";
 import Content from "../../components/Quiz/QuizDetailComponent/Content";
 import CommentaryModal from "../../components/Quiz/QuizDetailComponent/CommentaryModal";
@@ -14,13 +14,7 @@ import axiosInstance from "../../api/axiosInstance";
 
 const TestResultQuiz = ({ route }) => {
   const navigation = useNavigation();
-  const {
-    quizId,
-    quizzes,
-    firstQuizId,
-    lastQuizId,
-    correct
-  } = route.params;
+  const { quizId, quizzes, firstQuizId, lastQuizId, correct } = route.params;
   //const [ currentQuizId, setIsQuizId ] = useState(quizId);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -64,19 +58,18 @@ const TestResultQuiz = ({ route }) => {
   }, []);
 
   const nextQuiz = () => {
-   
-      if (currentIndex < quizzes.length - 1) {
-        const nextQuizId = quizzes[currentIndex + 1].quizId;
-        navigation.replace("TestResultQuiz", {
-          quizId: nextQuizId,
-          quizzes,
-          firstQuizId,
-          lastQuizId,
-          correct: quizzes[currentIndex + 1].correct,
-        });
-      } else {
-        Alert.alert("마지막 퀴즈입니다.");
-      }
+    if (currentIndex < quizzes.length - 1) {
+      const nextQuizId = quizzes[currentIndex + 1].quizId;
+      navigation.replace("TestResultQuiz", {
+        quizId: nextQuizId,
+        quizzes,
+        firstQuizId,
+        lastQuizId,
+        correct: quizzes[currentIndex + 1].correct,
+      });
+    } else {
+      Alert.alert("마지막 퀴즈입니다.");
+    }
   };
 
   const prevQuiz = () => {
@@ -129,11 +122,11 @@ const TestResultQuiz = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text style={styles.topText}>
-            {correct ? 
-              <Text style={{ color: '#81E381' }}>정답</Text>
-               : 
-              <Text style={{ color: '#FF7A67' }}>틀림</Text>
-            }
+          {correct ? (
+            <Text style={{ color: "#81E381" }}>정답</Text>
+          ) : (
+            <Text style={{ color: "#FF7A67" }}>틀림</Text>
+          )}
         </Text>
       </View>
       <View marginBottom={12}>
@@ -153,11 +146,10 @@ const TestResultQuiz = ({ route }) => {
         <NavButtonNext onPress={() => nextQuiz(quizId)} />
       </View>
 
-        <View style={styles.bottomContainer}>
-          <OpenModalButton onPress={openModal} />
-          <AddReviewButton onPress={addReview} />
-        </View>
-      
+      <View style={styles.bottomContainer}>
+        <OpenModalButton onPress={openModal} />
+        <AddReviewButton onPress={addReview} />
+      </View>
 
       <CommentaryModal
         content={quiz.description}
@@ -183,15 +175,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#F3F3F3",
   },
   topBar: {
-    width: '85%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: "85%",
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   topText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#303437'
+    fontWeight: "bold",
+    color: "#303437",
   },
   answer: {
     width: 360,

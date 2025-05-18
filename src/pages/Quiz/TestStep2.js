@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
-
 export default function TestStep2() {
   const navigation = useNavigation();
   const startTest = () => {
@@ -50,7 +49,10 @@ export default function TestStep2() {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button1} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.button1}
+          onPress={() => navigation.goBack()}
+        >
           <Text style={styles.Text1}>뒤로</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button2} onPress={startTest}>

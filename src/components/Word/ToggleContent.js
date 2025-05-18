@@ -1,7 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import Question from "../../assets/images/Word/question.svg";
-import Plane from "../../assets/images/Word/plane.png";
 
 // 받침 여부를 확인하는 함수
 const hasFinalConsonant = (term) => {

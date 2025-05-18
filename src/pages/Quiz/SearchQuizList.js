@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import QuizListComponent from "../../components/Quiz/QuizListComponent/QuizComponent";
 import LockedQuizListComponent from "../../components/Quiz/QuizListComponent/LockedQuizListComponent";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../api/axiosInstance";
 
@@ -23,19 +21,10 @@ const SearchQuizList = ({ route }) => {
   const [lastQuizId, setLastQuizId] = useState(null); // 마지막 퀴즈 ID
 
   const searchQuiz = async () => {
-    // const token = await AsyncStorage.getItem("accessToken");
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Accept: "application/json",
-    //   ...(token && { Authorization: `Bearer ${token}` }),
-    // };
-
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/api/quiz/search?keyword=${encodeURIComponent(
-          keyword
-        )}`
+        `/api/quiz/search?keyword=${encodeURIComponent(keyword)}`
       );
 
       if (response.data.isSuccess) {
@@ -48,7 +37,7 @@ const SearchQuizList = ({ route }) => {
           quizId: index + 1,
         }));
         setQuizzes(quizData); // 퀴즈 데이터 저장
-  
+
         if (quizData.length > 0) {
           setFirstQuizId(quizData[0].quizId); // 첫 번째 퀴즈 ID 저장
           setLastQuizId(quizData[quizData.length - 1].quizId); // 마지막 퀴즈 ID 저장
@@ -95,7 +84,10 @@ const SearchQuizList = ({ route }) => {
       <ScrollView>
         {quizzes.map((quiz) => {
           return quiz.locked ? (
-            <LockedQuizListComponent key={quiz.quizId} content={quiz.question} />
+            <LockedQuizListComponent
+              key={quiz.quizId}
+              content={quiz.question}
+            />
           ) : (
             <QuizListComponent
               key={quiz.quizId}
@@ -110,7 +102,6 @@ const SearchQuizList = ({ route }) => {
         })}
       </ScrollView>
     </View>
-    
   );
 };
 

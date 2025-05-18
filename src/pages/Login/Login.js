@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   SafeAreaView,
   Text,
@@ -14,8 +14,8 @@ import {
   login as KakaoLogin,
   loginWithKakaoTalk,
   loginWithKakaoAccount,
-} from '@react-native-seoul/kakao-login';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+} from "@react-native-seoul/kakao-login";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 // import {
 //   NaverLogin,
 //   getProfile,
@@ -24,7 +24,6 @@ import LogoText from "../../assets/images/Logo/logo2.svg";
 import EyeIcon1 from "../../assets/images/Logo/eye.svg";
 import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import { useNavigation } from "@react-navigation/native";
-import { post } from "../../api/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CookieManager from "@react-native-cookies/cookies";
 import { useAuth } from "../../contexts/AuthContext";
@@ -112,11 +111,10 @@ const LoginPage = () => {
     }
   };
 
-
   const handleKakaoLogin = async () => {
     try {
       let token;
-  
+
       // 1. 먼저 카카오톡 앱 로그인 시도
       try {
         token = await loginWithKakaoTalk();
@@ -125,21 +123,25 @@ const LoginPage = () => {
         // 2. 실패 시 카카오 계정 로그인으로 fallback
         token = await loginWithKakaoAccount();
       }
-  
+
       if (!token || !token.accessToken) {
         throw new Error("카카오 로그인 실패: accessToken 없음");
       }
-  
+
       const kakaoAccessToken = token.accessToken;
       console.log("✅ 카카오 accessToken:", kakaoAccessToken);
-  
+
       // 백엔드로 토큰 보내기
       const response = await axiosInstance.post(`/api/auth/kakao/login`, {
         accessToken: kakaoAccessToken,
       });
-      
+
       if (response.data.isSuccess) {
-        const { accessToken, refreshToken, new: isNewUser } = response.data.result;
+        const {
+          accessToken,
+          refreshToken,
+          new: isNewUser,
+        } = response.data.result;
         console.log("카카오 로그인 응답:", response.data.result);
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
@@ -164,7 +166,7 @@ const LoginPage = () => {
   // // 구글 로그인
   // useEffect(() => {
   //   GoogleSignin.configure({
-  //     scopes: ['profile', 'email'], 
+  //     scopes: ['profile', 'email'],
   //     webClientId: '846421192413-788b2a4ttarghk5ducafie8tuku6n3br.apps.googleusercontent.com',
   //     offlineAccess: true,
   //   });
@@ -174,32 +176,32 @@ const LoginPage = () => {
   //   try {
   //     await GoogleSignin.hasPlayServices();
   //     const userInfo = await GoogleSignin.signIn();
-  
+
   //     // 👉 이름 구분!
   //     const { idToken, accessToken: googleAccessToken } = await GoogleSignin.getTokens();
-  
+
   //     console.log("🪙 Google accessToken:", googleAccessToken);
-  
+
   //     // 백엔드로 전송할 때도 이름 명확하게
   //     const response = await axiosInstance.post(`/api/auth/google/login`, {
   //       accessToken: googleAccessToken,
   //     });
-  
+
   //     if (response.data.isSuccess) {
   //       const {
-  //         accessToken, 
+  //         accessToken,
   //         refreshToken,
   //         new: isNewUser,
   //       } = response.data.result;
-  
+
   //       console.log("Google 로그인 응답:", response.data.result);
-  
+
   //       // 저장도 명확하게
   //       await AsyncStorage.setItem("accessToken", accessToken);
   //       await AsyncStorage.setItem("refreshToken", refreshToken);
-  
+
   //       login();
-  
+
   //       if (isNewUser) {
   //         navigation.navigate("AuthStack", {
   //           screen: "JoiningDate",
@@ -215,9 +217,7 @@ const LoginPage = () => {
   //     console.error("❌ Google 로그인 실패:", error);
   //     Alert.alert("Google 로그인 오류", "로그인 중 오류가 발생했습니다.");
   //   }
-  // };  
-  
-  
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -290,10 +290,10 @@ const LoginPage = () => {
             <KakaoButton />
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={handleNaverLogin}> */}
-            {/* <NaverButton /> */}
+          {/* <NaverButton /> */}
           {/* </TouchableOpacity> */}
           {/* <TouchableOpacity onPress={handleGoogleLogin}> */}
-            {/* <GoogleButton /> */}
+          {/* <GoogleButton /> */}
           {/* </TouchableOpacity> */}
           {/* <AppleButton /> */}
         </View>

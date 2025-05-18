@@ -6,7 +6,8 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import Arrow_correct from "../../assets/images/TestStep/correctArrow.svg";
 import Arrow_incorrect from "../../assets/images/TestStep/incorrectArrow.svg";
@@ -24,9 +25,10 @@ export default function TestResult() {
   const [testResults, setTestResults] = useState([]);
   const [selectedTest, setSelectedTest] = useState(null);
 
-  const selectedResult = testResults.find(test => test.attemptCount === selectedTest);
+  const selectedResult = testResults.find(
+    (test) => test.attemptCount === selectedTest
+  );
 
-  
   useEffect(() => {
     const fetchTestResults = async () => {
       try {
@@ -34,7 +36,9 @@ export default function TestResult() {
         const response = await axiosInstance.get("/api/mockTest/result/all");
         if (response.data.isSuccess) {
           setTestResults(response.data.result);
-          setSelectedTest(response.data.result[response.data.result.length - 1]);
+          setSelectedTest(
+            response.data.result[response.data.result.length - 1]
+          );
           console.log(response.data.result);
         } else {
           Alert.alert("불러오기 실패", response.data.message);
@@ -42,23 +46,30 @@ export default function TestResult() {
       } catch (err) {
         Alert.alert("오류 발생", "데이터를 불러오는 중 문제가 발생했습니다.");
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
-  
+
     fetchTestResults();
   }, []);
 
-  const mockTests = testResults.map(test => ({
+  const mockTests = testResults.map((test) => ({
     id: test.mockTestId,
     label: `${test.attemptCount}회`,
-    attemptCount: test.attemptCount, 
-    data: test
+    attemptCount: test.attemptCount,
+    data: test,
   }));
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFFFF" }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#FFFFFF",
+        }}
+      >
         <ActivityIndicator size="large" color="#268AFF" />
       </View>
     );
@@ -70,14 +81,16 @@ export default function TestResult() {
         <Text style={styles.emptyText}>모의고사에 응시한 이력이 없습니다.</Text>
       </View>
     );
-  }  
+  }
 
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
         {/* 헤더 */}
         <View style={styles.headerRow}>
-          <Text style={styles.title}>{selectedTest?.attemptCount}회차 모의고사 결과</Text>
+          <Text style={styles.title}>
+            {selectedTest?.attemptCount}회차 모의고사 결과
+          </Text>
           <View>
             <TouchableOpacity
               style={styles.dropdownButton}
@@ -91,7 +104,9 @@ export default function TestResult() {
                   <TouchableOpacity
                     key={test.mockTestId}
                     onPress={() => {
-                      const selected = testResults.find(t => t.mockTestId === test.id); // ✔️ 전체 객체 찾기
+                      const selected = testResults.find(
+                        (t) => t.mockTestId === test.id
+                      ); // ✔️ 전체 객체 찾기
                       setSelectedTest(selected);
                       setDropdownVisible(false);
                     }}
@@ -104,12 +119,14 @@ export default function TestResult() {
             )}
           </View>
         </View>
-  
+
         {/* 점수, 등수 */}
         <View style={styles.circleWrapper}>
           <Text style={styles.score}>{selectedTest?.score ?? 0}</Text>
           <Text style={styles.change}>
-            {selectedTest?.scoreChange >= 0 ? `+${selectedTest?.scoreChange}` : selectedTest?.scoreChange}
+            {selectedTest?.scoreChange >= 0
+              ? `+${selectedTest?.scoreChange}`
+              : selectedTest?.scoreChange}
           </Text>
         </View>
         <Text style={styles.description}>
@@ -119,11 +136,11 @@ export default function TestResult() {
               : selectedTest?.score >= 60
               ? "좋아요!"
               : "조금 아쉬워요!"
-          } ${selectedTest?.score ?? 0}점을 받으셨네요.\n이전보다 ${selectedTest?.scoreChange ?? 0}점 ${
-            selectedTest?.scoreChange >= 0 ? "상승" : "하락"
-          }했어요.`}
+          } ${selectedTest?.score ?? 0}점을 받으셨네요.\n이전보다 ${
+            selectedTest?.scoreChange ?? 0
+          }점 ${selectedTest?.scoreChange >= 0 ? "상승" : "하락"}했어요.`}
         </Text>
-  
+
         <View style={styles.circleWrapper}>
           <Text style={styles.rank}>
             {(selectedTest?.topPercentile ?? 0).toFixed(1)}%
@@ -140,11 +157,12 @@ export default function TestResult() {
           {selectedTest?.topPercentileChange >= 0 ? " 상승" : " 하락"}했어요.
         </Text>
 
-  
         {/* 세부 결과 */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>세부 결과</Text>
-          <Text style={styles.detailSubtitle}>세부 항목 별 맞은 문제의 개수를 확인해보세요.</Text>
+          <Text style={styles.detailSubtitle}>
+            세부 항목 별 맞은 문제의 개수를 확인해보세요.
+          </Text>
           <View style={styles.detailBox}>
             {selectedTest?.categoryResults?.map((item, index) => (
               <View key={index} style={styles.barArea}>
@@ -154,28 +172,44 @@ export default function TestResult() {
                     <View
                       style={[
                         styles.barFill,
-                        { width: `${(item.correctCount / item.totalCount) * 100}%` },
+                        {
+                          width: `${
+                            (item.correctCount / item.totalCount) * 100
+                          }%`,
+                        },
                       ]}
                     />
                   </View>
-                  <Text style={styles.barScore}>{item.correctCount}/{item.totalCount}</Text>
+                  <Text style={styles.barScore}>
+                    {item.correctCount}/{item.totalCount}
+                  </Text>
                 </View>
               </View>
             ))}
           </View>
         </View>
-  
+
         {/* 전체 문제 */}
         <View style={styles.detailSection}>
           <Text style={styles.detailTitle}>전체 문제</Text>
-          <Text style={styles.detailSubtitle}>모의고사 문제를 확인하고 복습해보세요!</Text>
+          <Text style={styles.detailSubtitle}>
+            모의고사 문제를 확인하고 복습해보세요!
+          </Text>
           {selectedTest?.questionResults?.map((q, index) => (
             <View
               key={q.quizId}
-              style={[styles.questionBox, q.correct ? styles.correctBox : styles.incorrectBox]}
+              style={[
+                styles.questionBox,
+                q.correct ? styles.correctBox : styles.incorrectBox,
+              ]}
             >
               <View style={styles.questionHeader}>
-                <Text style={[styles.categoryTag, q.correct ? styles.correctTag : styles.incorrectTag]}>
+                <Text
+                  style={[
+                    styles.categoryTag,
+                    q.correct ? styles.correctTag : styles.incorrectTag,
+                  ]}
+                >
                   {q.category}
                 </Text>
                 <TouchableOpacity
@@ -185,22 +219,39 @@ export default function TestResult() {
                       quizId: q.quizId,
                       quizzes: selectedTest.questionResults,
                       firstQuizId: selectedTest.questionResults[0].quizId,
-                      lastQuizId: selectedTest.questionResults[selectedTest.questionResults.length - 1].quizId,
-                      correct: q.correct
+                      lastQuizId:
+                        selectedTest.questionResults[
+                          selectedTest.questionResults.length - 1
+                        ].quizId,
+                      correct: q.correct,
                     });
                   }}
                 >
-                  <Text style={[styles.viewText, q.correct ? styles.correctView : styles.incorrectView]}>
+                  <Text
+                    style={[
+                      styles.viewText,
+                      q.correct ? styles.correctView : styles.incorrectView,
+                    ]}
+                  >
                     문제 보러가기
                   </Text>
                   {q.correct ? <Arrow_correct /> : <Arrow_incorrect />}
                 </TouchableOpacity>
               </View>
               <View style={styles.questionLowBox}>
-                <Text style={[styles.questionNumber, q.correct ? styles.correctNumber : styles.incorrectNumber]}>
+                <Text
+                  style={[
+                    styles.questionNumber,
+                    q.correct ? styles.correctNumber : styles.incorrectNumber,
+                  ]}
+                >
                   {index + 1}
                 </Text>
-                <Text style={styles.questionText} numberOfLines={1} ellipsizeMode="tail">
+                <Text
+                  style={styles.questionText}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
                   {q.question}
                 </Text>
               </View>
@@ -241,7 +292,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   dropdownMenu: {
-    width: '100%',
+    width: "100%",
     alignItems: "center",
     position: "absolute",
     top: 35,
@@ -255,7 +306,7 @@ const styles = StyleSheet.create({
     elevation: 30,
     zIndex: 10,
   },
-  
+
   dropdownItem: {
     padding: 10,
   },

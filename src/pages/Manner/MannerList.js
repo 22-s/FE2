@@ -9,21 +9,11 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import MannerListBox from "../../components/Manner/MannerListBox";
-import SearchBar from "../../components/Home/searchBarQuiz";
 import MannerSearchBar from "../../components/Home/MannerSearchBar";
-import { get } from "../../api/request";
 import axiosInstance from "../../api/axiosInstance";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
-const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
-const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
-
 export default function MannerList({ route }) {
-  const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { category, searchText: routeSearchText } = route.params || {};

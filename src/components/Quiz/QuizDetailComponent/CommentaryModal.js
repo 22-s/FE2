@@ -19,21 +19,11 @@ const CommentaryModal = ({
   firstQuizId,
   lastQuizId,
 }) => {
-  const navigation = useNavigation();
-  //const [bookmark, setBookmark] = useState(review);
-
   const handleClose = () => {
     setModalVisible(false);
   };
 
   const addReview = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log("토큰이당: " + token);
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
     try {
       if (review) {
         Alert.alert("이미 복습리스트에 추가되어 있습니다.");
@@ -73,14 +63,7 @@ const CommentaryModal = ({
             <XButton width={17} height={17} onPress={handleClose} />
           </View>
           <View style={styles.modalTitle}>
-            <Text
-              style={[
-                styles.titleText,
-                { color: "#268AFF" },
-              ]}
-            >
-              해설
-            </Text>
+            <Text style={[styles.titleText, { color: "#268AFF" }]}>해설</Text>
           </View>
           <ScrollView
             style={styles.modalContent}

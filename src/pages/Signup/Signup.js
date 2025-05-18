@@ -7,12 +7,13 @@ import {
   TextInput,
   TouchableOpacity,
   Animated,
+  Alert,
 } from "react-native";
 import {
   login as KakaoLogin,
   loginWithKakaoTalk,
   loginWithKakaoAccount,
-} from '@react-native-seoul/kakao-login';
+} from "@react-native-seoul/kakao-login";
 import { useAuth } from "../../contexts/AuthContext";
 import DatePicker from "react-native-date-picker";
 import LogoText from "../../assets/images/Logo/logo2.svg";
@@ -30,7 +31,6 @@ import NaverButton from "../../assets/images/Login/naverButton.svg";
 import GoogleButton from "../../assets/images/Login/googleButton.svg";
 import AppleButton from "../../assets/images/Login/appleButton.svg";
 import { useNavigation } from "@react-navigation/native";
-import { post } from "../../api/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CookieManager from "@react-native-cookies/cookies";
 import axiosInstance from "../../api/axiosInstance";
@@ -182,7 +182,7 @@ const Signup = () => {
   const handleKakaoLogin = async () => {
     try {
       let token;
-  
+
       // 1. 먼저 카카오톡 앱 로그인 시도
       try {
         token = await loginWithKakaoTalk();
@@ -191,19 +191,19 @@ const Signup = () => {
         // 2. 실패 시 카카오 계정 로그인으로 fallback
         token = await loginWithKakaoAccount();
       }
-  
+
       if (!token || !token.accessToken) {
         throw new Error("카카오 로그인 실패: accessToken 없음");
       }
-  
+
       const kakaoAccessToken = token.accessToken;
       console.log("✅ 카카오 accessToken:", kakaoAccessToken);
-  
+
       // 백엔드로 토큰 보내기
       const response = await axiosInstance.post(`/api/auth/kakao/login`, {
         accessToken: kakaoAccessToken,
       });
-      
+
       if (response.data.isSuccess) {
         const { accessToken, refreshToken } = response.data.result;
         await AsyncStorage.setItem("accessToken", accessToken);
@@ -418,7 +418,7 @@ const Signup = () => {
             <KakaoButton />
           </TouchableOpacity>
           {/* <NaverButton /> */}
-          { /* <GoogleButton />*/ }
+          {/* <GoogleButton />*/}
           {/* <AppleButton /> */}
         </View>
       </View>
@@ -492,7 +492,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 12,
     color: "#4D678C",
-    fontSize: 16,
     fontWeight: "bold",
   },
   errorText: {

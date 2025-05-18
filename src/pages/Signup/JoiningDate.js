@@ -5,18 +5,12 @@ import {
   Text,
   StyleSheet,
   View,
-  TextInput,
   TouchableOpacity,
   Animated,
   Alert,
 } from "react-native";
 import DatePicker from "react-native-date-picker";
-import EyeIcon1 from "../../assets/images/Logo/eye.svg";
-import EyeIcon2 from "../../assets/images/Logo/eye2.svg";
 import { useNavigation } from "@react-navigation/native";
-import { post } from "../../api/request";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import CookieManager from "@react-native-cookies/cookies";
 import { useAuth } from "../../contexts/AuthContext";
 import axiosInstance from "../../api/axiosInstance";
 import DateIcon from "../../assets/images/Logo/date.svg";
@@ -95,12 +89,6 @@ const JoiningDate = () => {
         Alert.alert("오류 발생", error.message);
       }
     }
-  };
-
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    // setShowDatePicker(false);
-    setDate(currentDate);
   };
 
   return (

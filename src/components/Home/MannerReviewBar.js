@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  Dimensions,
-  Image,
-  TextInput,
-} from "react-native";
+import React from "react";
+import { View, StyleSheet, Text, Dimensions } from "react-native";
 import Star from "../../assets/images/Home/star.svg";
 import Arrow from "../../assets/images/Home/arrow_yellow.svg";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -20,8 +11,6 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function MannerReviewBar({ onPress }) {
-  const navigation = useNavigation();
-
   return (
     <TouchableOpacity style={styles.reviewBox} onPress={onPress}>
       <View style={{ flexDirection: "row" }}>

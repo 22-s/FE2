@@ -1,13 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  Dimensions,
-  Image,
-  TextInput,
-} from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, Dimensions, TextInput } from "react-native";
 import Lighting from "../../assets/images/Logo/lighting.svg";
 import Searching from "../../assets/images/Home/search.svg";
 import { useNavigation } from "@react-navigation/native";
@@ -19,7 +11,6 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 const heightPercentage = (percentage) => (windowHeight * percentage) / 100;
 
 export default function WordSearchBar({ onSearch }) {
-  const navigation = useNavigation();
   const [searchText, setSearchText] = useState("");
 
   const handleSearchSubmit = async () => {

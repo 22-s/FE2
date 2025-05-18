@@ -5,7 +5,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -71,17 +70,15 @@ const styles = StyleSheet.create({
   contentBox: {
     width: "95%",
     height: widthPercentage(20),
-    // backgroundColor: "lightgreen",
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: -4,
-    //marginTop: 25,
   },
   imageContainer: {
     width: widthPercentage(16),
     height: widthPercentage(16),
     borderRadius: 10,
-    overflow: "hidden", // 내부 이미지가 컨테이너 경계를 넘어서지 않도록 함
+    overflow: "hidden",
     backgroundColor: "pink",
   },
   image: {
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    resizeMode: "cover", // or 'stretch' or 'contain'
+    resizeMode: "cover",
   },
   textArea: {
     width: widthPercentage(66),

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Text, Dimensions, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  Text,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import Title from "../../components/Quiz/QuizDetailComponent/Title";
 import Content from "../../components/Quiz/QuizDetailComponent/Content";
 import O from "../../assets/images/QuizDetail/O.svg";
@@ -16,7 +23,7 @@ const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
 const TestDetail = ({ route }) => {
   const navigation = useNavigation();
-//   const { mockTestId } = route.params;
+  //   const { mockTestId } = route.params;
 
   const [quizzes, setQuizzes] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -32,12 +39,14 @@ const TestDetail = ({ route }) => {
   const [answers, setAnswers] = useState([]);
   const [mockTestId, setMockTestId] = useState(null);
   const currentQuiz = quizzes[currentIndex];
-  const currentSelectedAnswer = answers.find(a => a.quizId === currentQuiz.quizId)?.selectedAnswer;
+  const currentSelectedAnswer = answers.find(
+    (a) => a.quizId === currentQuiz.quizId
+  )?.selectedAnswer;
 
   // ✅ 타이머 시작
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
           Alert.alert("시간 종료", "시간이 종료되어 자동으로 제출됩니다.");
@@ -62,17 +71,18 @@ const TestDetail = ({ route }) => {
   }, []);
 
   const formatTime = (seconds) => {
-    const min = Math.floor(seconds / 60).toString().padStart(1, '0');
-    const sec = (seconds % 60).toString().padStart(2, '0');
+    const min = Math.floor(seconds / 60)
+      .toString()
+      .padStart(1, "0");
+    const sec = (seconds % 60).toString().padStart(2, "0");
     return `${min}:${sec}`;
   };
-
 
   const fetchMockTest = async () => {
     try {
       const response = await axiosInstance.post(`/api/mockTest/start`);
       console.log("📦 응답 데이터:", response.data);
-  
+
       if (response.data.isSuccess) {
         setQuizzes(response.data.result.quizzes);
         setMockTestId(response.data.result.mockTestId);
@@ -83,7 +93,7 @@ const TestDetail = ({ route }) => {
       }
     } catch (error) {
       console.error("❗ 요청 중 오류 발생:", error);
-  
+
       // 더 자세한 정보 로그 출력
       if (error.response) {
         console.error("🔍 에러 응답 데이터:", error.response.data);
@@ -99,13 +109,12 @@ const TestDetail = ({ route }) => {
       }
     }
   };
-  
 
   const submitAnswer = (quizId, selectedAnswer) => {
     setIsSubmit(true);
     setAnswerResult({ quizId, selectedAnswer });
     console.log("선택한 답안:", selectedAnswer);
-  
+
     // ✅ 기존 선택 제거 후 새 선택 추가
     setAnswers((prev) => {
       const filtered = prev.filter((a) => a.quizId !== quizId);
@@ -117,7 +126,7 @@ const TestDetail = ({ route }) => {
     const unanswered = quizzes.filter(
       (q) => !answers.find((a) => a.quizId === q.quizId)
     );
-  
+
     if (unanswered.length > 0) {
       Alert.alert(
         "확인되지 않은 문제 있음",
@@ -140,13 +149,16 @@ const TestDetail = ({ route }) => {
       ]);
     }
   };
-  
+
   const postSubmit = async () => {
     try {
-      const response = await axiosInstance.post(`/api/mockTest/${mockTestId}/submit`, {
-        mockTestId,
-        answers,
-      });
+      const response = await axiosInstance.post(
+        `/api/mockTest/${mockTestId}/submit`,
+        {
+          mockTestId,
+          answers,
+        }
+      );
       if (response.data.isSuccess) {
         Alert.alert("제출 완료", "모의고사가 제출되었습니다!");
         navigation.replace("TestLoading");
@@ -157,7 +169,6 @@ const TestDetail = ({ route }) => {
       Alert.alert("오류", "제출 중 문제가 발생했습니다.");
     }
   };
-  
 
   const nextQuiz = () => {
     if (currentIndex < quizzes.length - 1) {
@@ -181,18 +192,29 @@ const TestDetail = ({ route }) => {
     fetchMockTest();
   }, []);
 
-  if (quizzes.length === 0 || !currentQuiz) return null;
+  if (quizzes.length === 0 || !currentQuiz) {
+    return null;
+  }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <View style={styles.topBar}>
         <Text style={styles.topText}>
-            <Text style={{ color: '#000' }}>문제: </Text>
-            <Text style={{ color: '#70A0FF' }}>{currentIndex + 1}/{quizzes.length}</Text>
+          <Text style={{ color: "#000" }}>문제: </Text>
+          <Text style={{ color: "#70A0FF" }}>
+            {currentIndex + 1}/{quizzes.length}
+          </Text>
         </Text>
         <Text style={styles.topText}>
-            <Text style={{ color: timeLeft <= 60 ? '#FF2626' : '#000' }}>시간: </Text>
-            <Text style={{ color: timeLeft <= 60 ? '#FF2626' : '#70A0FF' }}>{formatTime(timeLeft)}</Text>
+          <Text style={{ color: timeLeft <= 60 ? "#FF2626" : "#000" }}>
+            시간:{" "}
+          </Text>
+          <Text style={{ color: timeLeft <= 60 ? "#FF2626" : "#70A0FF" }}>
+            {formatTime(timeLeft)}
+          </Text>
         </Text>
       </View>
 
@@ -208,30 +230,32 @@ const TestDetail = ({ route }) => {
         <NavButtonNext onPress={nextQuiz} />
       </View>
 
-        <View style={styles.answer}>
-            <TouchableOpacity onPress={() => submitAnswer(currentQuiz.quizId, "O")}>
-                {currentSelectedAnswer === "O" ? (
-                <Check width={165} height={75} />
-                ) : (
-                <O width={165} height={75} />
-                )}
-            </TouchableOpacity>
+      <View style={styles.answer}>
+        <TouchableOpacity onPress={() => submitAnswer(currentQuiz.quizId, "O")}>
+          {currentSelectedAnswer === "O" ? (
+            <Check width={165} height={75} />
+          ) : (
+            <O width={165} height={75} />
+          )}
+        </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => submitAnswer(currentQuiz.quizId, "X")}>
-                {currentSelectedAnswer === "X" ? (
-                <Check width={165} height={75} />
-                ) : (
-                <X width={165} height={75} />
-                )}
-            </TouchableOpacity>
-        </View>
-
-      <View style={styles.buttonArea}>
-        <TouchableOpacity onPress={handleSubmitMockTest} style={styles.submitButton}>
-            <Text style={styles.submitText}>제출하기</Text>
+        <TouchableOpacity onPress={() => submitAnswer(currentQuiz.quizId, "X")}>
+          {currentSelectedAnswer === "X" ? (
+            <Check width={165} height={75} />
+          ) : (
+            <X width={165} height={75} />
+          )}
         </TouchableOpacity>
       </View>
 
+      <View style={styles.buttonArea}>
+        <TouchableOpacity
+          onPress={handleSubmitMockTest}
+          style={styles.submitButton}
+        >
+          <Text style={styles.submitText}>제출하기</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -244,18 +268,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "center",
     alignItems: "center",
-  },  
+  },
   topBar: {
-    width: '85%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: "85%",
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 16,
     marginTop: 20,
   },
   topText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#303437'
+    fontWeight: "bold",
+    color: "#303437",
   },
   answer: {
     width: 360,
@@ -285,14 +309,13 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-end", 
+    alignSelf: "flex-end",
   },
   submitText: {
     color: "#268AFF",
     fontSize: 14,
     fontWeight: "600",
   },
-  
 });
 
 export default TestDetail;

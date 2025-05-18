@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Dimensions,
   ActivityIndicator,
   Alert,
 } from "react-native";
@@ -18,8 +17,6 @@ import TestBox from "../../components/Home/TestBox";
 import QuizList from "../../components/Home/quizList";
 import LockQuizList from "../../components/Home/LockQuizList";
 import axiosInstance from "../../api/axiosInstance";
-
-const windowWidth = Dimensions.get("window").width;
 
 export default function QuizHome() {
   const navigation = useNavigation();
@@ -96,10 +93,10 @@ export default function QuizHome() {
   };
 
   useFocusEffect(
-      React.useCallback(() => {
-        fetchMainInfo();
-      }, [])
-    );
+    React.useCallback(() => {
+      fetchMainInfo();
+    }, [])
+  );
 
   if (loading) {
     return (

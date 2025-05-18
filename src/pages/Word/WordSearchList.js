@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import Toggle from "../../components/Word/Toggle";
 import WordSearchBar from "../../components/Home/WordSearchBar";
-import { get } from "../../api/request";
 import axiosInstance from "../../api/axiosInstance";
 import { useNavigation } from "@react-navigation/native";
 
@@ -20,10 +19,12 @@ const WordSearchList = ({ route }) => {
   const fetchWords = async (param) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/api/voca/search?keyword=${param}`);
-  
+      const response = await axiosInstance.get(
+        `/api/voca/search?keyword=${param}`
+      );
+
       const { isSuccess, result } = response.data;
-  
+
       if (isSuccess) {
         setWords(result);
         if (result.length === 0) {
@@ -34,7 +35,7 @@ const WordSearchList = ({ route }) => {
         Alert.alert("검색 결과가 없습니다.", "이전 화면으로 돌아갑니다.");
         navigation.goBack();
       }
-  
+
       console.log("📦 검색 결과:", result);
     } catch (error) {
       console.error("❗ 오류:", error);
@@ -42,13 +43,15 @@ const WordSearchList = ({ route }) => {
         Alert.alert("검색 결과가 없습니다.", "이전 화면으로 돌아갑니다.");
         navigation.goBack();
       } else {
-        Alert.alert("오류 발생", "단어 데이터를 불러오는 중 문제가 발생했습니다.");
+        Alert.alert(
+          "오류 발생",
+          "단어 데이터를 불러오는 중 문제가 발생했습니다."
+        );
       }
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleSearch = (newSearchText) => {
     //검색 결과 처리

@@ -8,11 +8,9 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import BuizContentsListBox from "../../components/BuizContents/BuizContentsListBox";
 import StarFull from "../../assets/images/Manner/bigStar_full.svg";
 import StarEmpty from "../../assets/images/Manner/bigStar_empty.svg";
 import { Image } from "react-native";
-import { get, post, deleteRequest } from "../../api/request";
 import axiosInstance from "../../api/axiosInstance";
 
 const windowWidth = Dimensions.get("window").width;
@@ -48,8 +46,10 @@ export default function MannerContent({ route }) {
   const addMannerLikes = async () => {
     try {
       console.log(item.mannerId);
-      const response = await axiosInstance.post(`/api/manners/likes/${item.mannerId}`);
-      console.log("야야야"+response.isSuccess);
+      const response = await axiosInstance.post(
+        `/api/manners/likes/${item.mannerId}`
+      );
+      console.log("야야야" + response.isSuccess);
       if (response.data.isSuccess) {
         Alert.alert("즐겨찾기에 추가되었습니다.");
         return true;
@@ -66,7 +66,9 @@ export default function MannerContent({ route }) {
   const removeMannerLikes = async () => {
     try {
       console.log(item.mannerId);
-      const response = await axiosInstance.delete(`/api/manners/likes/${item.mannerId}`);
+      const response = await axiosInstance.delete(
+        `/api/manners/likes/${item.mannerId}`
+      );
       if (response.data.isSuccess) {
         Alert.alert("즐겨찾기에서 삭제되었습니다.");
         return true;
@@ -84,11 +86,15 @@ export default function MannerContent({ route }) {
     if (isStarFull) {
       //즐겨찾기 삭제
       const isSuccess = await removeMannerLikes();
-      if (isSuccess) setIsStarFull(false);
+      if (isSuccess) {
+        setIsStarFull(false);
+      }
     } else {
       //즐겨찾기 추가
       const isSuccess = await addMannerLikes();
-      if (isSuccess) setIsStarFull(true);
+      if (isSuccess) {
+        setIsStarFull(true);
+      }
     }
   };
 
@@ -99,7 +105,7 @@ export default function MannerContent({ route }) {
           source={{
             uri: item.imageUrl,
           }}
-          style={styles.imageContainer} 
+          style={styles.imageContainer}
         />
         <View style={styles.categoryBox}>
           <Text style={styles.categoryText}>{item.category}</Text>

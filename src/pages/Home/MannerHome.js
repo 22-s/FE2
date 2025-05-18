@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Dimensions, Text } from "react-native";
+import { View, StyleSheet, ScrollView, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Navigation hook
 import MannerSearchBar from "../../components/Home/MannerSearchBar";
 import MannerReviewBar from "../../components/Home/MannerReviewBar";
@@ -11,8 +11,6 @@ import Pen from "../../assets/images/Home/pen.svg";
 import Outfit from "../../assets/images/Home/outfit.svg";
 import Meeting from "../../assets/images/Home/meeting.svg";
 import TitleBar from "../../components/Home/titleBar";
-
-const windowWidth = Dimensions.get("window").width;
 
 export default function MannerHome() {
   const navigation = useNavigation();
@@ -28,7 +26,6 @@ export default function MannerHome() {
   };
 
   const handleClickReviewBox = () => {
-    console.log("ㅇㅇㅇㅇ");
     navigation.navigate("ReviewMannerList");
   };
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import WordSearchBar from "../../components/Home/WordSearchBar"
+import { View, StyleSheet, ScrollView } from "react-native";
+import WordSearchBar from "../../components/Home/WordSearchBar";
 import BookmarkBar from "../../components/Home/bookmarkBar";
 import CategoryBox from "../../components/Home/categoryBox";
 import Accounting from "../../assets/images/Home/accounting.svg";
@@ -10,8 +10,6 @@ import HR from "../../assets/images/Home/hr.svg";
 import Captain from "../../assets/images/Home/captain.svg";
 import Negotiate from "../../assets/images/Home/negotiate.svg";
 import { useNavigation } from "@react-navigation/native";
-
-const windowWidth = Dimensions.get("window").width;
 
 export default function WordHome() {
   const navigation = useNavigation(); // Access navigation object

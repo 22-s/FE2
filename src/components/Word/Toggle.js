@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import TogglePic from "../../assets/images/Word/오른쪽세모.svg";
 import ToggleTouched from "../../assets/images/Word/아래세모.svg";
 import StarFull from "../../assets/images/Word/채운별.svg";
 import Star from "../../assets/images/Word/빈별.svg";
 import ToggleContent from "./ToggleContent";
 import axiosInstance from "../../api/axiosInstance";
-
-const windowWidth = Dimensions.get("window").width;
-const widthPercentage = (percentage) => (windowWidth * percentage) / 100;
 
 const Toggle = ({ vocaId, term, description, example, favorited }) => {
   const [isToggled, setIsToggled] = useState(false);
@@ -28,14 +16,6 @@ const Toggle = ({ vocaId, term, description, example, favorited }) => {
   };
 
   const handleFavorite = async () => {
-    // const token = await AsyncStorage.getItem("accessToken");
-    // console.log("토큰이당: "+token);
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Accept: "application/json",
-    //   ...(token && { Authorization: `Bearer ${token}` }),
-    // };
-
     console.log(vocaId);
     try {
       if (isFavorite) {

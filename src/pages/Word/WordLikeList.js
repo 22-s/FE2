@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
-import Pic from "../../assets/images/Word/회계재무.svg";
 import Star from "../../assets/images/Word/별.svg";
 import Toggle from "../../components/Word/Toggle";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import axiosInstance from "../../api/axiosInstance";
 
 const WordLikeList = () => {
@@ -12,13 +9,6 @@ const WordLikeList = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchQuizzes = async () => {
-    // const token = await AsyncStorage.getItem("accessToken");
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Accept: "application/json",
-    //   ...(token && { Authorization: `Bearer ${token}` }),
-    // };
-
     try {
       setLoading(true);
       const response = await axiosInstance.get(`/api/voca/likes`);

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Animated,
   Alert,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axiosInstance from "../../api/axiosInstance";
@@ -51,7 +51,6 @@ const VerificationCode = () => {
   };
 
   const CodeConfirm = async () => {
-    
     try {
       const requestBody = { email, code };
       const response = await axiosInstance.post(
@@ -60,7 +59,7 @@ const VerificationCode = () => {
       );
       if (response.data.isSuccess) {
         console.log("인증 성공!");
-        navigation.navigate("NewPassword", { email }); 
+        navigation.navigate("NewPassword", { email });
       } else {
         console.log("인증번호가 올바르지 않습니다.");
       }
@@ -73,7 +72,7 @@ const VerificationCode = () => {
     startTimer();
     return () => clearInterval(timerRef.current);
   }, []);
-  
+
   const startTimer = () => {
     clearInterval(timerRef.current);
     setTimer(180);
@@ -91,9 +90,12 @@ const VerificationCode = () => {
   const handleResendCode = async () => {
     try {
       console.log(email);
-      const response = await axiosInstance.post("/api/user/password/send-code", {
-        email,
-      });
+      const response = await axiosInstance.post(
+        "/api/user/password/send-code",
+        {
+          email,
+        }
+      );
       if (response.data.isSuccess) {
         showToast("인증코드가 재전송되었습니다.");
         startTimer(); // ⏱ 타이머 재시작
@@ -104,12 +106,13 @@ const VerificationCode = () => {
       Alert.alert("재전송 실패", "다시 시도해주세요.");
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>인증코드가 발송되었습니다.</Text>
-      <Text style={styles.semiTitle}>이메일을 확인하여 인증코드를 입력해주세요.</Text>
+      <Text style={styles.semiTitle}>
+        이메일을 확인하여 인증코드를 입력해주세요.
+      </Text>
       {/* <Text style={styles.title}>이메일을 확인하여 인증코드를 입력해주세요.</Text> */}
       <View style={styles.inputRow}>
         <TextInput
@@ -120,15 +123,18 @@ const VerificationCode = () => {
           placeholderTextColor="#4D678C"
           keyboardType="numeric"
         />
-        <TouchableOpacity style={styles.resendButton} onPress={handleResendCode}>
+        <TouchableOpacity
+          style={styles.resendButton}
+          onPress={handleResendCode}
+        >
           <Text style={styles.resendText}>재전송</Text>
         </TouchableOpacity>
       </View>
 
       <Text style={styles.timerText}>
-        {String(Math.floor(timer / 60)).padStart(2, '0')}:{String(timer % 60).padStart(2, '0')}
+        {String(Math.floor(timer / 60)).padStart(2, "0")}:
+        {String(timer % 60).padStart(2, "0")}
       </Text>
-
 
       <TouchableOpacity style={styles.loginButton} onPress={CodeConfirm}>
         <Text style={styles.loginButtonText}>확인</Text>
@@ -206,7 +212,7 @@ const styles = StyleSheet.create({
     width: "90%",
     justifyContent: "space-between",
   },
-  
+
   resendButton: {
     backgroundColor: "#D2E7FF",
     paddingVertical: 8,
@@ -214,19 +220,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 8,
   },
-  
+
   resendText: {
     color: "#268AFF",
     fontWeight: "bold",
   },
-  
+
   timerText: {
     marginBottom: 20,
     fontSize: 15,
     fontWeight: "bold",
     color: "#4D678C",
   },
-  
 });
 
 export default VerificationCode;

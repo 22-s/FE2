@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Touchable, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import Title from "../../components/Quiz/QuizDetailComponent/Title";
 import Content from "../../components/Quiz/QuizDetailComponent/Content";
 import O from "../../assets/images/QuizDetail/O.svg";
@@ -64,15 +64,6 @@ const QuizDetail = ({ route }) => {
 
   const submitAnswer = async (quizId, selectedAnswer) => {
     console.log("quizId:", quizId);
-    // const token = await AsyncStorage.getItem("accessToken");
-    // console.log("토큰이당: " + token);
-
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Accept: "application/json",
-    //   ...(token && { Authorization: `Bearer ${token}` }),
-    // };
-
     try {
       const response = await axiosInstance.post(
         `/api/quiz/${quizId}/submit`,
@@ -172,7 +163,7 @@ const QuizDetail = ({ route }) => {
       //     : "즐겨찾기 추가 중 문제가 발생했습니다."
       // );
 
-      //Alert 멘트 변경 
+      //Alert 멘트 변경
       Alert.alert("이미 즐겨찾기 리스트에 추가되어 있습니다.");
     }
   };

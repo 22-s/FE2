@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
   Text,
-  ScrollView,
   Dimensions,
-  Image,
-  TextInput,
   TouchableOpacity,
 } from "react-native";
 import Star from "../../assets/images/Home/star.svg";

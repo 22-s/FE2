@@ -23,11 +23,6 @@ const NewPassword = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordChanged, setIsPasswordChanged] = useState(false);
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  const showToast = (message) => {
-    Alert.alert(message);
-  };
 
   const handleConfirmPasswordChange = (text) => {
     setConfirmPassword(text);
@@ -36,11 +31,11 @@ const NewPassword = () => {
 
   const handlePasswordChange = async () => {
     if (!password || !confirmPassword) {
-       Alert.alert("비밀번호를 입력해주세요.");
+      Alert.alert("비밀번호를 입력해주세요.");
       return;
     }
     if (password !== confirmPassword) {
-       Alert.alert("비밀번호가 일치하지 않습니다.");
+      Alert.alert("비밀번호가 일치하지 않습니다.");
       return;
     }
 
@@ -57,9 +52,11 @@ const NewPassword = () => {
         console.log("비밀번호 변경에 실패하였습니다.");
       }
     } catch (error) {
-      Alert.alert("비밀번호 변경 실패", "비밀번호 변경에 실패하였습니다. 다시 시도해주세요.");
+      Alert.alert(
+        "비밀번호 변경 실패",
+        "비밀번호 변경에 실패하였습니다. 다시 시도해주세요."
+      );
     }
-    
   };
 
   return (

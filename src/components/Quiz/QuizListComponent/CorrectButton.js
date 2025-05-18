@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 const CorrectButton = () => {
   return (
@@ -13,13 +13,13 @@ const styles = StyleSheet.create({
   container: {
     width: 30,
     height: 14,
-    backgroundColor: '#E5EFFF',
+    backgroundColor: "#E5EFFF",
     borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
-    color: '#268AFF',
+    color: "#268AFF",
     fontSize: 10,
   },
 });
